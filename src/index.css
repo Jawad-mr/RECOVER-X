@@ -3,23 +3,12 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --campus-forest: #059669;
-    --campus-emerald: #10b981;
-    --campus-ink: #0b1120;
-    --campus-card: #131d31;
-    --campus-border: #1e2d4a;
-    --campus-amber: #f59e0b;
-    --campus-rose: #f43f5e;
-  }
-
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #0b1120;
-    color: #f1f5f9;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  /* Accessible focus ring across all interactive elements */
+  /* Accessible focus rings */
   button:focus-visible,
   a:focus-visible,
   input:focus-visible,
@@ -36,52 +25,30 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #475569;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
-}
-
-/* Subtle tactile card styling */
-.campus-card {
-  background-color: #111a2e;
-  border: 1px solid #1e2c47;
-  border-radius: 1rem;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.campus-card-interactive {
-  background-color: #111a2e;
-  border: 1px solid #1e2c47;
-  border-radius: 1rem;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.campus-card-interactive:hover {
-  background-color: #16223b;
-  border-color: #2b3e63;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.4), 0 4px 10px -2px rgba(0, 0, 0, 0.2);
+  background: #64748b;
 }
 
 /* Score ring pulse */
 @keyframes scorePulse {
-  0% { transform: scale(0.95); opacity: 0.8; }
+  0% { transform: scale(0.96); opacity: 0.8; }
   50% { transform: scale(1.02); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
 }
 
 .animate-score {
-  animation: scorePulse 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: scorePulse 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Clean Toast Notification */
+/* Toast animation */
 @keyframes toastSlideIn {
-  0% { transform: translateY(-12px) scale(0.96); opacity: 0; }
+  0% { transform: translateY(16px) scale(0.96); opacity: 0; }
   100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 
