@@ -2,13 +2,13 @@ import React, { useState, useEffect, useMemo } from "react";
 import { 
   Search, Plus, Sparkles, MapPin, Clock, 
   ShieldCheck, GitMerge, Compass, Tag, Layers, RefreshCw,
-  QrCode, Lock, CheckCircle2, ChevronRight, Bell, AlertCircle, Menu, Sun, Moon
+  QrCode, Lock, CheckCircle2, ChevronRight, Bell, AlertCircle, Menu, Sun, Moon, FilePlus2
 } from "lucide-react";
 
 import Sidebar from "./components/Sidebar";
 import ItemCard from "./components/ItemCard";
 import MatchHub from "./components/MatchHub";
-import ReportModal from "./components/ReportModal";
+import ReportPage from "./components/ReportPage";
 import ItemDetailsModal from "./components/ItemDetailsModal";
 import ClaimVerificationModal from "./components/ClaimVerificationModal";
 import SafeHandoffModal from "./components/SafeHandoffModal";
@@ -21,7 +21,7 @@ export default function App() {
   // Theme State: Default to Dark Mode
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem("campus_find_theme");
-    return saved ? saved === "dark" : true; // default dark
+    return saved ? saved === "dark" : true;
   });
 
   // Mobile sidebar drawer state
@@ -33,13 +33,12 @@ export default function App() {
     return saved ? JSON.parse(saved) : INITIAL_REPORTS;
   });
 
-  const [activeTab, setActiveTab] = useState("feed"); // "feed" | "matches" | "vault" | "analytics"
+  const [activeTab, setActiveTab] = useState("feed"); // "feed" | "report" | "matches" | "vault" | "analytics"
   const [selectedType, setSelectedType] = useState("all"); // "all" | "lost" | "found"
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [searchQuery, setSearchQuery] = useState("");
 
   // Modals state
-  const [reportModalOpen, setReportModalOpen] = useState(false);
   const [detailsModalItem, setDetailsModalItem] = useState(null);
   const [claimModalItem, setClaimModalItem] = useState(null);
   const [handoffModalItem, setHandoffModalItem] = useState(null);
@@ -117,7 +116,8 @@ export default function App() {
   const handleCreateReport = async (newReport) => {
     const updated = [newReport, ...reports];
     setReports(updated);
-    showToast("Report Submitted", `AI Radar scanning campus records for ${newReport.title}...`);
+    setActiveTab("feed"); // navigate back to feed
+    showToast("Report Submitted Successfully", `AI Radar scanning campus records for ${newReport.title}...`);
 
     // Proactive background matching against opposite reports
     const opposites = updated.filter(r => r.type !== newReport.type);
@@ -183,7 +183,6 @@ export default function App() {
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        onOpenReportModal={() => setReportModalOpen(true)}
         notifications={notifications}
         onSelectNotification={handleSelectNotification}
         darkMode={darkMode}
@@ -208,7 +207,7 @@ export default function App() {
               <Menu className="w-5 h-5" />
             </button>
             <div className="flex items-center space-x-1.5 font-black text-base">
-              <span>Campus<span className="text-emerald-500">Find</span></span>
+              <span>RECOVER<span className="text-emerald-500">-X</span></span>
             </div>
           </div>
 
@@ -221,7 +220,7 @@ export default function App() {
               {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
             </button>
             <button
-              onClick={() => setReportModalOpen(true)}
+              onClick={() => setActiveTab("report")}
               className="px-3 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs shadow-sm"
             >
               + Report
@@ -248,6 +247,7 @@ export default function App() {
 
         {/* Main Content Body */}
         <main className="flex-1">
+          {/* TAB 1: CAMPUS EXPLORER (FEED) */}
           {activeTab === "feed" && (
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
               
@@ -262,7 +262,7 @@ export default function App() {
                   </div>
 
                   <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
-                    Recover lost items faster with <span className="text-emerald-500">AI Visual Matching</span>
+                    Recover lost items faster with <span className="text-emerald-500">RECOVER-X</span>
                   </h1>
 
                   <p className={`text-sm sm:text-base leading-relaxed font-medium ${
@@ -273,7 +273,7 @@ export default function App() {
 
                   <div className="flex flex-wrap gap-3 pt-2">
                     <button
-                      onClick={() => setReportModalOpen(true)}
+                      onClick={() => setActiveTab("report")}
                       className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-md flex items-center space-x-2 transition-all transform hover:-translate-y-0.5"
                     >
                       <Plus className="w-4 h-4 stroke-[3]" />
@@ -403,7 +403,16 @@ export default function App() {
             </div>
           )}
 
-          {/* Tab 2: AI Match Hub */}
+          {/* TAB 2: DEDICATED REPORT LOST / FOUND PAGE */}
+          {activeTab === "report" && (
+            <ReportPage
+              onSubmitReport={handleCreateReport}
+              onNavigateBack={() => setActiveTab("feed")}
+              darkMode={darkMode}
+            />
+          )}
+
+          {/* TAB 3: AI MATCH HUB */}
           {activeTab === "matches" && (
             <MatchHub
               reports={reports}
@@ -414,7 +423,7 @@ export default function App() {
             />
           )}
 
-          {/* Tab 3: Safe Handoff Vault */}
+          {/* TAB 4: SAFE HANDOFF VAULT */}
           {activeTab === "vault" && (
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
               <div className="pb-6 border-b border-slate-800/80">
@@ -476,7 +485,7 @@ export default function App() {
             </div>
           )}
 
-          {/* Tab 4: Campus Analytics */}
+          {/* TAB 5: CAMPUS METRICS */}
           {activeTab === "analytics" && (
             <AnalyticsView reports={reports} />
           )}
@@ -488,12 +497,12 @@ export default function App() {
         }`}>
           <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center space-x-2">
-              <span className="font-bold">Campus Find (RECOVER-X)</span>
+              <span className="font-bold">RECOVER-X</span>
               <span>•</span>
-              <span>Smart Campus Lost & Found System</span>
+              <span>Smart Lost & Found System</span>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-slate-500">Encrypted Campus Data Protection</span>
+              <span className="text-slate-500">Encrypted Data Protection</span>
             </div>
           </div>
         </footer>
@@ -501,12 +510,6 @@ export default function App() {
       </div>
 
       {/* Modals */}
-      <ReportModal
-        isOpen={reportModalOpen}
-        onClose={() => setReportModalOpen(false)}
-        onSubmitReport={handleCreateReport}
-      />
-
       <ItemDetailsModal
         isOpen={Boolean(detailsModalItem)}
         onClose={() => setDetailsModalItem(null)}

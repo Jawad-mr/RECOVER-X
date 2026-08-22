@@ -121,7 +121,7 @@ export default function AnalyticsView({ reports }) {
               <span className="font-mono font-bold text-white">40% Weight</span>
             </div>
             <p className="text-[11px] text-slate-400 leading-snug">
-              Gemini Vision inspection of scratches, decals, dents, and colorimetry.
+              Visual AI inspection of scratches, decals, dents, and colorimetry.
             </p>
 
             <div className="pt-2 border-t border-slate-800 flex items-center justify-between">

@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { 
   Sparkles, Bell, Plus, Compass, GitMerge, ShieldCheck, 
-  BarChart3, Sun, Moon, Check, X, Menu, Shield
+  BarChart3, Sun, Moon, Check, X, Shield, FilePlus2
 } from "lucide-react";
 
 export default function Sidebar({ 
   activeTab, 
   setActiveTab, 
-  onOpenReportModal, 
   notifications = [],
   onSelectNotification,
   darkMode,
@@ -31,6 +30,7 @@ export default function Sidebar({
 
   const navItems = [
     { id: "feed", label: "Campus Explorer", icon: Compass },
+    { id: "report", label: "Report Lost / Found", icon: FilePlus2 },
     { id: "matches", label: "AI Match Hub", icon: GitMerge, badge: "4 matches" },
     { id: "vault", label: "Safe Handoff", icon: ShieldCheck },
     { id: "analytics", label: "Campus Metrics", icon: BarChart3 },
@@ -73,15 +73,8 @@ export default function Sidebar({
               </div>
               <div>
                 <div className="flex items-center space-x-1.5">
-                  <span className="text-lg font-black tracking-tight">
-                    Campus<span className="text-emerald-500">Find</span>
-                  </span>
-                  <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${
-                    darkMode 
-                      ? "bg-slate-800 text-emerald-400 border border-slate-700" 
-                      : "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                  }`}>
-                    RECOVER-X
+                  <span className="text-xl font-black tracking-tight text-white">
+                    RECOVER<span className="text-emerald-500">-X</span>
                   </span>
                 </div>
                 <p className={`text-[11px] font-medium ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
@@ -99,37 +92,20 @@ export default function Sidebar({
             </button>
           </div>
 
-          {/* System Status Pill */}
-          <div className={`p-2.5 rounded-xl border text-xs flex items-center justify-between ${
-            darkMode 
-              ? "bg-slate-900/90 border-slate-800 text-slate-300" 
-              : "bg-slate-50 border-slate-200 text-slate-700"
-          }`}>
-            <div className="flex items-center space-x-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span className="text-[11px] font-bold">Campus AI Radar</span>
-            </div>
-            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
-              darkMode ? "bg-emerald-950 text-emerald-300 border border-emerald-800" : "bg-emerald-100 text-emerald-800"
-            }`}>
-              Active
-            </span>
-          </div>
-
           {/* Primary Action Button: Report Item */}
           <button
             onClick={() => {
-              onOpenReportModal();
+              setActiveTab("report");
               if (onCloseMobile) onCloseMobile();
             }}
             className="w-full py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-md flex items-center justify-center space-x-2 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
-            <span>Report Lost or Found</span>
+            <span>+ Report Item</span>
           </button>
 
           {/* Navigation Links */}
-          <nav className="space-y-1.5 pt-2" aria-label="Sidebar Navigation">
+          <nav className="space-y-1.5 pt-1" aria-label="Sidebar Navigation">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -257,10 +233,10 @@ export default function Sidebar({
             )}
           </button>
 
-          {/* Campus Security & Privacy Badge */}
+          {/* Security & Privacy Badge */}
           <div className="flex items-center justify-center space-x-1.5 text-[11px] text-slate-400 py-1">
             <Shield className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Encrypted Campus Privacy Shield</span>
+            <span>Encrypted Privacy Protection</span>
           </div>
 
         </div>
