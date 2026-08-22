@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { 
   GitMerge, ShieldCheck, CheckCircle2, 
-  MapPin, Clock, Eye, RefreshCw, Check, FileText, ChevronRight, Triangle
+  MapPin, Clock, Eye, RefreshCw, Check, FileText, ChevronRight, Sparkles
 } from "lucide-react";
 import { runMultimodalMatch } from "../services/geminiService";
 
@@ -75,33 +75,37 @@ export default function MatchHub({
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
       
       {/* Top Banner & Heading */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-zinc-800">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-[#3c4043]">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            <GitMerge className="w-5 h-5 text-zinc-400" />
-            <span>Multi-Signal AI Match Hub</span>
-          </h1>
-          <p className="text-xs text-zinc-400 mt-0.5">
-            Cross-referencing physical markings, surface damage, and campus geography
+          <div className="flex items-center space-x-2.5">
+            <div className="p-2 rounded-xl bg-[#4285F4]/20 text-[#8ab4f8]">
+              <GitMerge className="w-5 h-5 text-[#4285F4]" />
+            </div>
+            <h1 className="text-2xl font-black tracking-tight text-white">
+              AI Multi-Signal Match Hub
+            </h1>
+          </div>
+          <p className="text-xs text-[#9aa0a6] mt-1">
+            Multimodal vision and text analysis cross-referencing physical markings, surface damage, and campus corridors
           </p>
         </div>
 
         {/* Featured Matches Switcher */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0" role="toolbar" aria-label="Featured Matches">
-          <span className="text-xs text-zinc-500 font-mono">Presets:</span>
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0" role="toolbar" aria-label="Featured Matches">
+          <span className="text-xs text-[#9aa0a6] font-bold">Featured:</span>
           {[
-            { label: "MacBook", l: "REP-9001", f: "REP-9002" },
-            { label: "Hydro Flask", l: "REP-9003", f: "REP-9004" },
-            { label: "Sony XM4", l: "REP-9005", f: "REP-9006" },
-            { label: "Jansport", l: "REP-9007", f: "REP-9008" }
+            { label: "💻 MacBook", l: "REP-9001", f: "REP-9002" },
+            { label: "💧 Hydro Flask", l: "REP-9003", f: "REP-9004" },
+            { label: "🎧 Sony XM4", l: "REP-9005", f: "REP-9006" },
+            { label: "🎒 Jansport", l: "REP-9007", f: "REP-9008" }
           ].map((preset) => (
             <button
               key={preset.l}
               onClick={() => selectPresetPair(preset.l, preset.f)}
-              className={`px-2.5 py-1 rounded-lg text-xs font-medium font-mono transition-colors ${
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
                 currentLost?.id === preset.l
-                  ? "bg-white text-black font-semibold shadow-sm"
-                  : "bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800"
+                  ? "bg-[#1a73e8] text-white shadow-md"
+                  : "bg-[#202124] text-[#bdc1c6] hover:text-white border border-[#3c4043]"
               }`}
             >
               {preset.label}
@@ -114,10 +118,10 @@ export default function MatchHub({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
         
         {/* Left: Lost Item Panel */}
-        <div className="lg:col-span-5 rounded-2xl bg-zinc-950 border border-zinc-800 p-4 space-y-3">
+        <div className="lg:col-span-5 rounded-3xl bg-[#202124] border border-[#3c4043] p-5 space-y-4 shadow-md">
           <div className="flex items-center justify-between">
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-950/80 text-rose-300 border border-rose-800">
-              LOST REPORT
+            <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-[#ea4335] text-white">
+              • LOST REPORT
             </span>
             <select
               value={currentLost?.id || ""}
@@ -126,11 +130,11 @@ export default function MatchHub({
                 setCurrentLost(item);
                 if (item && currentFound) handleExecuteMatch(item, currentFound);
               }}
-              className="bg-black border border-zinc-800 rounded-lg text-xs text-zinc-300 px-2 py-1 font-mono"
+              className="bg-[#121212] border border-[#3c4043] rounded-full text-xs text-[#e8eaed] px-3 py-1 font-bold"
             >
               {lostItems.map(item => (
                 <option key={item.id} value={item.id}>
-                  {item.id} - {item.title.slice(0, 22)}...
+                  {item.id} - {item.title.slice(0, 20)}...
                 </option>
               ))}
             </select>
@@ -138,31 +142,31 @@ export default function MatchHub({
 
           {currentLost && (
             <>
-              <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black border border-zinc-800">
+              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-[#121212] border border-[#3c4043]">
                 <img 
                   src={currentLost.imageUrl} 
                   alt={currentLost.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-2 left-2 right-2 p-1.5 rounded-lg bg-black/90 backdrop-blur-sm border border-zinc-800 text-[11px] text-zinc-300">
-                  <span className="text-zinc-400 font-mono">Hallmarks: </span>
-                  <span>{currentLost.imageVisualFeatures}</span>
+                <div className="absolute bottom-2.5 left-2.5 right-2.5 p-2 rounded-xl bg-[#202124]/95 backdrop-blur-sm border border-[#3c4043] text-xs text-[#e8eaed]">
+                  <span className="text-[#8ab4f8] font-bold">Hallmarks: </span>
+                  <span className="font-medium">{currentLost.imageVisualFeatures}</span>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <h3 className="text-sm font-semibold text-white">{currentLost.title}</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">{currentLost.description}</p>
+                <h3 className="text-base font-bold text-white">{currentLost.title}</h3>
+                <p className="text-xs text-[#bdc1c6] leading-relaxed">{currentLost.description}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-zinc-850 text-zinc-400 font-mono">
+              <div className="grid grid-cols-2 gap-2 text-xs pt-2.5 border-t border-[#3c4043] text-[#9aa0a6]">
                 <div>
-                  <span className="text-[10px] text-zinc-500 block uppercase">Location</span>
-                  <span className="text-zinc-300 font-sans text-xs">{currentLost.location}</span>
+                  <span className="text-[10px] font-bold text-[#5f6368] block uppercase">Location</span>
+                  <span className="text-white font-medium">{currentLost.location}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-zinc-500 block uppercase">Reported</span>
-                  <span className="text-zinc-300 text-xs">{currentLost.time}</span>
+                  <span className="text-[10px] font-bold text-[#5f6368] block uppercase">Reported</span>
+                  <span className="text-white font-medium">{currentLost.time}</span>
                 </div>
               </div>
             </>
@@ -170,24 +174,24 @@ export default function MatchHub({
         </div>
 
         {/* Center: Re-Analyze Trigger */}
-        <div className="lg:col-span-2 flex flex-col items-center justify-center py-2 lg:py-0">
+        <div className="lg:col-span-2 flex flex-col items-center justify-center py-3 lg:py-0">
           <button
             onClick={() => handleExecuteMatch(currentLost, currentFound)}
             disabled={isMatching}
-            className="p-3.5 rounded-xl bg-white hover:bg-zinc-200 text-black font-semibold text-xs shadow-sm flex flex-col items-center justify-center gap-1 transition-colors"
+            className="p-4 rounded-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold shadow-lg hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center gap-1"
           >
-            <RefreshCw className={`w-4 h-4 ${isMatching ? 'animate-spin' : ''}`} />
-            <span className="font-mono text-[10px] uppercase font-bold tracking-wider">
+            <RefreshCw className={`w-5 h-5 ${isMatching ? 'animate-spin' : ''}`} />
+            <span className="text-[10px] uppercase font-bold tracking-wider">
               {isMatching ? "Analyzing" : "Analyze"}
             </span>
           </button>
         </div>
 
         {/* Right: Found Item Panel */}
-        <div className="lg:col-span-5 rounded-2xl bg-zinc-950 border border-zinc-800 p-4 space-y-3">
+        <div className="lg:col-span-5 rounded-3xl bg-[#202124] border border-[#3c4043] p-5 space-y-4 shadow-md">
           <div className="flex items-center justify-between">
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-800">
-              FOUND REPORT
+            <span className="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-[#34a853] text-white">
+              • FOUND REPORT
             </span>
             <select
               value={currentFound?.id || ""}
@@ -196,11 +200,11 @@ export default function MatchHub({
                 setCurrentFound(item);
                 if (currentLost && item) handleExecuteMatch(currentLost, item);
               }}
-              className="bg-black border border-zinc-800 rounded-lg text-xs text-zinc-300 px-2 py-1 font-mono"
+              className="bg-[#121212] border border-[#3c4043] rounded-full text-xs text-[#e8eaed] px-3 py-1 font-bold"
             >
               {foundItems.map(item => (
                 <option key={item.id} value={item.id}>
-                  {item.id} - {item.title.slice(0, 22)}...
+                  {item.id} - {item.title.slice(0, 20)}...
                 </option>
               ))}
             </select>
@@ -208,31 +212,31 @@ export default function MatchHub({
 
           {currentFound && (
             <>
-              <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black border border-zinc-800">
+              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-[#121212] border border-[#3c4043]">
                 <img 
                   src={currentFound.imageUrl} 
                   alt={currentFound.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-2 left-2 right-2 p-1.5 rounded-lg bg-black/90 backdrop-blur-sm border border-zinc-800 text-[11px] text-zinc-300">
-                  <span className="text-zinc-400 font-mono">Hallmarks: </span>
-                  <span>{currentFound.imageVisualFeatures}</span>
+                <div className="absolute bottom-2.5 left-2.5 right-2.5 p-2 rounded-xl bg-[#202124]/95 backdrop-blur-sm border border-[#3c4043] text-xs text-[#e8eaed]">
+                  <span className="text-[#81c995] font-bold">Hallmarks: </span>
+                  <span className="font-medium">{currentFound.imageVisualFeatures}</span>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <h3 className="text-sm font-semibold text-white">{currentFound.title}</h3>
-                <p className="text-xs text-zinc-400 leading-relaxed">{currentFound.description}</p>
+                <h3 className="text-base font-bold text-white">{currentFound.title}</h3>
+                <p className="text-xs text-[#bdc1c6] leading-relaxed">{currentFound.description}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-zinc-850 text-zinc-400 font-mono">
+              <div className="grid grid-cols-2 gap-2 text-xs pt-2.5 border-t border-[#3c4043] text-[#9aa0a6]">
                 <div>
-                  <span className="text-[10px] text-zinc-500 block uppercase">Location</span>
-                  <span className="text-zinc-300 font-sans text-xs">{currentFound.location}</span>
+                  <span className="text-[10px] font-bold text-[#5f6368] block uppercase">Location</span>
+                  <span className="text-white font-medium">{currentFound.location}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-zinc-500 block uppercase">Found Time</span>
-                  <span className="text-zinc-300 text-xs">{currentFound.time}</span>
+                  <span className="text-[10px] font-bold text-[#5f6368] block uppercase">Found Time</span>
+                  <span className="text-white font-medium">{currentFound.time}</span>
                 </div>
               </div>
             </>
@@ -242,76 +246,79 @@ export default function MatchHub({
 
       {/* MATCH RESULTS BREAKDOWN */}
       {isMatching ? (
-        <div className="p-10 rounded-2xl bg-zinc-950 border border-zinc-800 flex flex-col items-center justify-center text-center space-y-2.5 animate-fade-in">
-          <RefreshCw className="w-6 h-6 text-zinc-400 animate-spin" />
-          <h4 className="text-sm font-semibold text-white">Cross-Referencing Physical & Geospatial Signals</h4>
-          <p className="text-xs text-zinc-400 font-mono">Analyzing damage markers, colorimetry, and corridors...</p>
+        <div className="p-12 rounded-3xl bg-[#202124] border border-[#3c4043] flex flex-col items-center justify-center text-center space-y-3 animate-fade-in shadow-md">
+          <RefreshCw className="w-8 h-8 text-[#4285F4] animate-spin" />
+          <h4 className="text-base font-bold text-white">Cross-Referencing Physical & Geospatial Signals</h4>
+          <p className="text-xs text-[#9aa0a6]">Analyzing surface markings, colorimetry, and campus transit corridors...</p>
         </div>
       ) : matchResult ? (
-        <div className="rounded-2xl bg-zinc-950 border border-zinc-800 p-6 space-y-5 animate-score">
+        <div className="rounded-3xl bg-[#202124] border border-[#3c4043] p-6 sm:p-8 space-y-6 animate-score shadow-xl">
           
           {/* Header & Overall Score */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-850">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#3c4043]">
             <div className="space-y-1">
-              <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
-                matchResult.overallScore >= 80 ? "bg-emerald-950 text-emerald-300 border border-emerald-800" : "bg-zinc-900 text-zinc-300 border border-zinc-800"
+              <span className={`px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${
+                matchResult.overallScore >= 80 ? "bg-[#34a853]/20 text-[#81c995] border border-[#34a853]/40" : "bg-[#1a73e8]/20 text-[#8ab4f8] border border-[#1a73e8]/40"
               }`}>
                 {matchResult.matchTier.replace("_", " ")}
               </span>
-              <h2 className="text-lg font-bold text-white">Evaluation Summary</h2>
+              <h2 className="text-xl font-bold text-white mt-1">AI Match Evaluation</h2>
             </div>
 
             {/* Score Ring */}
-            <div className="flex items-center space-x-3 bg-black px-4 py-2.5 rounded-xl border border-zinc-800">
+            <div className="flex items-center space-x-4 bg-[#121212] px-5 py-3 rounded-2xl border border-[#3c4043]">
               <div className="text-right">
-                <span className="text-[10px] text-zinc-400 uppercase font-mono block">Confidence Score</span>
-                <span className="text-xs text-zinc-500">Weighted Total</span>
+                <span className="text-[10px] text-[#9aa0a6] uppercase font-bold block">Confidence Score</span>
+                <span className="text-xs text-[#8ab4f8] font-semibold">Weighted Total</span>
               </div>
-              <div className="text-3xl font-bold font-mono text-white">
+              <div className="text-4xl font-black font-mono text-white">
                 {displayScore}%
               </div>
             </div>
           </div>
 
           {/* Rationale */}
-          <div className="p-3.5 rounded-xl bg-black border border-zinc-800 space-y-1 text-xs">
-            <span className="text-zinc-400 font-semibold uppercase text-[10px] font-mono block">Rationale:</span>
-            <p className="text-zinc-200 leading-relaxed">
+          <div className="p-4 rounded-2xl bg-[#2d2f31] border border-[#3c4043] space-y-1.5 text-xs">
+            <span className="text-[#8ab4f8] font-bold uppercase text-[11px] block flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5" />
+              Match Rationale:
+            </span>
+            <p className="text-[#e8eaed] text-sm leading-relaxed font-medium">
               "{matchResult.summaryReason}"
             </p>
           </div>
 
           {/* 4-SIGNAL BREAKDOWN */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[
-              { label: "Visual Surface Match (40%)", data: matchResult.breakdown.visualSimilarity },
-              { label: "Model & Specs (25%)", data: matchResult.breakdown.descriptionSimilarity },
-              { label: "Campus Proximity (20%)", data: matchResult.breakdown.locationProximity },
-              { label: "Timeline Delta (15%)", data: matchResult.breakdown.timeProximity }
+              { label: "Visual Surface Match (40%)", data: matchResult.breakdown.visualSimilarity, color: "bg-[#4285F4]" },
+              { label: "Model & Specs (25%)", data: matchResult.breakdown.descriptionSimilarity, color: "bg-[#34A853]" },
+              { label: "Campus Proximity (20%)", data: matchResult.breakdown.locationProximity, color: "bg-[#FBBC05]" },
+              { label: "Timeline Delta (15%)", data: matchResult.breakdown.timeProximity, color: "bg-[#EA4335]" }
             ].map((sig, i) => (
-              <div key={i} className="p-3.5 rounded-xl bg-black border border-zinc-850 space-y-1.5">
+              <div key={i} className="p-4 rounded-2xl bg-[#2d2f31] border border-[#3c4043] space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-zinc-200">{sig.label}</span>
-                  <span className="font-mono font-bold text-white text-xs">{sig.data.score}%</span>
+                  <span className="font-bold text-white">{sig.label}</span>
+                  <span className="font-mono font-bold text-white text-sm">{sig.data.score}%</span>
                 </div>
-                <div className="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
-                  <div className="bg-white h-full rounded-full transition-all duration-500" style={{ width: `${sig.data.score}%` }}></div>
+                <div className="w-full bg-[#1e1f20] h-2 rounded-full overflow-hidden">
+                  <div className={`${sig.color} h-full rounded-full transition-all duration-500`} style={{ width: `${sig.data.score}%` }}></div>
                 </div>
-                <p className="text-[11px] text-zinc-400 leading-snug">{sig.data.details}</p>
+                <p className="text-xs text-[#bdc1c6] leading-snug">{sig.data.details}</p>
               </div>
             ))}
           </div>
 
           {/* Key Visual Evidence Chips */}
           {matchResult.keyVisualEvidence && matchResult.keyVisualEvidence.length > 0 && (
-            <div className="p-3.5 rounded-xl bg-black border border-zinc-850 space-y-2">
-              <span className="text-[10px] font-mono font-bold uppercase text-zinc-400 block">
-                Corroborated Evidence:
+            <div className="p-4 rounded-2xl bg-[#2d2f31] border border-[#3c4043] space-y-2">
+              <span className="text-[11px] font-bold uppercase text-[#9aa0a6] block">
+                Corroborated Physical Evidence:
               </span>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {matchResult.keyVisualEvidence.map((ev, i) => (
-                  <span key={i} className="px-2 py-0.5 rounded text-[11px] font-mono bg-zinc-900 text-zinc-300 border border-zinc-800 flex items-center gap-1">
-                    <Check className="w-3 h-3 text-emerald-400" />
+                  <span key={i} className="px-3 py-1 rounded-full text-xs font-semibold bg-[#34a853]/20 text-[#81c995] border border-[#34a853]/40 flex items-center gap-1.5">
+                    <Check className="w-3.5 h-3.5 text-[#34a853]" />
                     {ev}
                   </span>
                 ))}
@@ -320,15 +327,15 @@ export default function MatchHub({
           )}
 
           {/* Action CTA */}
-          <div className="pt-2 border-t border-zinc-850 flex items-center justify-between">
-            <span className="text-xs text-zinc-400">Ready to initiate ownership challenge?</span>
+          <div className="pt-3 border-t border-[#3c4043] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <span className="text-xs text-[#9aa0a6]">Proceed to ownership challenge to generate handoff ticket.</span>
             <button
               onClick={() => onStartClaimVerification(currentFound || currentLost)}
-              className="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold text-xs flex items-center gap-1.5 transition-colors"
+              className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md transform hover:scale-105"
             >
-              <ShieldCheck className="w-3.5 h-3.5 stroke-[2.5]" />
+              <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
               <span>Verify Ownership & Claim</span>
-              <ChevronRight className="w-3.5 h-3.5" />
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
 

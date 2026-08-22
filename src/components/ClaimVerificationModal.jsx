@@ -9,7 +9,6 @@ export default function ClaimVerificationModal({
   isOpen, 
   onClose, 
   item, 
-  apiKey,
   onVerificationSuccess
 }) {
   const [loadingQuestions, setLoadingQuestions] = useState(false);
@@ -30,7 +29,7 @@ export default function ClaimVerificationModal({
     if (!item) return;
     setLoadingQuestions(true);
     try {
-      const qData = await generateAntiFraudQuestions(item, apiKey);
+      const qData = await generateAntiFraudQuestions(item, "");
       setQuestionsData(qData);
       const initialAnswers = {};
       qData.questions.forEach(q => { initialAnswers[q.id] = ""; });
@@ -47,7 +46,7 @@ export default function ClaimVerificationModal({
     if (!questionsData || !item) return;
     setEvaluating(true);
     try {
-      const result = await evaluateClaimantAnswers(questionsData.questions, answers, item, apiKey);
+      const result = await evaluateClaimantAnswers(questionsData.questions, answers, item, "");
       setEvalResult(result);
     } catch (err) {
       console.error("Failed to evaluate answers:", err);
@@ -56,11 +55,9 @@ export default function ClaimVerificationModal({
     }
   };
 
-  // Quick fill helper
   const fastFillLegitimate = () => {
     if (!questionsData || !item) return;
     const newAnswers = {};
-    
     const hidden = item.hiddenGroundTruth || "";
     questionsData.questions.forEach(q => {
       if (q.id.includes("wallpaper") || q.question.toLowerCase().includes("wallpaper") || q.question.toLowerCase().includes("lock screen")) {
@@ -77,7 +74,6 @@ export default function ClaimVerificationModal({
         newAnswers[q.id] = hidden.slice(0, 40);
       }
     });
-
     setAnswers(newAnswers);
   };
 
@@ -93,27 +89,27 @@ export default function ClaimVerificationModal({
   if (!isOpen || !item) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-sm overflow-y-auto animate-fade-in">
-      <div className="relative w-full max-w-2xl my-8 overflow-hidden rounded-3xl bg-slate-900 border border-slate-700 shadow-2xl p-6 sm:p-8 space-y-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm overflow-y-auto animate-fade-in">
+      <div className="relative w-full max-w-2xl my-8 overflow-hidden rounded-3xl bg-[#202124] border border-[#3c4043] shadow-2xl p-6 sm:p-8 space-y-6">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-4 border-b border-[#3c4043]">
           <div className="flex items-center space-x-3">
-            <div className="p-3 rounded-2xl bg-cyan-950 text-cyan-400 border border-cyan-800">
+            <div className="p-3 rounded-2xl bg-[#EA4335]/20 text-[#f28b82]">
               <ShieldCheck className="w-6 h-6 stroke-[2.5]" />
             </div>
             <div>
-              <h3 className="text-lg sm:text-xl font-extrabold text-white">
+              <h3 className="text-xl font-bold text-white">
                 Ownership Verification Challenge
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[#9aa0a6]">
                 Answer ownership security questions to verify genuine ownership before handoff
               </p>
             </div>
           </div>
           <button 
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+            className="p-2 text-slate-400 hover:text-white rounded-full hover:bg-[#2d2f31] transition-colors"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -121,43 +117,43 @@ export default function ClaimVerificationModal({
         </div>
 
         {/* Item Summary Card */}
-        <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-4">
+        <div className="p-4 rounded-2xl bg-[#121212] border border-[#3c4043] flex items-center gap-4">
           <img 
             src={item.imageUrl} 
             alt={item.title} 
-            className="w-16 h-16 rounded-xl object-cover border border-slate-800"
+            className="w-16 h-16 rounded-2xl object-cover border border-[#3c4043]"
           />
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 text-xs text-slate-400">
-              <span className="font-mono text-emerald-400 font-bold">{item.id}</span>
+            <div className="flex items-center gap-2 text-xs text-[#9aa0a6]">
+              <span className="font-mono text-[#8ab4f8] font-bold">{item.id}</span>
               <span>•</span>
-              <span className="font-semibold text-slate-300">{item.category}</span>
+              <span className="font-bold text-[#e8eaed]">{item.category}</span>
             </div>
-            <h4 className="text-sm font-bold text-white truncate">{item.title}</h4>
-            <p className="text-xs text-slate-400 truncate">{item.location}</p>
+            <h4 className="text-base font-bold text-white truncate">{item.title}</h4>
+            <p className="text-xs text-[#9aa0a6] truncate">{item.location}</p>
           </div>
           <div className="text-right text-xs">
-            <span className="px-2 py-1 rounded bg-slate-800 text-slate-300 font-mono text-[11px] block font-semibold">
+            <span className="px-3 py-1 rounded-full bg-[#2d2f31] text-[#bdc1c6] font-mono text-[11px] block font-bold">
               {item.reporterAlias}
             </span>
-            <span className="text-[10px] text-slate-500 mt-1 block font-medium">Privacy Masked</span>
+            <span className="text-[10px] text-[#81c995] mt-1 block font-bold">Encrypted</span>
           </div>
         </div>
 
-        {/* Quick Fill Sample Helper */}
+        {/* Sample Helper */}
         <div className="flex items-center justify-end space-x-2 text-xs">
-          <span className="text-slate-500 text-[11px]">Test with sample answers:</span>
+          <span className="text-[#9aa0a6] text-[11px]">Test with sample answers:</span>
           <button
             type="button"
             onClick={fastFillLegitimate}
-            className="px-2.5 py-1 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-700 hover:bg-emerald-900 font-bold text-[11px] transition-colors"
+            className="px-3 py-1 rounded-full bg-[#34a853]/20 text-[#81c995] border border-[#34a853]/40 font-bold text-[11px] transition-colors"
           >
             ✓ Genuine Owner Sample
           </button>
           <button
             type="button"
             onClick={fastFillImposter}
-            className="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700 font-bold text-[11px] transition-colors"
+            className="px-3 py-1 rounded-full bg-[#2d2f31] text-[#9aa0a6] hover:text-white border border-[#3c4043] font-bold text-[11px] transition-colors"
           >
             ✕ Invalid Guess Sample
           </button>
@@ -166,16 +162,16 @@ export default function ClaimVerificationModal({
         {/* Question Form */}
         {loadingQuestions ? (
           <div className="py-12 flex flex-col items-center justify-center space-y-3">
-            <RefreshCw className="w-8 h-8 text-cyan-400 animate-spin" />
-            <p className="text-xs text-slate-400">Loading ownership verification questions...</p>
+            <RefreshCw className="w-8 h-8 text-[#4285F4] animate-spin" />
+            <p className="text-xs text-[#9aa0a6]">Loading ownership verification questions...</p>
           </div>
         ) : (
           <form onSubmit={handleEvaluate} className="space-y-4">
             <div className="space-y-3">
               {questionsData?.questions?.map((q, idx) => (
-                <div key={q.id} className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                <div key={q.id} className="p-4 rounded-2xl bg-[#121212] border border-[#3c4043] space-y-2">
                   <label className="block text-xs font-bold text-white flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 flex items-center justify-center text-[10px] font-mono font-bold">
+                    <span className="w-5 h-5 rounded-full bg-[#1a73e8] text-white flex items-center justify-center text-[10px] font-bold">
                       {idx + 1}
                     </span>
                     <span>{q.question}</span>
@@ -186,7 +182,7 @@ export default function ClaimVerificationModal({
                     value={answers[q.id] || ""}
                     onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
                     placeholder="Provide specific details you know about this item..."
-                    className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-medium"
+                    className="w-full px-4 py-2.5 bg-[#1e1f20] border border-[#3c4043] rounded-xl text-xs text-white placeholder-[#5f6368] font-medium focus:border-[#4285F4] focus:outline-none"
                   />
                 </div>
               ))}
@@ -197,16 +193,16 @@ export default function ClaimVerificationModal({
               <button
                 type="submit"
                 disabled={evaluating}
-                className="w-full py-3 px-4 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm shadow-md flex items-center justify-center space-x-2 transition-all"
+                className="w-full py-3 px-4 rounded-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm shadow-md flex items-center justify-center space-x-2 transition-all"
               >
                 {evaluating ? (
                   <>
-                    <RefreshCw className="w-4 h-4 animate-spin text-slate-950" />
+                    <RefreshCw className="w-4 h-4 animate-spin" />
                     <span>Verifying responses...</span>
                   </>
                 ) : (
                   <>
-                    <ShieldCheck className="w-4 h-4 text-slate-950 stroke-[3]" />
+                    <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
                     <span>Submit & Verify Ownership</span>
                   </>
                 )}
@@ -217,20 +213,20 @@ export default function ClaimVerificationModal({
 
         {/* EVALUATION RESULTS CARD */}
         {evalResult && (
-          <div className="rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 p-5 space-y-4 animate-score">
+          <div className="rounded-2xl overflow-hidden border border-[#3c4043] bg-[#121212] p-5 space-y-4 animate-score">
             
             {/* Verdict Top Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center justify-between pb-3 border-b border-[#3c4043]">
               <div className="flex items-center space-x-2">
-                <span className={`px-3 py-1 rounded-md text-xs font-black uppercase tracking-wider ${
+                <span className={`px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider ${
                   evalResult.verdict === "VERIFIED"
-                    ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
-                    : "bg-rose-950 text-rose-300 border border-rose-700"
+                    ? "bg-[#34a853]/20 text-[#81c995] border border-[#34a853]/40"
+                    : "bg-[#ea4335]/20 text-[#f28b82] border border-[#ea4335]/40"
                 }`}>
                   {evalResult.verdict}
                 </span>
-                <span className="text-xs text-slate-400 font-mono">
-                  Trust Status: <span className={evalResult.fraudRiskLevel === "LOW" ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>{evalResult.fraudRiskLevel === "LOW" ? "Confirmed Owner" : "Unverified"}</span>
+                <span className="text-xs text-[#9aa0a6]">
+                  Status: <span className={evalResult.fraudRiskLevel === "LOW" ? "text-[#81c995] font-bold" : "text-[#f28b82] font-bold"}>{evalResult.fraudRiskLevel === "LOW" ? "Confirmed Owner" : "Unverified"}</span>
                 </span>
               </div>
 
@@ -238,38 +234,38 @@ export default function ClaimVerificationModal({
                 <span className="text-2xl font-black text-white font-mono">
                   {evalResult.verificationScore}%
                 </span>
-                <span className="text-[10px] text-slate-400 block font-medium">Confidence Score</span>
+                <span className="text-[10px] text-[#9aa0a6] block font-medium">Confidence Score</span>
               </div>
             </div>
 
             {/* Rationale */}
-            <p className="text-xs text-slate-200 leading-relaxed font-medium">
+            <p className="text-xs text-[#e8eaed] leading-relaxed font-medium">
               "{evalResult.confidenceReason}"
             </p>
 
             {/* Per-question breakdown */}
             <div className="space-y-2 pt-1">
               {evalResult.questionBreakdown?.map((qb, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs p-2.5 rounded-xl bg-slate-900 border border-slate-800">
+                <div key={i} className="flex items-start gap-2 text-xs p-3 rounded-xl bg-[#1e1f20] border border-[#3c4043]">
                   {qb.isMatch ? (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-[#34a853] shrink-0 mt-0.5" />
                   ) : (
-                    <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                    <ShieldAlert className="w-4 h-4 text-[#ea4335] shrink-0 mt-0.5" />
                   )}
-                  <span className="text-slate-300 font-medium">{qb.feedback}</span>
+                  <span className="text-[#bdc1c6] font-medium">{qb.feedback}</span>
                 </div>
               ))}
             </div>
 
             {/* Action when Verified */}
             {evalResult.unlockedHandoffEligible ? (
-              <div className="pt-3 border-t border-slate-800">
+              <div className="pt-3 border-t border-[#3c4043]">
                 <button
                   onClick={() => {
                     onClose();
                     onVerificationSuccess(item);
                   }}
-                  className="w-full py-3.5 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm shadow-md flex items-center justify-center space-x-2 transition-all transform hover:-translate-y-0.5"
+                  className="w-full py-3.5 px-6 rounded-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-sm shadow-md flex items-center justify-center space-x-2 transition-all transform hover:scale-105"
                 >
                   <ShieldCheck className="w-5 h-5 stroke-[2.5]" />
                   <span>Security Cleared → Generate Safe Handoff Ticket</span>
@@ -277,7 +273,7 @@ export default function ClaimVerificationModal({
                 </button>
               </div>
             ) : (
-              <div className="p-3 rounded-xl bg-rose-950 text-xs text-rose-300 text-center font-semibold border border-rose-800">
+              <div className="p-3 rounded-xl bg-[#ea4335]/20 text-xs text-[#f28b82] text-center font-bold border border-[#ea4335]/40">
                 Verification failed. Contact details remain protected.
               </div>
             )}

@@ -11,19 +11,19 @@ export default function AnalyticsView({ reports }) {
   const total = reports.length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
       
       {/* Header */}
-      <div className="pb-6 border-b border-slate-800">
-        <div className="flex items-center space-x-2">
-          <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-            <BarChart3 className="w-5 h-5" />
+      <div className="pb-4 border-b border-[#3c4043]">
+        <div className="flex items-center space-x-2.5">
+          <div className="p-2 rounded-xl bg-[#4285F4]/20 text-[#8ab4f8]">
+            <BarChart3 className="w-5 h-5 text-[#4285F4]" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl font-black text-white tracking-tight">
             Campus Trust & Recovery Intelligence
           </h1>
         </div>
-        <p className="mt-1 text-sm text-slate-400">
+        <p className="mt-1 text-xs text-[#9aa0a6]">
           Real-time analytics on multimodal AI matching efficiency, fraud interception, and campus safe zone throughput.
         </p>
       </div>
@@ -31,48 +31,48 @@ export default function AnalyticsView({ reports }) {
       {/* Primary KPI Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>AI Match Precision</span>
-            <Sparkles className="w-4 h-4 text-emerald-400" />
+        <div className="p-5 rounded-3xl bg-[#202124] border border-[#3c4043] space-y-2 shadow-md">
+          <div className="flex items-center justify-between text-xs text-[#9aa0a6]">
+            <span className="font-medium">AI Match Precision</span>
+            <Sparkles className="w-4 h-4 text-[#4285F4]" />
           </div>
           <div className="text-3xl font-black text-white">96.4%</div>
-          <div className="text-[11px] text-emerald-400 flex items-center gap-1">
-            <TrendingUp className="w-3 h-3" />
+          <div className="text-[11px] text-[#81c995] font-bold flex items-center gap-1">
+            <TrendingUp className="w-3.5 h-3.5" />
             <span>Multimodal Vision + Text</span>
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>Fraud Interception Rate</span>
-            <ShieldCheck className="w-4 h-4 text-cyan-400" />
+        <div className="p-5 rounded-3xl bg-[#202124] border border-[#3c4043] space-y-2 shadow-md">
+          <div className="flex items-center justify-between text-xs text-[#9aa0a6]">
+            <span className="font-medium">Fraud Interception</span>
+            <ShieldCheck className="w-4 h-4 text-[#EA4335]" />
           </div>
           <div className="text-3xl font-black text-white">100%</div>
-          <div className="text-[11px] text-cyan-400">
+          <div className="text-[11px] text-[#8ab4f8] font-bold">
             <span>Zero False Claims Released</span>
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>Average Recovery Delta</span>
-            <Clock className="w-4 h-4 text-amber-400" />
+        <div className="p-5 rounded-3xl bg-[#202124] border border-[#3c4043] space-y-2 shadow-md">
+          <div className="flex items-center justify-between text-xs text-[#9aa0a6]">
+            <span className="font-medium">Recovery Delta</span>
+            <Clock className="w-4 h-4 text-[#FBBC05]" />
           </div>
           <div className="text-3xl font-black text-white">1.8 hrs</div>
-          <div className="text-[11px] text-amber-400">
+          <div className="text-[11px] text-[#fdd663] font-bold">
             <span>Proactive Push Speed</span>
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>Active Campus Reports</span>
-            <Users className="w-4 h-4 text-purple-400" />
+        <div className="p-5 rounded-3xl bg-[#202124] border border-[#3c4043] space-y-2 shadow-md">
+          <div className="flex items-center justify-between text-xs text-[#9aa0a6]">
+            <span className="font-medium">Campus Reports</span>
+            <Users className="w-4 h-4 text-[#34A853]" />
           </div>
           <div className="text-3xl font-black text-white">{total} Items</div>
-          <div className="text-[11px] text-purple-400">
-            <span>{lostCount} Lost • {foundCount} Found</span>
+          <div className="text-[11px] text-[#bdc1c6] font-bold">
+            <span className="text-[#f28b82]">{lostCount} Lost</span> • <span className="text-[#81c995]">{foundCount} Found</span>
           </div>
         </div>
 
@@ -82,25 +82,25 @@ export default function AnalyticsView({ reports }) {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Campus Hotspots Heatmap */}
-        <div className="lg:col-span-7 rounded-3xl bg-slate-900 border border-slate-800 p-6 space-y-4">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-rose-400" />
-            <span>Campus Building Activity Hotspots</span>
+        <div className="lg:col-span-7 rounded-3xl bg-[#202124] border border-[#3c4043] p-6 space-y-4 shadow-md">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-[#EA4335]" />
+            <span>Campus Activity Hotspots</span>
           </h3>
 
-          <div className="space-y-3 pt-2">
+          <div className="space-y-3 pt-1">
             {[
-              { building: "Central Library (Study Rooms & Atrium)", count: 4, pct: 45, color: "bg-emerald-500" },
-              { building: "Science & Engineering Complex", count: 2, pct: 25, color: "bg-cyan-500" },
-              { building: "Athletics & Recreation Center", count: 2, pct: 20, color: "bg-amber-500" },
-              { building: "Student Union Lounge & Cafe", count: 1, pct: 10, color: "bg-purple-500" }
+              { building: "Central Library (Study Rooms & Atrium)", count: 4, pct: 45, color: "bg-[#4285F4]" },
+              { building: "Science & Engineering Complex", count: 2, pct: 25, color: "bg-[#34A853]" },
+              { building: "Athletics & Recreation Center", count: 2, pct: 20, color: "bg-[#FBBC05]" },
+              { building: "Student Union Lounge & Cafe", count: 1, pct: 10, color: "bg-[#EA4335]" }
             ].map((spot, i) => (
-              <div key={i} className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800 space-y-1.5">
+              <div key={i} className="p-3 rounded-2xl bg-[#2d2f31] border border-[#3c4043] space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-white">{spot.building}</span>
-                  <span className="text-slate-400 font-mono">{spot.count} items ({spot.pct}%)</span>
+                  <span className="font-bold text-white">{spot.building}</span>
+                  <span className="text-[#9aa0a6] font-mono">{spot.count} items ({spot.pct}%)</span>
                 </div>
-                <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-[#1e1f20] h-2 rounded-full overflow-hidden">
                   <div className={`${spot.color} h-full rounded-full`} style={{ width: `${spot.pct}%` }}></div>
                 </div>
               </div>
@@ -109,34 +109,34 @@ export default function AnalyticsView({ reports }) {
         </div>
 
         {/* AI Multimodal Signal Distribution */}
-        <div className="lg:col-span-5 rounded-3xl bg-slate-900 border border-slate-800 p-6 space-y-4">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-            <Zap className="w-4 h-4 text-emerald-400" />
+        <div className="lg:col-span-5 rounded-3xl bg-[#202124] border border-[#3c4043] p-6 space-y-4 shadow-md">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+            <Zap className="w-4 h-4 text-[#FBBC05]" />
             <span>AI Reasoning Signal Weights</span>
           </h3>
 
-          <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3 text-xs">
+          <div className="p-4 rounded-2xl bg-[#2d2f31] border border-[#3c4043] space-y-3 text-xs">
             <div className="flex items-center justify-between">
-              <span className="text-emerald-400 font-bold">1. Visual Surface & Markings</span>
-              <span className="font-mono font-bold text-white">40% Weight</span>
+              <span className="text-[#8ab4f8] font-bold">1. Visual Surface & Markings</span>
+              <span className="font-mono font-bold text-white">40%</span>
             </div>
-            <p className="text-[11px] text-slate-400 leading-snug">
+            <p className="text-[11px] text-[#9aa0a6] leading-snug">
               Visual AI inspection of scratches, decals, dents, and colorimetry.
             </p>
 
-            <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
-              <span className="text-cyan-400 font-bold">2. Model & Categorical Specs</span>
-              <span className="font-mono font-bold text-white">25% Weight</span>
+            <div className="pt-2 border-t border-[#3c4043] flex items-center justify-between">
+              <span className="text-[#81c995] font-bold">2. Model & Specs</span>
+              <span className="font-mono font-bold text-white">25%</span>
             </div>
 
-            <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
-              <span className="text-amber-400 font-bold">3. Campus Geospatial Proximity</span>
-              <span className="font-mono font-bold text-white">20% Weight</span>
+            <div className="pt-2 border-t border-[#3c4043] flex items-center justify-between">
+              <span className="text-[#fdd663] font-bold">3. Campus Proximity</span>
+              <span className="font-mono font-bold text-white">20%</span>
             </div>
 
-            <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
-              <span className="text-purple-400 font-bold">4. Temporal Coincidence Delta</span>
-              <span className="font-mono font-bold text-white">15% Weight</span>
+            <div className="pt-2 border-t border-[#3c4043] flex items-center justify-between">
+              <span className="text-[#f28b82] font-bold">4. Timeline Delta</span>
+              <span className="font-mono font-bold text-white">15%</span>
             </div>
           </div>
         </div>
@@ -144,23 +144,23 @@ export default function AnalyticsView({ reports }) {
       </div>
 
       {/* Supervised Safe Handoff Network Status */}
-      <div className="rounded-3xl bg-slate-900 border border-slate-800 p-6 space-y-4">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
+      <div className="rounded-3xl bg-[#202124] border border-[#3c4043] p-6 space-y-4 shadow-md">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-[#34A853]" />
           <span>Active Supervised Safe Handoff Stations</span>
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {SAFE_HANDOFF_ZONES.map((zone) => (
-            <div key={zone.id} className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-2">
+            <div key={zone.id} className="p-4 rounded-2xl bg-[#2d2f31] border border-[#3c4043] space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-white text-xs">{zone.name}</span>
-                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span className="w-2 h-2 rounded-full bg-[#34A853]"></span>
               </div>
-              <p className="text-[11px] text-slate-400">{zone.location}</p>
-              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] text-slate-500">
+              <p className="text-[11px] text-[#9aa0a6]">{zone.location}</p>
+              <div className="pt-2 border-t border-[#3c4043] flex items-center justify-between text-[10px] text-[#bdc1c6]">
                 <span>{zone.hours}</span>
-                <span className="text-emerald-400 font-medium">Station Online</span>
+                <span className="text-[#81c995] font-bold">Station Online</span>
               </div>
             </div>
           ))}
