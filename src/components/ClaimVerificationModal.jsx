@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { 
   ShieldCheck, AlertTriangle, Sparkles, CheckCircle2, 
-  X, Lock, ShieldAlert, ChevronRight, RefreshCw
+  X, Lock, ShieldAlert, ChevronRight, RefreshCw, Check
 } from "lucide-react";
 import { generateAntiFraudQuestions, evaluateClaimantAnswers } from "../services/geminiService";
 
@@ -140,22 +140,24 @@ export default function ClaimVerificationModal({
           </div>
         </div>
 
-        {/* Sample Helper */}
+        {/* Sample Helper with Lucide Icons */}
         <div className="flex items-center justify-end space-x-2 text-xs">
           <span className="text-[#9aa0a6] text-[11px]">Test with sample answers:</span>
           <button
             type="button"
             onClick={fastFillLegitimate}
-            className="px-3 py-1 rounded-full bg-[#34a853]/20 text-[#81c995] border border-[#34a853]/40 font-bold text-[11px] transition-colors"
+            className="px-3.5 py-1.5 rounded-full bg-[#34a853]/20 text-[#81c995] border border-[#34a853]/40 font-bold text-[11px] flex items-center gap-1.5 transition-colors"
           >
-            ✓ Genuine Owner Sample
+            <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>Genuine Owner Sample</span>
           </button>
           <button
             type="button"
             onClick={fastFillImposter}
-            className="px-3 py-1 rounded-full bg-[#2d2f31] text-[#9aa0a6] hover:text-white border border-[#3c4043] font-bold text-[11px] transition-colors"
+            className="px-3.5 py-1.5 rounded-full bg-[#2d2f31] text-[#9aa0a6] hover:text-white border border-[#3c4043] font-bold text-[11px] flex items-center gap-1.5 transition-colors"
           >
-            ✕ Invalid Guess Sample
+            <X className="w-3.5 h-3.5" />
+            <span>Invalid Guess Sample</span>
           </button>
         </div>
 

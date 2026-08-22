@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { 
   GitMerge, ShieldCheck, CheckCircle2, 
-  MapPin, Clock, Eye, RefreshCw, Check, FileText, ChevronRight, Sparkles
+  MapPin, Clock, Eye, RefreshCw, Check, FileText, ChevronRight, Sparkles,
+  Laptop, Droplets, Headphones, Backpack
 } from "lucide-react";
 import { runMultimodalMatch } from "../services/geminiService";
 
@@ -90,27 +91,32 @@ export default function MatchHub({
           </p>
         </div>
 
-        {/* Featured Matches Switcher */}
+        {/* Featured Matches Switcher with Lucide Icons */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0" role="toolbar" aria-label="Featured Matches">
           <span className="text-xs text-[#9aa0a6] font-bold">Featured:</span>
           {[
-            { label: "💻 MacBook", l: "REP-9001", f: "REP-9002" },
-            { label: "💧 Hydro Flask", l: "REP-9003", f: "REP-9004" },
-            { label: "🎧 Sony XM4", l: "REP-9005", f: "REP-9006" },
-            { label: "🎒 Jansport", l: "REP-9007", f: "REP-9008" }
-          ].map((preset) => (
-            <button
-              key={preset.l}
-              onClick={() => selectPresetPair(preset.l, preset.f)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
-                currentLost?.id === preset.l
-                  ? "bg-[#1a73e8] text-white shadow-md"
-                  : "bg-[#202124] text-[#bdc1c6] hover:text-white border border-[#3c4043]"
-              }`}
-            >
-              {preset.label}
-            </button>
-          ))}
+            { label: "MacBook Pro", icon: Laptop, l: "REP-9001", f: "REP-9002" },
+            { label: "Hydro Flask", icon: Droplets, l: "REP-9003", f: "REP-9004" },
+            { label: "Sony XM4", icon: Headphones, l: "REP-9005", f: "REP-9006" },
+            { label: "Jansport Fox", icon: Backpack, l: "REP-9007", f: "REP-9008" }
+          ].map((preset) => {
+            const Icon = preset.icon;
+            const isSelected = currentLost?.id === preset.l;
+            return (
+              <button
+                key={preset.l}
+                onClick={() => selectPresetPair(preset.l, preset.f)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap flex items-center gap-1.5 transition-all ${
+                  isSelected
+                    ? "bg-[#1a73e8] text-white shadow-md"
+                    : "bg-[#202124] text-[#bdc1c6] hover:text-white border border-[#3c4043]"
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span>{preset.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 

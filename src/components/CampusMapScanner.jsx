@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { 
   MapPin, Compass, Building, ShieldCheck, 
-  Layers, ArrowRight, Sparkles, Filter
+  Layers, ArrowRight, Sparkles, Filter,
+  BookOpen, FlaskConical, Trophy, Coffee, X
 } from "lucide-react";
 import { CAMPUS_LOCATIONS } from "../data/seedData";
 
@@ -16,8 +17,8 @@ export default function CampusMapScanner({
       id: "loc-1",
       name: "Central Library",
       area: "North Quad",
-      icon: "📚",
-      color: "bg-[#4285F4]",
+      icon: BookOpen,
+      iconColor: "text-[#4285F4]",
       lost: reports.filter(r => r.location.includes("Library") && r.type === "lost").length,
       found: reports.filter(r => r.location.includes("Library") && r.type === "found").length,
       kiosk: "Kiosk #1 • Level 1 Front Desk"
@@ -26,8 +27,8 @@ export default function CampusMapScanner({
       id: "loc-2",
       name: "Science Complex",
       area: "East Wing",
-      icon: "🔬",
-      color: "bg-[#34A853]",
+      icon: FlaskConical,
+      iconColor: "text-[#34A853]",
       lost: reports.filter(r => r.location.includes("Science") && r.type === "lost").length,
       found: reports.filter(r => r.location.includes("Science") && r.type === "found").length,
       kiosk: "Kiosk #2 • Lab Lobby"
@@ -36,8 +37,8 @@ export default function CampusMapScanner({
       id: "loc-3",
       name: "Athletics Center",
       area: "South Quad",
-      icon: "🏀",
-      color: "bg-[#FBBC05]",
+      icon: Trophy,
+      iconColor: "text-[#FBBC05]",
       lost: reports.filter(r => (r.location.includes("Athletics") || r.location.includes("Gym")) && r.type === "lost").length,
       found: reports.filter(r => (r.location.includes("Athletics") || r.location.includes("Gym")) && r.type === "found").length,
       kiosk: "Kiosk #3 • Gymnasium Desk"
@@ -46,8 +47,8 @@ export default function CampusMapScanner({
       id: "loc-4",
       name: "Student Union",
       area: "West Plaza",
-      icon: "☕",
-      color: "bg-[#EA4335]",
+      icon: Coffee,
+      iconColor: "text-[#EA4335]",
       lost: reports.filter(r => (r.location.includes("Union") || r.location.includes("Dining")) && r.type === "lost").length,
       found: reports.filter(r => (r.location.includes("Union") || r.location.includes("Dining")) && r.type === "found").length,
       kiosk: "Kiosk #4 • Info Lounge"
@@ -55,7 +56,7 @@ export default function CampusMapScanner({
   ];
 
   return (
-    <div className={`p-6 rounded-2xl border space-y-4 ${
+    <div className={`p-6 rounded-3xl border space-y-4 shadow-md ${
       darkMode ? "bg-[#202124] border-[#3c4043]" : "bg-white border-[#dadce0]"
     }`}>
       
@@ -78,10 +79,10 @@ export default function CampusMapScanner({
         {selectedLocation && (
           <button
             onClick={() => onSelectLocationFilter(null)}
-            className="px-3 py-1 rounded-full bg-[#1a73e8] text-xs font-bold text-white flex items-center gap-1.5 shadow-sm self-start"
+            className="px-3.5 py-1.5 rounded-full bg-[#1a73e8] text-xs font-bold text-white flex items-center gap-1.5 shadow-sm self-start"
           >
             <span>Zone: {selectedLocation}</span>
-            <span className="font-mono">✕</span>
+            <X className="w-3.5 h-3.5 stroke-[2.5]" />
           </button>
         )}
       </div>
@@ -89,6 +90,7 @@ export default function CampusMapScanner({
       {/* Grid of Building Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {zoneStats.map((zone) => {
+          const Icon = zone.icon;
           const isSelected = selectedLocation === zone.name;
           return (
             <button
@@ -101,7 +103,9 @@ export default function CampusMapScanner({
               }`}
             >
               <div className="flex items-start justify-between">
-                <span className="text-2xl p-2 rounded-xl bg-[#1e1f20] border border-[#3c4043]">{zone.icon}</span>
+                <div className={`p-2.5 rounded-xl bg-[#1e1f20] border border-[#3c4043] ${zone.iconColor}`}>
+                  <Icon className="w-5 h-5" />
+                </div>
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#1e1f20] text-[#bdc1c6] border border-[#3c4043]">
                   {zone.area}
                 </span>
