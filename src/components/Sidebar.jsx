@@ -14,7 +14,8 @@ export default function Sidebar({
   darkMode,
   onToggleTheme,
   mobileOpen,
-  onCloseMobile
+  onCloseMobile,
+  onReplayIntro
 }) {
   const [showNotifications, setShowNotifications] = useState(false);
   const unreadCount = notifications.filter(n => !n.read).length;
@@ -230,6 +231,21 @@ export default function Sidebar({
               </div>
             )}
           </div>
+
+          {/* Intro Tour Button */}
+          {onReplayIntro && (
+            <button
+              onClick={onReplayIntro}
+              className={`w-full py-2 px-3 rounded-full border text-xs font-medium flex items-center justify-center space-x-1.5 transition-colors ${
+                darkMode 
+                  ? "bg-[#2d2f31] border-[#3c4043] text-[#8ab4f8] hover:bg-[#3c4043]" 
+                  : "bg-white border-[#dadce0] text-[#1a73e8] hover:bg-[#f1f3f4]"
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#4285F4]" />
+              <span>System Boot Intro</span>
+            </button>
+          )}
 
           {/* Theme Switcher Toggle */}
           <button

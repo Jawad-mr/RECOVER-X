@@ -17,11 +17,22 @@ import CampusMapScanner from "./components/CampusMapScanner";
 import FeaturesShowcase from "./components/FeaturesShowcase";
 import SmartTagModal from "./components/SmartTagModal";
 import RecoverXLogo from "./components/RecoverXLogo";
+import IntroSplashScreen from "./components/IntroSplashScreen";
 
 import { INITIAL_REPORTS, CATEGORIES, CAMPUS_LOCATIONS } from "./data/seedData";
 import { runMultimodalMatch } from "./services/geminiService";
 
 export default function App() {
+  // Intro splash screen state
+  const [showSplash, setShowSplash] = useState(() => {
+    return !sessionStorage.getItem("recover_x_intro_seen");
+  });
+
+  const handleCompleteSplash = () => {
+    setShowSplash(false);
+    sessionStorage.setItem("recover_x_intro_seen", "true");
+  };
+
   // Theme State: Default to Dark Mode (Google Material Dark)
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem("campus_find_theme");
@@ -193,6 +204,7 @@ export default function App() {
         onToggleTheme={handleToggleTheme}
         mobileOpen={mobileMenuOpen}
         onCloseMobile={() => setMobileMenuOpen(false)}
+        onReplayIntro={() => setShowSplash(true)}
       />
 
       {/* Main Layout Container */}
@@ -609,6 +621,14 @@ export default function App() {
         isOpen={smartTagModalOpen}
         onClose={() => setSmartTagModalOpen(false)}
       />
+
+      {/* Intro Boot Splash Screen */}
+      {showSplash && (
+        <IntroSplashScreen
+          onComplete={handleCompleteSplash}
+          darkMode={darkMode}
+        />
+      )}
 
     </div>
   );
