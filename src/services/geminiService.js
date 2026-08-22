@@ -285,36 +285,38 @@ function simulateMultimodalMatch(lost, found) {
   }
 
   // Calculation of signal scores
-  let visualScore = 55;
+  let visualScore = sameCategory ? 55 : 15;
   if (matchedMarkers.length >= 2) visualScore = 95;
-  else if (matchedMarkers.length === 1) visualScore = 84;
+  else if (matchedMarkers.length === 1 && sameCategory) visualScore = 84;
   else if (sameCategory) visualScore = 70;
 
-  let descScore = sameCategory ? 80 : 40;
-  if (lost.brand && found.brand && lost.brand.toLowerCase() === found.brand.toLowerCase()) {
+  let descScore = sameCategory ? 80 : 15;
+  if (sameCategory && lost.brand && found.brand && lost.brand.toLowerCase() === found.brand.toLowerCase()) {
     descScore += 15;
   }
-  if (lost.color && found.color && (lostText.includes(found.color.toLowerCase()) || foundText.includes(lost.color.toLowerCase()))) {
+  if (sameCategory && lost.color && found.color && (lostText.includes(found.color.toLowerCase()) || foundText.includes(lost.color.toLowerCase()))) {
     descScore += 5;
   }
   descScore = Math.min(98, descScore);
 
-  let locScore = sameLocation ? 96 : sameBuilding ? 85 : 55;
+  let locScore = sameCategory 
+    ? (sameLocation ? 96 : sameBuilding ? 85 : 55)
+    : 20;
   
   // Time proximity
-  let timeScore = 88;
-  if (lost.date === found.date) {
-    timeScore = 94;
-  }
+  let timeScore = sameCategory
+    ? (lost.date === found.date ? 94 : 88)
+    : 25;
 
   // Weighted overall calculation: Visual 40%, Desc 25%, Location 20%, Time 15%
   const overallScore = Math.round(
     visualScore * 0.40 + descScore * 0.25 + locScore * 0.20 + timeScore * 0.15
   );
 
-  let matchTier = "LOW_LIKELIHOOD";
+  let matchTier = "NO_MATCH";
   if (overallScore >= 80) matchTier = "HIGH_CONFIDENCE";
   else if (overallScore >= 60) matchTier = "MODERATE_MATCH";
+  else if (overallScore >= 40) matchTier = "LOW_LIKELIHOOD";
 
   const visualReason = visualScore > 80 
     ? `Strong visual correlation on physical hallmarks: ${matchedMarkers.map(m => m.key).join(", ") || "form & finish"}.`
