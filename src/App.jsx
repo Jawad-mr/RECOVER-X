@@ -13,6 +13,9 @@ import ItemDetailsModal from "./components/ItemDetailsModal";
 import ClaimVerificationModal from "./components/ClaimVerificationModal";
 import SafeHandoffModal from "./components/SafeHandoffModal";
 import AnalyticsView from "./components/AnalyticsView";
+import CampusMapScanner from "./components/CampusMapScanner";
+import FeaturesShowcase from "./components/FeaturesShowcase";
+import SmartTagModal from "./components/SmartTagModal";
 
 import { INITIAL_REPORTS, CATEGORIES, CAMPUS_LOCATIONS } from "./data/seedData";
 import { runMultimodalMatch } from "./services/geminiService";
@@ -36,12 +39,14 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("feed"); // "feed" | "report" | "matches" | "vault" | "analytics"
   const [selectedType, setSelectedType] = useState("all"); // "all" | "lost" | "found"
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [selectedLocation, setSelectedLocation] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   // Modals state
   const [detailsModalItem, setDetailsModalItem] = useState(null);
   const [claimModalItem, setClaimModalItem] = useState(null);
   const [handoffModalItem, setHandoffModalItem] = useState(null);
+  const [smartTagModalOpen, setSmartTagModalOpen] = useState(false);
 
   // Match Hub focused pair
   const [selectedPair, setSelectedPair] = useState(null);
@@ -103,6 +108,7 @@ export default function App() {
     return reports.filter((item) => {
       if (selectedType !== "all" && item.type !== selectedType) return false;
       if (selectedCategory !== "All Categories" && item.category !== selectedCategory) return false;
+      if (selectedLocation && !item.location.toLowerCase().includes(selectedLocation.toLowerCase())) return false;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const text = `${item.title} ${item.description} ${item.location} ${item.category} ${item.brand || ""} ${item.color || ""}`.toLowerCase();
@@ -110,13 +116,13 @@ export default function App() {
       }
       return true;
     });
-  }, [reports, selectedType, selectedCategory, searchQuery]);
+  }, [reports, selectedType, selectedCategory, selectedLocation, searchQuery]);
 
   // Submit new report & trigger Proactive Push Matching!
   const handleCreateReport = async (newReport) => {
     const updated = [newReport, ...reports];
     setReports(updated);
-    setActiveTab("feed"); // navigate back to feed
+    setActiveTab("feed");
     showToast("Report Submitted Successfully", `AI Radar scanning campus records for ${newReport.title}...`);
 
     // Proactive background matching against opposite reports
@@ -183,6 +189,7 @@ export default function App() {
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        onOpenSmartTag={() => setSmartTagModalOpen(true)}
         notifications={notifications}
         onSelectNotification={handleSelectNotification}
         darkMode={darkMode}
@@ -249,7 +256,7 @@ export default function App() {
         <main className="flex-1">
           {/* TAB 1: CAMPUS EXPLORER (FEED) */}
           {activeTab === "feed" && (
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10 animate-fade-in">
               
               {/* Hero Banner */}
               <div className={`relative rounded-3xl overflow-hidden border p-6 sm:p-8 shadow-xl ${
@@ -258,7 +265,7 @@ export default function App() {
                 <div className="relative z-10 max-w-3xl space-y-4">
                   <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs font-bold">
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>Smart Campus Lost & Found</span>
+                    <span>Next-Gen Campus Lost & Found</span>
                   </div>
 
                   <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
@@ -297,12 +304,36 @@ export default function App() {
                       <GitMerge className="w-4 h-4 text-emerald-500" />
                       <span>View Active Matches</span>
                     </button>
+
+                    <button
+                      onClick={() => setSmartTagModalOpen(true)}
+                      className="px-5 py-2.5 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-700 text-purple-300 text-xs font-bold flex items-center space-x-2 transition-colors"
+                    >
+                      <QrCode className="w-4 h-4 text-purple-400" />
+                      <span>Generate QR Safe-Tag</span>
+                    </button>
                   </div>
                 </div>
               </div>
 
+              {/* NEW FEATURES SHOWCASE */}
+              <FeaturesShowcase
+                onOpenSmartTag={() => setSmartTagModalOpen(true)}
+                onJumpToMatches={() => setActiveTab("matches")}
+                onJumpToVault={() => setActiveTab("vault")}
+                darkMode={darkMode}
+              />
+
+              {/* INTERACTIVE CAMPUS MAP & HOTSPOTS */}
+              <CampusMapScanner
+                reports={reports}
+                selectedLocation={selectedLocation}
+                onSelectLocationFilter={(loc) => setSelectedLocation(loc)}
+                darkMode={darkMode}
+              />
+
               {/* Filter & Search Bar */}
-              <div className="flex flex-col md:flex-row gap-4 items-center justify-between pb-2">
+              <div className="flex flex-col md:flex-row gap-4 items-center justify-between pb-2 pt-4">
                 
                 {/* Type Switcher */}
                 <div className={`flex items-center p-1 rounded-2xl border w-full md:w-auto ${
@@ -371,12 +402,13 @@ export default function App() {
                   <Search className="w-10 h-10 text-slate-400 mx-auto" />
                   <h4 className="text-base font-bold">No Matching Reports Found</h4>
                   <p className={`text-xs max-w-sm mx-auto ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                    No campus reports match your search query or filter selection.
+                    {selectedLocation ? `No items found in ${selectedLocation}.` : "No campus reports match your search query."}
                   </p>
                   <button
                     onClick={() => {
                       setSelectedType("all");
                       setSelectedCategory("All Categories");
+                      setSelectedLocation(null);
                       setSearchQuery("");
                     }}
                     className={`px-4 py-2 rounded-xl text-xs font-bold text-emerald-500 transition-colors ${
@@ -502,6 +534,12 @@ export default function App() {
               <span>Smart Lost & Found System</span>
             </div>
             <div className="flex items-center space-x-4">
+              <button 
+                onClick={() => setSmartTagModalOpen(true)}
+                className="text-purple-400 hover:underline font-bold"
+              >
+                + Print Device Safe-Tags
+              </button>
               <span className="text-slate-500">Encrypted Data Protection</span>
             </div>
           </div>
@@ -532,6 +570,11 @@ export default function App() {
         onClose={() => setHandoffModalItem(null)}
         item={handoffModalItem}
         onHandoffComplete={handleHandoffComplete}
+      />
+
+      <SmartTagModal
+        isOpen={smartTagModalOpen}
+        onClose={() => setSmartTagModalOpen(false)}
       />
 
     </div>

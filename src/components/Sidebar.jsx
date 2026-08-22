@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { 
   Sparkles, Bell, Plus, Compass, GitMerge, ShieldCheck, 
-  BarChart3, Sun, Moon, Check, X, Shield, FilePlus2
+  BarChart3, Sun, Moon, Check, X, Shield, FilePlus2, QrCode
 } from "lucide-react";
 
 export default function Sidebar({ 
   activeTab, 
   setActiveTab, 
+  onOpenSmartTag,
   notifications = [],
   onSelectNotification,
   darkMode,
@@ -143,6 +144,20 @@ export default function Sidebar({
                 </button>
               );
             })}
+
+            {/* Smart Safe Tag Generator Button in Sidebar */}
+            <button
+              onClick={() => {
+                onOpenSmartTag();
+                if (onCloseMobile) onCloseMobile();
+              }}
+              className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-3 transition-colors ${
+                darkMode ? "text-purple-400 hover:bg-purple-950/40 border border-purple-800/50" : "text-purple-700 bg-purple-50 hover:bg-purple-100 border border-purple-200"
+              }`}
+            >
+              <QrCode className="w-4 h-4 text-purple-400" />
+              <span>QR Safe-Tag Generator</span>
+            </button>
           </nav>
         </div>
 
