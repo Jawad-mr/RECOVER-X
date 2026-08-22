@@ -56,7 +56,7 @@ export default function ClaimVerificationModal({
     }
   };
 
-  // Quick fill helper for judges
+  // Quick fill helper
   const fastFillLegitimate = () => {
     if (!questionsData || !item) return;
     const newAnswers = {};
@@ -103,16 +103,11 @@ export default function ClaimVerificationModal({
               <ShieldCheck className="w-6 h-6 stroke-[2.5]" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-lg sm:text-xl font-extrabold text-white">
-                  AI Anti-Fraud Verification
-                </h3>
-                <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
-                  Novel Differentiator
-                </span>
-              </div>
+              <h3 className="text-lg sm:text-xl font-extrabold text-white">
+                Ownership Verification Challenge
+              </h3>
               <p className="text-xs text-slate-400">
-                Cross-referencing claimant answers against confidential ground truth via Gemini AI
+                Answer ownership security questions to verify genuine ownership before handoff
               </p>
             </div>
           </div>
@@ -145,39 +140,34 @@ export default function ClaimVerificationModal({
             <span className="px-2 py-1 rounded bg-slate-800 text-slate-300 font-mono text-[11px] block font-semibold">
               {item.reporterAlias}
             </span>
-            <span className="text-[10px] text-slate-500 mt-1 block font-medium">Privacy Mask Active</span>
+            <span className="text-[10px] text-slate-500 mt-1 block font-medium">Privacy Masked</span>
           </div>
         </div>
 
-        {/* Judge Fast-Fill Banner */}
-        <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
-          <span className="text-amber-300 font-bold flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Judge Test Shortcuts:</span>
-          </span>
-          <div className="flex items-center space-x-2">
-            <button
-              type="button"
-              onClick={fastFillLegitimate}
-              className="px-2.5 py-1 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-700 hover:bg-emerald-900 font-bold text-[11px] transition-colors"
-            >
-              ✓ Test Real Owner Answers (Pass)
-            </button>
-            <button
-              type="button"
-              onClick={fastFillImposter}
-              className="px-2.5 py-1 rounded-lg bg-rose-950 text-rose-300 border border-rose-700 hover:bg-rose-900 font-bold text-[11px] transition-colors"
-            >
-              ✕ Test Imposter Guess (Fail)
-            </button>
-          </div>
+        {/* Quick Fill Sample Helper */}
+        <div className="flex items-center justify-end space-x-2 text-xs">
+          <span className="text-slate-500 text-[11px]">Test with sample answers:</span>
+          <button
+            type="button"
+            onClick={fastFillLegitimate}
+            className="px-2.5 py-1 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-700 hover:bg-emerald-900 font-bold text-[11px] transition-colors"
+          >
+            ✓ Genuine Owner Sample
+          </button>
+          <button
+            type="button"
+            onClick={fastFillImposter}
+            className="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700 font-bold text-[11px] transition-colors"
+          >
+            ✕ Invalid Guess Sample
+          </button>
         </div>
 
         {/* Question Form */}
         {loadingQuestions ? (
           <div className="py-12 flex flex-col items-center justify-center space-y-3">
             <RefreshCw className="w-8 h-8 text-cyan-400 animate-spin" />
-            <p className="text-xs text-slate-400">Gemini generating dynamic ownership verification challenges from hidden metadata...</p>
+            <p className="text-xs text-slate-400">Loading ownership verification questions...</p>
           </div>
         ) : (
           <form onSubmit={handleEvaluate} className="space-y-4">
@@ -195,7 +185,7 @@ export default function ClaimVerificationModal({
                     required
                     value={answers[q.id] || ""}
                     onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
-                    placeholder="Type specific details to prove ownership..."
+                    placeholder="Provide specific details you know about this item..."
                     className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-medium"
                   />
                 </div>
@@ -212,12 +202,12 @@ export default function ClaimVerificationModal({
                 {evaluating ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin text-slate-950" />
-                    <span>Cross-referencing confidential ground truth with Gemini AI...</span>
+                    <span>Verifying responses...</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4 text-slate-950 stroke-[3]" />
-                    <span>Cross-Reference & Verify Ownership</span>
+                    <ShieldCheck className="w-4 h-4 text-slate-950 stroke-[3]" />
+                    <span>Submit & Verify Ownership</span>
                   </>
                 )}
               </button>
@@ -240,7 +230,7 @@ export default function ClaimVerificationModal({
                   {evalResult.verdict}
                 </span>
                 <span className="text-xs text-slate-400 font-mono">
-                  Fraud Risk: <span className={evalResult.fraudRiskLevel === "LOW" ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>{evalResult.fraudRiskLevel}</span>
+                  Trust Status: <span className={evalResult.fraudRiskLevel === "LOW" ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>{evalResult.fraudRiskLevel === "LOW" ? "Confirmed Owner" : "Unverified"}</span>
                 </span>
               </div>
 
@@ -248,7 +238,7 @@ export default function ClaimVerificationModal({
                 <span className="text-2xl font-black text-white font-mono">
                   {evalResult.verificationScore}%
                 </span>
-                <span className="text-[10px] text-slate-400 block font-medium">AI Match Score</span>
+                <span className="text-[10px] text-slate-400 block font-medium">Confidence Score</span>
               </div>
             </div>
 
@@ -288,7 +278,7 @@ export default function ClaimVerificationModal({
               </div>
             ) : (
               <div className="p-3 rounded-xl bg-rose-950 text-xs text-rose-300 text-center font-semibold border border-rose-800">
-                Verification failed. Contact details remain masked to protect student privacy.
+                Verification failed. Contact details remain protected.
               </div>
             )}
 

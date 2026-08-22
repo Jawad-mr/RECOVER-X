@@ -76,8 +76,8 @@ export default function ReportModal({
       imageVisualFeatures: visualFeatures || "Standard form factor with identifiable surface details",
       hiddenGroundTruth,
       reporterAlias: `@Campus_${Math.floor(1000 + Math.random() * 9000)}`,
-      reporterName: "Campus Student",
-      contactEmail: "student@campus.edu",
+      reporterName: "Campus Member",
+      contactEmail: "member@campus.edu",
       contactPhone: "+1 (555) 019-2819",
       status: "open",
       createdAt: new Date().toISOString(),
@@ -105,7 +105,7 @@ export default function ReportModal({
                 Submit Campus Item Report
               </h3>
               <p className="text-xs text-slate-400">
-                AI Vision pre-processing & proactive match radar
+                AI visual hallmark extraction & automatic match radar
               </p>
             </div>
           </div>
@@ -149,11 +149,11 @@ export default function ReportModal({
             </button>
           </div>
 
-          {/* Quick Preset Selector for Easy Testing */}
+          {/* Photo Gallery Selector */}
           <div className="space-y-2">
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
-              <span>Quick Preset Sample Photos (1-Click Fill):</span>
-              <span className="text-emerald-400 font-semibold text-[11px]">Instant test data</span>
+              <span>Select Sample Item Photo:</span>
+              <span className="text-emerald-400 font-semibold text-[11px]">Quick selection</span>
             </label>
 
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
@@ -192,7 +192,7 @@ export default function ReportModal({
                 />
                 <div>
                   <h4 className="text-xs font-bold text-white">Item Image & Visual Feature Extractor</h4>
-                  <p className="text-[11px] text-slate-400">Gemini analyzes surface damage, decals, and geometry</p>
+                  <p className="text-[11px] text-slate-400">AI automatically scans surface markings, decals, and damage</p>
                 </div>
               </div>
 
@@ -203,16 +203,15 @@ export default function ReportModal({
                 className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 text-xs font-bold flex items-center space-x-1.5 transition-colors"
               >
                 <Sparkles className={`w-3.5 h-3.5 ${isAnalyzingImage ? 'animate-spin' : ''}`} />
-                <span>{isAnalyzingImage ? "Extracting Hallmarks..." : "Auto-Tag with Gemini Vision"}</span>
+                <span>{isAnalyzingImage ? "Extracting..." : "Scan & Auto-Extract Details"}</span>
               </button>
             </div>
 
-            {/* VISUALLY DISTINGUISHED: WHAT THE AI UNDERSTOOD */}
             {aiAnalysisCompleted && visualFeatures && (
               <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-700/60 text-xs text-slate-200 space-y-1.5 animate-fade-in">
                 <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-[11px] uppercase tracking-wider">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Gemini Vision Interpretation:</span>
+                  <span>AI Visual Interpretation:</span>
                 </div>
                 <p className="text-slate-200 font-medium leading-relaxed">
                   "{visualFeatures}"
@@ -261,7 +260,7 @@ export default function ReportModal({
           {/* Public Description */}
           <div>
             <label className="block text-xs font-bold uppercase text-slate-300 mb-1.5">
-              Public Description (Visible to Campus) *
+              Public Description (Visible on Campus Feed) *
             </label>
             <textarea
               rows={2}
@@ -320,14 +319,14 @@ export default function ReportModal({
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold uppercase tracking-wider text-cyan-300 flex items-center gap-1.5">
                 <Lock className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Confidential Hidden Ground Truth (Anti-Fraud Secret)</span>
+                <span>Confidential Security Secret (Hidden from Public)</span>
               </label>
               <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold">
-                Never Shown Publicly
+                Private
               </span>
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Enter private details known only to the genuine owner (e.g. lock screen wallpaper, hidden serial digit, charger brand in sleeve, inner pocket keys). Gemini uses this to dynamically challenge claimants.
+              Enter private details known only to the genuine owner (e.g. lock screen wallpaper, hidden serial digit, charger brand in sleeve, inner pocket keys). Used to challenge claimants.
             </p>
             <textarea
               rows={2}
@@ -353,7 +352,7 @@ export default function ReportModal({
               className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-md flex items-center space-x-2 transition-all transform hover:-translate-y-0.5"
             >
               <Sparkles className="w-4 h-4 text-slate-950 stroke-[3]" />
-              <span>Submit Report & Run Proactive AI</span>
+              <span>Submit Report</span>
             </button>
           </div>
 

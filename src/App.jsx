@@ -12,8 +12,6 @@ import ReportModal from "./components/ReportModal";
 import ItemDetailsModal from "./components/ItemDetailsModal";
 import ClaimVerificationModal from "./components/ClaimVerificationModal";
 import SafeHandoffModal from "./components/SafeHandoffModal";
-import ApiKeyModal from "./components/ApiKeyModal";
-import JudgeTourModal from "./components/JudgeTourModal";
 import AnalyticsView from "./components/AnalyticsView";
 
 import { INITIAL_REPORTS, CATEGORIES, CAMPUS_LOCATIONS } from "./data/seedData";
@@ -40,15 +38,11 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem("campus_find_gemini_key") || "");
-  
   // Modals state
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [detailsModalItem, setDetailsModalItem] = useState(null);
   const [claimModalItem, setClaimModalItem] = useState(null);
   const [handoffModalItem, setHandoffModalItem] = useState(null);
-  const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false);
-  const [judgeTourModalOpen, setJudgeTourModalOpen] = useState(false);
 
   // Match Hub focused pair
   const [selectedPair, setSelectedPair] = useState(null);
@@ -76,7 +70,7 @@ export default function App() {
   const [notifications, setNotifications] = useState([
     {
       id: "notif-1",
-      title: "High-Confidence AI Match Detected",
+      title: "Potential Match Detected",
       message: "Lost MacBook Pro (REP-9001) matched with Found Laptop (REP-9002) at 96% confidence.",
       score: 96,
       timeAgo: "10m ago",
@@ -88,8 +82,8 @@ export default function App() {
     },
     {
       id: "notif-2",
-      title: "Proactive Radar: Hydro Flask Match",
-      message: "Teal Hydro Flask (REP-9003) matched with Gym Bleachers report (REP-9004) at 94%.",
+      title: "Match Alert: Hydro Flask",
+      message: "Teal Hydro Flask (REP-9003) matched with Gym report (REP-9004) at 94%.",
       score: 94,
       timeAgo: "25m ago",
       read: false,
@@ -104,13 +98,6 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("campus_find_reports", JSON.stringify(reports));
   }, [reports]);
-
-  // Save API key
-  const handleSaveApiKey = (key) => {
-    setApiKey(key);
-    localStorage.setItem("campus_find_gemini_key", key);
-    showToast("Gemini Settings Saved", key ? "Live Gemini 1.5/2.0 API enabled." : "Smart fallback neural reasoning active.");
-  };
 
   // Filtered reports for Campus Explorer
   const filteredReports = useMemo(() => {
@@ -130,32 +117,32 @@ export default function App() {
   const handleCreateReport = async (newReport) => {
     const updated = [newReport, ...reports];
     setReports(updated);
-    showToast("Report Submitted Successfully", `Proactive AI Radar scanning campus database for ${newReport.title}...`);
+    showToast("Report Submitted", `AI Radar scanning campus records for ${newReport.title}...`);
 
-    // Proactive background matching simulation against opposite reports
+    // Proactive background matching against opposite reports
     const opposites = updated.filter(r => r.type !== newReport.type);
     for (const opp of opposites.slice(0, 3)) {
       try {
         const lost = newReport.type === "lost" ? newReport : opp;
         const found = newReport.type === "lost" ? opp : newReport;
-        const matchResult = await runMultimodalMatch(lost, found, apiKey);
+        const matchResult = await runMultimodalMatch(lost, found, "");
         
         if (matchResult.overallScore >= 75) {
           const newNotif = {
             id: `notif-${Date.now()}`,
-            title: `Proactive Match: ${matchResult.overallScore}% Confidence`,
-            message: `"${newReport.title}" automatically matched with "${opp.title}".`,
+            title: `Match Found (${matchResult.overallScore}% Confidence)`,
+            message: `"${newReport.title}" matched with "${opp.title}".`,
             score: matchResult.overallScore,
             timeAgo: "Just now",
             read: false,
             pair: { lost, found }
           };
           setNotifications(prev => [newNotif, ...prev]);
-          showToast(`Proactive Match (${matchResult.overallScore}%)`, `High-confidence match found for ${newReport.title}`);
+          showToast(`Match Detected (${matchResult.overallScore}%)`, `Potential match found for ${newReport.title}`);
           break;
         }
       } catch (err) {
-        console.error("Proactive match check error:", err);
+        console.error("Proactive match error:", err);
       }
     }
   };
@@ -184,7 +171,7 @@ export default function App() {
   // Complete Handoff
   const handleHandoffComplete = (itemId) => {
     setReports(prev => prev.map(r => r.id === itemId ? { ...r, status: "resolved" } : r));
-    showToast("Handoff Completed", "Item marked as resolved in campus records.");
+    showToast("Handoff Complete", "Item marked as resolved in campus records.");
   };
 
   return (
@@ -197,9 +184,6 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenReportModal={() => setReportModalOpen(true)}
-        onOpenTour={() => setJudgeTourModalOpen(true)}
-        onOpenApiKeyModal={() => setApiKeyModalOpen(true)}
-        hasApiKey={Boolean(apiKey)}
         notifications={notifications}
         onSelectNotification={handleSelectNotification}
         darkMode={darkMode}
@@ -274,17 +258,17 @@ export default function App() {
                 <div className="relative z-10 max-w-3xl space-y-4">
                   <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs font-bold">
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>Next-Gen Smart Campus Ecosystem</span>
+                    <span>Smart Campus Lost & Found</span>
                   </div>
 
                   <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
-                    Multimodal AI Lost & Found with <span className="text-emerald-500">Anti-Fraud Verification</span>
+                    Recover lost items faster with <span className="text-emerald-500">AI Visual Matching</span>
                   </h1>
 
                   <p className={`text-sm sm:text-base leading-relaxed font-medium ${
                     darkMode ? "text-slate-300" : "text-slate-600"
                   }`}>
-                    Powered by Google Gemini Vision & Text reasoning. Analyzes physical damage, stickers, and campus geography simultaneously, protecting items with dynamic AI ownership challenges.
+                    Submit lost or found reports across campus. Our multimodal vision system automatically cross-references physical hallmarks, damage indicators, and campus locations to suggest instant matches.
                   </p>
 
                   <div className="flex flex-wrap gap-3 pt-2">
@@ -311,7 +295,7 @@ export default function App() {
                       }`}
                     >
                       <GitMerge className="w-4 h-4 text-emerald-500" />
-                      <span>Test Multimodal Match Hub</span>
+                      <span>View Active Matches</span>
                     </button>
                   </div>
                 </div>
@@ -419,11 +403,10 @@ export default function App() {
             </div>
           )}
 
-          {/* Tab 2: Multimodal AI Match Hub */}
+          {/* Tab 2: AI Match Hub */}
           {activeTab === "matches" && (
             <MatchHub
               reports={reports}
-              apiKey={apiKey}
               selectedPair={selectedPair}
               onSelectPair={(pair) => setSelectedPair(pair)}
               onStartClaimVerification={(item) => setClaimModalItem(item)}
@@ -507,15 +490,10 @@ export default function App() {
             <div className="flex items-center space-x-2">
               <span className="font-bold">Campus Find (RECOVER-X)</span>
               <span>•</span>
-              <span>PromptWars x YenTech • Google for Developers</span>
+              <span>Smart Campus Lost & Found System</span>
             </div>
             <div className="flex items-center space-x-4">
-              <button onClick={() => setJudgeTourModalOpen(true)} className="hover:text-emerald-500 transition-colors font-medium">
-                Judge Pitch Summary
-              </button>
-              <button onClick={() => setApiKeyModalOpen(true)} className="hover:text-emerald-500 transition-colors font-medium">
-                Gemini Settings
-              </button>
+              <span className="text-slate-500">Encrypted Campus Data Protection</span>
             </div>
           </div>
         </footer>
@@ -527,7 +505,6 @@ export default function App() {
         isOpen={reportModalOpen}
         onClose={() => setReportModalOpen(false)}
         onSubmitReport={handleCreateReport}
-        apiKey={apiKey}
       />
 
       <ItemDetailsModal
@@ -542,7 +519,6 @@ export default function App() {
         isOpen={Boolean(claimModalItem)}
         onClose={() => setClaimModalItem(null)}
         item={claimModalItem}
-        apiKey={apiKey}
         onVerificationSuccess={(item) => {
           setHandoffModalItem(item);
         }}
@@ -553,28 +529,6 @@ export default function App() {
         onClose={() => setHandoffModalItem(null)}
         item={handoffModalItem}
         onHandoffComplete={handleHandoffComplete}
-      />
-
-      <ApiKeyModal
-        isOpen={apiKeyModalOpen}
-        onClose={() => setApiKeyModalOpen(false)}
-        apiKey={apiKey}
-        onSaveKey={handleSaveApiKey}
-      />
-
-      <JudgeTourModal
-        isOpen={judgeTourModalOpen}
-        onClose={() => setJudgeTourModalOpen(false)}
-        onJumpToTab={(tab) => setActiveTab(tab)}
-        onLaunchDemoMatch={() => {
-          setSelectedPair({
-            lost: INITIAL_REPORTS[0],
-            found: INITIAL_REPORTS[1]
-          });
-        }}
-        onLaunchDemoClaim={() => {
-          setClaimModalItem(INITIAL_REPORTS[0]);
-        }}
       />
 
     </div>

@@ -75,7 +75,7 @@ export default function MatchHub({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
       
       {/* Top Banner & Heading */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
@@ -84,18 +84,18 @@ export default function MatchHub({
             <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
               <GitMerge className="w-5 h-5" />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Multimodal AI Reasoning Hub
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              AI Multi-Signal Match Hub
             </h1>
           </div>
           <p className="mt-1 text-sm text-slate-400">
-            Real Gemini Vision + Text matching across visual indicators, damage hallmarks, and campus geospatial proximity.
+            Intelligent vision and text analysis cross-referencing visual hallmarks, damage patterns, and campus proximity.
           </p>
         </div>
 
-        {/* Quick Test Pair Switcher */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0" role="toolbar" aria-label="Demo Presets">
-          <span className="text-xs text-slate-400 font-bold whitespace-nowrap">Judge Presets:</span>
+        {/* Featured Matches Quick Switcher */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0" role="toolbar" aria-label="Featured Matches">
+          <span className="text-xs text-slate-400 font-bold whitespace-nowrap">Featured Matches:</span>
           <button
             onClick={() => selectPresetPair("REP-9001", "REP-9002")}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
@@ -139,7 +139,7 @@ export default function MatchHub({
         </div>
       </div>
 
-      {/* Side-by-Side Multimodal Comparison Grid */}
+      {/* Side-by-Side Comparison Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
         
         {/* Left: Lost Item Panel */}
@@ -176,7 +176,7 @@ export default function MatchHub({
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-2 left-2 right-2 p-2 rounded-lg bg-slate-950/90 backdrop-blur-sm border border-slate-800 text-xs text-slate-200">
-                  <span className="text-emerald-400 font-bold">Visual Signature: </span>
+                  <span className="text-emerald-400 font-bold">Visual Hallmarks: </span>
                   <span className="font-medium">{currentLost.imageVisualFeatures}</span>
                 </div>
               </div>
@@ -188,7 +188,7 @@ export default function MatchHub({
 
               <div className="grid grid-cols-2 gap-2 text-xs pt-2.5 border-t border-slate-800 text-slate-400">
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-500 block">Lost Location</span>
+                  <span className="text-[10px] uppercase font-bold text-slate-500 block">Reported Location</span>
                   <span className="text-slate-200 font-medium">{currentLost.location}</span>
                 </div>
                 <div>
@@ -200,21 +200,21 @@ export default function MatchHub({
           )}
         </div>
 
-        {/* Center: AI Multimodal Processing Core */}
+        {/* Center: Re-Analyze Trigger */}
         <div className="lg:col-span-2 flex flex-col items-center justify-center py-4 lg:py-0">
           <button
             onClick={() => handleExecuteMatch(currentLost, currentFound)}
             disabled={isMatching}
             className="p-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black shadow-lg hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center gap-1 group"
-            aria-label="Re-run AI Matching Engine"
+            aria-label="Re-analyze match"
           >
             <Sparkles className={`w-6 h-6 stroke-[3] ${isMatching ? 'animate-spin' : 'group-hover:rotate-12 transition-transform'}`} />
             <span className="text-[11px] uppercase tracking-wider font-black">
-              {isMatching ? "Reasoning..." : "Re-Match AI"}
+              {isMatching ? "Analyzing..." : "Re-Analyze"}
             </span>
           </button>
           <span className="text-[11px] text-slate-400 mt-2 font-medium text-center">
-            Gemini Multimodal Reasoning
+            Multi-Signal AI Engine
           </span>
         </div>
 
@@ -252,7 +252,7 @@ export default function MatchHub({
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-2 left-2 right-2 p-2 rounded-lg bg-slate-950/90 backdrop-blur-sm border border-slate-800 text-xs text-slate-200">
-                  <span className="text-emerald-400 font-bold">Visual Signature: </span>
+                  <span className="text-emerald-400 font-bold">Visual Hallmarks: </span>
                   <span className="font-medium">{currentFound.imageVisualFeatures}</span>
                 </div>
               </div>
@@ -277,15 +277,15 @@ export default function MatchHub({
         </div>
       </div>
 
-      {/* MATCH RESULTS: EXPLAINABLE WEIGHTED CONFIDENCE BREAKDOWN */}
+      {/* MATCH RESULTS: EXPLAINABLE BREAKDOWN */}
       {isMatching ? (
         <div className="p-12 rounded-3xl bg-slate-900 border border-slate-800 flex flex-col items-center justify-center text-center space-y-3 animate-fade-in">
           <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center animate-spin">
             <RefreshCw className="w-6 h-6" />
           </div>
           <div>
-            <h4 className="text-base font-bold text-white">Comparing Physical & Geospatial Indicators</h4>
-            <p className="text-xs text-slate-400 mt-1">Cross-referencing stickers, colorimetry, scratches, and building proximity with Gemini AI...</p>
+            <h4 className="text-base font-bold text-white">Cross-Referencing Physical & Geospatial Markers</h4>
+            <p className="text-xs text-slate-400 mt-1">Analyzing colorimetry, scratches, decals, and campus building corridors...</p>
           </div>
         </div>
       ) : matchResult ? (
@@ -305,19 +305,19 @@ export default function MatchHub({
                   {matchResult.matchTier.replace("_", " ")}
                 </span>
                 <span className="text-xs text-slate-400 font-mono">
-                  Engine: {matchResult.source || "Gemini Multimodal"}
+                  Analysis Complete
                 </span>
               </div>
               <h2 className="text-xl sm:text-2xl font-black text-white">
-                Multimodal Forensic Assessment
+                AI Match Evaluation
               </h2>
             </div>
 
-            {/* Score Ring / Gauge */}
+            {/* Score Ring */}
             <div className="flex items-center space-x-4 bg-slate-950 p-4 rounded-2xl border border-slate-800">
               <div className="text-right">
                 <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Overall Match Confidence</span>
-                <span className="text-xs text-slate-500 font-medium">Weighted Cross-Modal Score</span>
+                <span className="text-xs text-slate-500 font-medium">Weighted Score</span>
               </div>
               <div className={`text-4xl font-black font-mono ${
                 matchResult.overallScore >= 80 ? "text-emerald-400" : matchResult.overallScore >= 60 ? "text-amber-400" : "text-slate-400"
@@ -331,7 +331,7 @@ export default function MatchHub({
           <div className="p-4 sm:p-5 rounded-2xl bg-emerald-950/30 border border-emerald-600/40 space-y-2">
             <div className="flex items-center space-x-2 text-emerald-400 font-bold text-sm">
               <Sparkles className="w-4 h-4" />
-              <span>AI Forensic Rationale</span>
+              <span>Match Rationale</span>
             </div>
             <p className="text-slate-100 text-sm leading-relaxed font-medium">
               "{matchResult.summaryReason}"
@@ -341,7 +341,7 @@ export default function MatchHub({
           {/* 4-SIGNAL WEIGHTED BREAKDOWN */}
           <div className="space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <span>Weighted Multi-Signal Breakdown (Explainable Reasoning)</span>
+              <span>Confidence Breakdown by Signal</span>
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -373,7 +373,7 @@ export default function MatchHub({
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-white flex items-center gap-1.5">
                     <FileText className="w-3.5 h-3.5 text-cyan-400" />
-                    Description & Specs (25% Weight)
+                    Description & Specifications (25% Weight)
                   </span>
                   <span className="font-mono font-bold text-cyan-400 text-sm">
                     {matchResult.breakdown.descriptionSimilarity.score}%
@@ -395,7 +395,7 @@ export default function MatchHub({
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-white flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                    Geospatial Proximity (20% Weight)
+                    Campus Proximity (20% Weight)
                   </span>
                   <span className="font-mono font-bold text-amber-400 text-sm">
                     {matchResult.breakdown.locationProximity.score}%
@@ -417,7 +417,7 @@ export default function MatchHub({
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-bold text-white flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-purple-400" />
-                    Temporal Delta (15% Weight)
+                    Timeline Proximity (15% Weight)
                   </span>
                   <span className="font-mono font-bold text-purple-400 text-sm">
                     {matchResult.breakdown.timeProximity.score}%
@@ -441,7 +441,7 @@ export default function MatchHub({
           {matchResult.keyVisualEvidence && matchResult.keyVisualEvidence.length > 0 && (
             <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
               <span className="text-[11px] font-bold uppercase text-slate-400 tracking-wider">
-                Corroborated Visual Markers & Physical Proof:
+                Corroborated Physical Evidence:
               </span>
               <div className="flex flex-wrap gap-2 pt-1">
                 {matchResult.keyVisualEvidence.map((ev, i) => (
@@ -460,8 +460,8 @@ export default function MatchHub({
           {/* NEXT STEP CTA */}
           <div className="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-xs text-slate-400">
-              <span className="text-slate-200 font-bold block">Next Step in Pipeline:</span>
-              <span>Run anti-fraud verification before releasing handoff QR ticket.</span>
+              <span className="text-slate-200 font-bold block">Next Step:</span>
+              <span>Verify ownership before generating claim and handoff ticket.</span>
             </div>
 
             <button
@@ -469,7 +469,7 @@ export default function MatchHub({
               className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm shadow-md flex items-center justify-center space-x-2 transition-all transform hover:-translate-y-0.5"
             >
               <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
-              <span>Launch Anti-Fraud Verification</span>
+              <span>Verify Ownership & Claim</span>
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>

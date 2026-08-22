@@ -72,7 +72,7 @@ export default function ItemDetailsModal({
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span className="font-mono">{item.reporterAlias} (Masked Handle)</span>
+                <span className="font-mono">{item.reporterAlias} (Privacy Protected)</span>
               </div>
             </div>
 
@@ -99,28 +99,28 @@ export default function ItemDetailsModal({
           </p>
         </div>
 
-        {/* Judge Inspect: Hidden Anti-Fraud Truth Toggle */}
+        {/* Confidential Ground Truth View */}
         <div className="p-4 rounded-2xl bg-slate-950 border border-cyan-800 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider text-cyan-300 flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Confidential Ground Truth (Anti-Fraud Secret)</span>
+              <span>Confidential Verification Secret</span>
             </span>
             <button
               onClick={() => setShowHiddenTruth(!showHiddenTruth)}
               className="text-xs font-bold text-cyan-400 hover:text-cyan-300 underline underline-offset-2"
             >
-              {showHiddenTruth ? "Hide Secret" : "Judge View: Reveal Secret"}
+              {showHiddenTruth ? "Hide Details" : "View Security Secret"}
             </button>
           </div>
           
           {showHiddenTruth ? (
             <p className="text-xs text-cyan-200 font-mono bg-slate-900 p-3 rounded-xl border border-slate-700 leading-relaxed animate-fade-in">
-              "{item.hiddenGroundTruth || 'No hidden ground truth stored for this test item.'}"
+              "{item.hiddenGroundTruth || 'No hidden ground truth stored for this report.'}"
             </p>
           ) : (
             <p className="text-xs text-slate-400">
-              Hidden from public view. Used exclusively by Gemini AI to dynamically challenge claimants before releasing contact data.
+              Hidden from public view. Used exclusively by the automated verification system to dynamically challenge claimants before releasing contact data.
             </p>
           )}
         </div>
@@ -146,7 +146,7 @@ export default function ItemDetailsModal({
             className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-md flex items-center justify-center gap-1.5 transition-all transform hover:-translate-y-0.5"
           >
             <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
-            <span>Claim This Item (AI Verification)</span>
+            <span>Claim This Item (Verify Ownership)</span>
           </button>
         </div>
 
