@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { 
-  Sparkles, GitMerge, ShieldCheck, CheckCircle2, 
-  MapPin, Clock, Eye, RefreshCw, Check, FileText, ChevronRight
+  GitMerge, ShieldCheck, CheckCircle2, 
+  MapPin, Clock, Eye, RefreshCw, Check, FileText, ChevronRight, Triangle
 } from "lucide-react";
 import { runMultimodalMatch } from "../services/geminiService";
 
 export default function MatchHub({ 
   reports, 
-  apiKey, 
   selectedPair, 
   onSelectPair,
   onStartClaimVerification,
@@ -22,7 +21,6 @@ export default function MatchHub({
   const [matchResult, setMatchResult] = useState(null);
   const [displayScore, setDisplayScore] = useState(0);
 
-  // Sync with selected pair if passed from outside
   useEffect(() => {
     if (selectedPair?.lost && selectedPair?.found) {
       setCurrentLost(selectedPair.lost);
@@ -33,7 +31,6 @@ export default function MatchHub({
     }
   }, [selectedPair]);
 
-  // Smooth animated score counter when match result changes
   useEffect(() => {
     if (!matchResult) return;
     const target = matchResult.overallScore;
@@ -55,7 +52,7 @@ export default function MatchHub({
     if (!lost || !found) return;
     setIsMatching(true);
     try {
-      const result = await runMultimodalMatch(lost, found, apiKey);
+      const result = await runMultimodalMatch(lost, found, "");
       setMatchResult(result);
     } catch (err) {
       console.error("Match error:", err);
@@ -75,79 +72,52 @@ export default function MatchHub({
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
       
       {/* Top Banner & Heading */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-zinc-800">
         <div>
-          <div className="flex items-center space-x-2.5">
-            <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
-              <GitMerge className="w-5 h-5" />
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              AI Multi-Signal Match Hub
-            </h1>
-          </div>
-          <p className="mt-1 text-sm text-slate-400">
-            Intelligent vision and text analysis cross-referencing visual hallmarks, damage patterns, and campus proximity.
+          <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+            <GitMerge className="w-5 h-5 text-zinc-400" />
+            <span>Multi-Signal AI Match Hub</span>
+          </h1>
+          <p className="text-xs text-zinc-400 mt-0.5">
+            Cross-referencing physical markings, surface damage, and campus geography
           </p>
         </div>
 
-        {/* Featured Matches Quick Switcher */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0" role="toolbar" aria-label="Featured Matches">
-          <span className="text-xs text-slate-400 font-bold whitespace-nowrap">Featured Matches:</span>
-          <button
-            onClick={() => selectPresetPair("REP-9001", "REP-9002")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
-              currentLost?.id === "REP-9001" 
-                ? "bg-emerald-500 text-slate-950 shadow-sm" 
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-            }`}
-          >
-            💻 MacBook Pro
-          </button>
-          <button
-            onClick={() => selectPresetPair("REP-9003", "REP-9004")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
-              currentLost?.id === "REP-9003" 
-                ? "bg-emerald-500 text-slate-950 shadow-sm" 
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-            }`}
-          >
-            💧 Hydro Flask
-          </button>
-          <button
-            onClick={() => selectPresetPair("REP-9005", "REP-9006")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
-              currentLost?.id === "REP-9005" 
-                ? "bg-emerald-500 text-slate-950 shadow-sm" 
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-            }`}
-          >
-            🎧 Sony XM4
-          </button>
-          <button
-            onClick={() => selectPresetPair("REP-9007", "REP-9008")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all ${
-              currentLost?.id === "REP-9007" 
-                ? "bg-emerald-500 text-slate-950 shadow-sm" 
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700"
-            }`}
-          >
-            🎒 Jansport Fox
-          </button>
+        {/* Featured Matches Switcher */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0" role="toolbar" aria-label="Featured Matches">
+          <span className="text-xs text-zinc-500 font-mono">Presets:</span>
+          {[
+            { label: "MacBook", l: "REP-9001", f: "REP-9002" },
+            { label: "Hydro Flask", l: "REP-9003", f: "REP-9004" },
+            { label: "Sony XM4", l: "REP-9005", f: "REP-9006" },
+            { label: "Jansport", l: "REP-9007", f: "REP-9008" }
+          ].map((preset) => (
+            <button
+              key={preset.l}
+              onClick={() => selectPresetPair(preset.l, preset.f)}
+              className={`px-2.5 py-1 rounded-lg text-xs font-medium font-mono transition-colors ${
+                currentLost?.id === preset.l
+                  ? "bg-white text-black font-semibold shadow-sm"
+                  : "bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800"
+              }`}
+            >
+              {preset.label}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Side-by-Side Comparison Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
         
         {/* Left: Lost Item Panel */}
-        <div className="lg:col-span-5 rounded-2xl bg-slate-900 border border-slate-800 shadow-md p-5 space-y-4">
+        <div className="lg:col-span-5 rounded-2xl bg-zinc-950 border border-zinc-800 p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="px-2.5 py-1 rounded-md text-xs font-extrabold bg-rose-950 text-rose-300 border border-rose-800 uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-rose-400"></span>
-              Lost Report
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-950/80 text-rose-300 border border-rose-800">
+              LOST REPORT
             </span>
             <select
               value={currentLost?.id || ""}
@@ -156,12 +126,11 @@ export default function MatchHub({
                 setCurrentLost(item);
                 if (item && currentFound) handleExecuteMatch(item, currentFound);
               }}
-              className="bg-slate-950 border border-slate-700 rounded-lg text-xs text-slate-200 px-2.5 py-1 font-medium"
-              aria-label="Select Lost Report"
+              className="bg-black border border-zinc-800 rounded-lg text-xs text-zinc-300 px-2 py-1 font-mono"
             >
               {lostItems.map(item => (
                 <option key={item.id} value={item.id}>
-                  {item.id} - {item.title.slice(0, 26)}...
+                  {item.id} - {item.title.slice(0, 22)}...
                 </option>
               ))}
             </select>
@@ -169,31 +138,31 @@ export default function MatchHub({
 
           {currentLost && (
             <>
-              <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
+              <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black border border-zinc-800">
                 <img 
                   src={currentLost.imageUrl} 
                   alt={currentLost.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-2 left-2 right-2 p-2 rounded-lg bg-slate-950/90 backdrop-blur-sm border border-slate-800 text-xs text-slate-200">
-                  <span className="text-emerald-400 font-bold">Visual Hallmarks: </span>
-                  <span className="font-medium">{currentLost.imageVisualFeatures}</span>
+                <div className="absolute bottom-2 left-2 right-2 p-1.5 rounded-lg bg-black/90 backdrop-blur-sm border border-zinc-800 text-[11px] text-zinc-300">
+                  <span className="text-zinc-400 font-mono">Hallmarks: </span>
+                  <span>{currentLost.imageVisualFeatures}</span>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <h3 className="text-base font-bold text-white">{currentLost.title}</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">{currentLost.description}</p>
+                <h3 className="text-sm font-semibold text-white">{currentLost.title}</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed">{currentLost.description}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs pt-2.5 border-t border-slate-800 text-slate-400">
+              <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-zinc-850 text-zinc-400 font-mono">
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-500 block">Reported Location</span>
-                  <span className="text-slate-200 font-medium">{currentLost.location}</span>
+                  <span className="text-[10px] text-zinc-500 block uppercase">Location</span>
+                  <span className="text-zinc-300 font-sans text-xs">{currentLost.location}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-500 block">Reported Time</span>
-                  <span className="text-slate-200 font-medium">{currentLost.date} @ {currentLost.time}</span>
+                  <span className="text-[10px] text-zinc-500 block uppercase">Reported</span>
+                  <span className="text-zinc-300 text-xs">{currentLost.time}</span>
                 </div>
               </div>
             </>
@@ -201,29 +170,24 @@ export default function MatchHub({
         </div>
 
         {/* Center: Re-Analyze Trigger */}
-        <div className="lg:col-span-2 flex flex-col items-center justify-center py-4 lg:py-0">
+        <div className="lg:col-span-2 flex flex-col items-center justify-center py-2 lg:py-0">
           <button
             onClick={() => handleExecuteMatch(currentLost, currentFound)}
             disabled={isMatching}
-            className="p-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black shadow-lg hover:scale-105 active:scale-95 transition-all flex flex-col items-center justify-center gap-1 group"
-            aria-label="Re-analyze match"
+            className="p-3.5 rounded-xl bg-white hover:bg-zinc-200 text-black font-semibold text-xs shadow-sm flex flex-col items-center justify-center gap-1 transition-colors"
           >
-            <Sparkles className={`w-6 h-6 stroke-[3] ${isMatching ? 'animate-spin' : 'group-hover:rotate-12 transition-transform'}`} />
-            <span className="text-[11px] uppercase tracking-wider font-black">
-              {isMatching ? "Analyzing..." : "Re-Analyze"}
+            <RefreshCw className={`w-4 h-4 ${isMatching ? 'animate-spin' : ''}`} />
+            <span className="font-mono text-[10px] uppercase font-bold tracking-wider">
+              {isMatching ? "Analyzing" : "Analyze"}
             </span>
           </button>
-          <span className="text-[11px] text-slate-400 mt-2 font-medium text-center">
-            Multi-Signal AI Engine
-          </span>
         </div>
 
         {/* Right: Found Item Panel */}
-        <div className="lg:col-span-5 rounded-2xl bg-slate-900 border border-slate-800 shadow-md p-5 space-y-4">
+        <div className="lg:col-span-5 rounded-2xl bg-zinc-950 border border-zinc-800 p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="px-2.5 py-1 rounded-md text-xs font-extrabold bg-emerald-950 text-emerald-300 border border-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-              Found Report
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-800">
+              FOUND REPORT
             </span>
             <select
               value={currentFound?.id || ""}
@@ -232,12 +196,11 @@ export default function MatchHub({
                 setCurrentFound(item);
                 if (currentLost && item) handleExecuteMatch(currentLost, item);
               }}
-              className="bg-slate-950 border border-slate-700 rounded-lg text-xs text-slate-200 px-2.5 py-1 font-medium"
-              aria-label="Select Found Report"
+              className="bg-black border border-zinc-800 rounded-lg text-xs text-zinc-300 px-2 py-1 font-mono"
             >
               {foundItems.map(item => (
                 <option key={item.id} value={item.id}>
-                  {item.id} - {item.title.slice(0, 26)}...
+                  {item.id} - {item.title.slice(0, 22)}...
                 </option>
               ))}
             </select>
@@ -245,31 +208,31 @@ export default function MatchHub({
 
           {currentFound && (
             <>
-              <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
+              <div className="relative aspect-[16/10] rounded-xl overflow-hidden bg-black border border-zinc-800">
                 <img 
                   src={currentFound.imageUrl} 
                   alt={currentFound.title}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-2 left-2 right-2 p-2 rounded-lg bg-slate-950/90 backdrop-blur-sm border border-slate-800 text-xs text-slate-200">
-                  <span className="text-emerald-400 font-bold">Visual Hallmarks: </span>
-                  <span className="font-medium">{currentFound.imageVisualFeatures}</span>
+                <div className="absolute bottom-2 left-2 right-2 p-1.5 rounded-lg bg-black/90 backdrop-blur-sm border border-zinc-800 text-[11px] text-zinc-300">
+                  <span className="text-zinc-400 font-mono">Hallmarks: </span>
+                  <span>{currentFound.imageVisualFeatures}</span>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <h3 className="text-base font-bold text-white">{currentFound.title}</h3>
-                <p className="text-xs text-slate-300 leading-relaxed">{currentFound.description}</p>
+                <h3 className="text-sm font-semibold text-white">{currentFound.title}</h3>
+                <p className="text-xs text-zinc-400 leading-relaxed">{currentFound.description}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs pt-2.5 border-t border-slate-800 text-slate-400">
+              <div className="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-zinc-850 text-zinc-400 font-mono">
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-500 block">Found Location</span>
-                  <span className="text-slate-200 font-medium">{currentFound.location}</span>
+                  <span className="text-[10px] text-zinc-500 block uppercase">Location</span>
+                  <span className="text-zinc-300 font-sans text-xs">{currentFound.location}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-500 block">Found Time</span>
-                  <span className="text-slate-200 font-medium">{currentFound.date} @ {currentFound.time}</span>
+                  <span className="text-[10px] text-zinc-500 block uppercase">Found Time</span>
+                  <span className="text-zinc-300 text-xs">{currentFound.time}</span>
                 </div>
               </div>
             </>
@@ -277,179 +240,78 @@ export default function MatchHub({
         </div>
       </div>
 
-      {/* MATCH RESULTS: EXPLAINABLE BREAKDOWN */}
+      {/* MATCH RESULTS BREAKDOWN */}
       {isMatching ? (
-        <div className="p-12 rounded-3xl bg-slate-900 border border-slate-800 flex flex-col items-center justify-center text-center space-y-3 animate-fade-in">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center animate-spin">
-            <RefreshCw className="w-6 h-6" />
-          </div>
-          <div>
-            <h4 className="text-base font-bold text-white">Cross-Referencing Physical & Geospatial Markers</h4>
-            <p className="text-xs text-slate-400 mt-1">Analyzing colorimetry, scratches, decals, and campus building corridors...</p>
-          </div>
+        <div className="p-10 rounded-2xl bg-zinc-950 border border-zinc-800 flex flex-col items-center justify-center text-center space-y-2.5 animate-fade-in">
+          <RefreshCw className="w-6 h-6 text-zinc-400 animate-spin" />
+          <h4 className="text-sm font-semibold text-white">Cross-Referencing Physical & Geospatial Signals</h4>
+          <p className="text-xs text-zinc-400 font-mono">Analyzing damage markers, colorimetry, and corridors...</p>
         </div>
       ) : matchResult ? (
-        <div className="rounded-3xl bg-slate-900 border border-slate-800 shadow-xl p-6 sm:p-8 space-y-6 animate-score">
+        <div className="rounded-2xl bg-zinc-950 border border-zinc-800 p-6 space-y-5 animate-score">
           
           {/* Header & Overall Score */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-800">
-            <div className="space-y-1.5">
-              <div className="flex items-center space-x-2">
-                <span className={`px-3 py-1 rounded-md text-xs font-black uppercase tracking-wider ${
-                  matchResult.overallScore >= 80
-                    ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
-                    : matchResult.overallScore >= 60
-                    ? "bg-amber-950 text-amber-300 border border-amber-700"
-                    : "bg-slate-800 text-slate-300 border border-slate-700"
-                }`}>
-                  {matchResult.matchTier.replace("_", " ")}
-                </span>
-                <span className="text-xs text-slate-400 font-mono">
-                  Analysis Complete
-                </span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-black text-white">
-                AI Match Evaluation
-              </h2>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-850">
+            <div className="space-y-1">
+              <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase ${
+                matchResult.overallScore >= 80 ? "bg-emerald-950 text-emerald-300 border border-emerald-800" : "bg-zinc-900 text-zinc-300 border border-zinc-800"
+              }`}>
+                {matchResult.matchTier.replace("_", " ")}
+              </span>
+              <h2 className="text-lg font-bold text-white">Evaluation Summary</h2>
             </div>
 
             {/* Score Ring */}
-            <div className="flex items-center space-x-4 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+            <div className="flex items-center space-x-3 bg-black px-4 py-2.5 rounded-xl border border-zinc-800">
               <div className="text-right">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Overall Match Confidence</span>
-                <span className="text-xs text-slate-500 font-medium">Weighted Score</span>
+                <span className="text-[10px] text-zinc-400 uppercase font-mono block">Confidence Score</span>
+                <span className="text-xs text-zinc-500">Weighted Total</span>
               </div>
-              <div className={`text-4xl font-black font-mono ${
-                matchResult.overallScore >= 80 ? "text-emerald-400" : matchResult.overallScore >= 60 ? "text-amber-400" : "text-slate-400"
-              }`}>
+              <div className="text-3xl font-bold font-mono text-white">
                 {displayScore}%
               </div>
             </div>
           </div>
 
-          {/* Plain-Language Forensic Rationale */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-emerald-950/30 border border-emerald-600/40 space-y-2">
-            <div className="flex items-center space-x-2 text-emerald-400 font-bold text-sm">
-              <Sparkles className="w-4 h-4" />
-              <span>Match Rationale</span>
-            </div>
-            <p className="text-slate-100 text-sm leading-relaxed font-medium">
+          {/* Rationale */}
+          <div className="p-3.5 rounded-xl bg-black border border-zinc-800 space-y-1 text-xs">
+            <span className="text-zinc-400 font-semibold uppercase text-[10px] font-mono block">Rationale:</span>
+            <p className="text-zinc-200 leading-relaxed">
               "{matchResult.summaryReason}"
             </p>
           </div>
 
-          {/* 4-SIGNAL WEIGHTED BREAKDOWN */}
-          <div className="space-y-4">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-              <span>Confidence Breakdown by Signal</span>
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              
-              {/* Signal 1: Visual Similarity (40% Weight) */}
-              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+          {/* 4-SIGNAL BREAKDOWN */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              { label: "Visual Surface Match (40%)", data: matchResult.breakdown.visualSimilarity },
+              { label: "Model & Specs (25%)", data: matchResult.breakdown.descriptionSimilarity },
+              { label: "Campus Proximity (20%)", data: matchResult.breakdown.locationProximity },
+              { label: "Timeline Delta (15%)", data: matchResult.breakdown.timeProximity }
+            ].map((sig, i) => (
+              <div key={i} className="p-3.5 rounded-xl bg-black border border-zinc-850 space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white flex items-center gap-1.5">
-                    <Eye className="w-3.5 h-3.5 text-emerald-400" />
-                    Visual Similarity (40% Weight)
-                  </span>
-                  <span className="font-mono font-bold text-emerald-400 text-sm">
-                    {matchResult.breakdown.visualSimilarity.score}%
-                  </span>
+                  <span className="font-semibold text-zinc-200">{sig.label}</span>
+                  <span className="font-mono font-bold text-white text-xs">{sig.data.score}%</span>
                 </div>
-                <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                  <div 
-                    className="bg-emerald-400 h-full rounded-full transition-all duration-700 ease-out"
-                    style={{ width: `${matchResult.breakdown.visualSimilarity.score}%` }}
-                  ></div>
+                <div className="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
+                  <div className="bg-white h-full rounded-full transition-all duration-500" style={{ width: `${sig.data.score}%` }}></div>
                 </div>
-                <p className="text-xs text-slate-300 leading-snug">
-                  {matchResult.breakdown.visualSimilarity.details}
-                </p>
+                <p className="text-[11px] text-zinc-400 leading-snug">{sig.data.details}</p>
               </div>
-
-              {/* Signal 2: Description Similarity (25% Weight) */}
-              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white flex items-center gap-1.5">
-                    <FileText className="w-3.5 h-3.5 text-cyan-400" />
-                    Description & Specifications (25% Weight)
-                  </span>
-                  <span className="font-mono font-bold text-cyan-400 text-sm">
-                    {matchResult.breakdown.descriptionSimilarity.score}%
-                  </span>
-                </div>
-                <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                  <div 
-                    className="bg-cyan-400 h-full rounded-full transition-all duration-700 ease-out"
-                    style={{ width: `${matchResult.breakdown.descriptionSimilarity.score}%` }}
-                  ></div>
-                </div>
-                <p className="text-xs text-slate-300 leading-snug">
-                  {matchResult.breakdown.descriptionSimilarity.details}
-                </p>
-              </div>
-
-              {/* Signal 3: Location Proximity (20% Weight) */}
-              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                    Campus Proximity (20% Weight)
-                  </span>
-                  <span className="font-mono font-bold text-amber-400 text-sm">
-                    {matchResult.breakdown.locationProximity.score}%
-                  </span>
-                </div>
-                <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                  <div 
-                    className="bg-amber-400 h-full rounded-full transition-all duration-700 ease-out"
-                    style={{ width: `${matchResult.breakdown.locationProximity.score}%` }}
-                  ></div>
-                </div>
-                <p className="text-xs text-slate-300 leading-snug">
-                  {matchResult.breakdown.locationProximity.details}
-                </p>
-              </div>
-
-              {/* Signal 4: Time Proximity (15% Weight) */}
-              <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-white flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-purple-400" />
-                    Timeline Proximity (15% Weight)
-                  </span>
-                  <span className="font-mono font-bold text-purple-400 text-sm">
-                    {matchResult.breakdown.timeProximity.score}%
-                  </span>
-                </div>
-                <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                  <div 
-                    className="bg-purple-400 h-full rounded-full transition-all duration-700 ease-out"
-                    style={{ width: `${matchResult.breakdown.timeProximity.score}%` }}
-                  ></div>
-                </div>
-                <p className="text-xs text-slate-300 leading-snug">
-                  {matchResult.breakdown.timeProximity.details}
-                </p>
-              </div>
-
-            </div>
+            ))}
           </div>
 
           {/* Key Visual Evidence Chips */}
           {matchResult.keyVisualEvidence && matchResult.keyVisualEvidence.length > 0 && (
-            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-              <span className="text-[11px] font-bold uppercase text-slate-400 tracking-wider">
-                Corroborated Physical Evidence:
+            <div className="p-3.5 rounded-xl bg-black border border-zinc-850 space-y-2">
+              <span className="text-[10px] font-mono font-bold uppercase text-zinc-400 block">
+                Corroborated Evidence:
               </span>
-              <div className="flex flex-wrap gap-2 pt-1">
+              <div className="flex flex-wrap gap-1.5">
                 {matchResult.keyVisualEvidence.map((ev, i) => (
-                  <span 
-                    key={i} 
-                    className="px-3 py-1 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-700 text-xs font-semibold flex items-center gap-1.5"
-                  >
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span key={i} className="px-2 py-0.5 rounded text-[11px] font-mono bg-zinc-900 text-zinc-300 border border-zinc-800 flex items-center gap-1">
+                    <Check className="w-3 h-3 text-emerald-400" />
                     {ev}
                   </span>
                 ))}
@@ -457,20 +319,16 @@ export default function MatchHub({
             </div>
           )}
 
-          {/* NEXT STEP CTA */}
-          <div className="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs text-slate-400">
-              <span className="text-slate-200 font-bold block">Next Step:</span>
-              <span>Verify ownership before generating claim and handoff ticket.</span>
-            </div>
-
+          {/* Action CTA */}
+          <div className="pt-2 border-t border-zinc-850 flex items-center justify-between">
+            <span className="text-xs text-zinc-400">Ready to initiate ownership challenge?</span>
             <button
               onClick={() => onStartClaimVerification(currentFound || currentLost)}
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm shadow-md flex items-center justify-center space-x-2 transition-all transform hover:-translate-y-0.5"
+              className="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold text-xs flex items-center gap-1.5 transition-colors"
             >
-              <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
+              <ShieldCheck className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Verify Ownership & Claim</span>
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
 

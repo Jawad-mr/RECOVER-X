@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { 
-  Search, Plus, Sparkles, MapPin, Clock, 
+  Search, Plus, MapPin, Clock, 
   ShieldCheck, GitMerge, Compass, Tag, Layers, RefreshCw,
-  QrCode, Lock, CheckCircle2, ChevronRight, Bell, AlertCircle, Menu, Sun, Moon, FilePlus2
+  QrCode, Lock, CheckCircle2, ChevronRight, Bell, AlertCircle, Menu, Sun, Moon, FilePlus2, Triangle
 } from "lucide-react";
 
 import Sidebar from "./components/Sidebar";
@@ -21,7 +21,7 @@ import { INITIAL_REPORTS, CATEGORIES, CAMPUS_LOCATIONS } from "./data/seedData";
 import { runMultimodalMatch } from "./services/geminiService";
 
 export default function App() {
-  // Theme State: Default to Dark Mode
+  // Theme State: Default to Dark Mode (Vercel Black)
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem("campus_find_theme");
     return saved ? saved === "dark" : true;
@@ -123,9 +123,8 @@ export default function App() {
     const updated = [newReport, ...reports];
     setReports(updated);
     setActiveTab("feed");
-    showToast("Report Submitted Successfully", `AI Radar scanning campus records for ${newReport.title}...`);
+    showToast("Report Submitted", `Scanning campus records for ${newReport.title}...`);
 
-    // Proactive background matching against opposite reports
     const opposites = updated.filter(r => r.type !== newReport.type);
     for (const opp of opposites.slice(0, 3)) {
       try {
@@ -153,7 +152,6 @@ export default function App() {
     }
   };
 
-  // Trigger match from card or details
   const handleTriggerMatch = (item) => {
     if (item.type === "lost") {
       const targetFound = reports.find(r => r.id === item.targetMatchId) || reports.find(r => r.type === "found");
@@ -165,7 +163,6 @@ export default function App() {
     setActiveTab("matches");
   };
 
-  // Notification click handler
   const handleSelectNotification = (notif) => {
     setNotifications(prev => prev.map(n => n.id === notif.id ? { ...n, read: true } : n));
     if (notif.pair) {
@@ -174,18 +171,17 @@ export default function App() {
     }
   };
 
-  // Complete Handoff
   const handleHandoffComplete = (itemId) => {
     setReports(prev => prev.map(r => r.id === itemId ? { ...r, status: "resolved" } : r));
-    showToast("Handoff Complete", "Item marked as resolved in campus records.");
+    showToast("Handoff Complete", "Item marked as resolved.");
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-200 ${
-      darkMode ? "bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-white" : "bg-slate-50 text-slate-900 selection:bg-emerald-500 selection:text-white"
+    <div className={`min-h-screen transition-colors duration-150 ${
+      darkMode ? "bg-black text-zinc-100 selection:bg-zinc-800 selection:text-white" : "bg-white text-zinc-900 selection:bg-zinc-200 selection:text-black"
     }`}>
       
-      {/* Persistent Desktop / Drawer Mobile Sidebar */}
+      {/* Vercel-Style Persistent Left Sidebar */}
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -199,36 +195,36 @@ export default function App() {
       />
 
       {/* Main Layout Container (Offset by Sidebar on Desktop) */}
-      <div className="md:pl-72 flex flex-col min-h-screen">
+      <div className="md:pl-64 flex flex-col min-h-screen">
         
         {/* Mobile Top Header */}
         <header className={`md:hidden sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b ${
-          darkMode ? "bg-slate-950/95 border-slate-800" : "bg-white/95 border-slate-200"
+          darkMode ? "bg-black/95 border-zinc-800" : "bg-white/95 border-zinc-200"
         } backdrop-blur-md`}>
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2.5">
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="p-2 rounded-xl border border-slate-700/60 text-slate-300"
+              className="p-1.5 rounded-lg border border-zinc-800 text-zinc-300"
               aria-label="Open Navigation Menu"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="w-4 h-4" />
             </button>
-            <div className="flex items-center space-x-1.5 font-black text-base">
-              <span>RECOVER<span className="text-emerald-500">-X</span></span>
+            <div className="flex items-center space-x-1.5 font-mono font-bold text-sm">
+              <span>RECOVER<span className="text-zinc-400">-X</span></span>
             </div>
           </div>
 
           <div className="flex items-center space-x-2">
             <button
               onClick={handleToggleTheme}
-              className="p-2 rounded-xl border border-slate-700/60 text-slate-300"
+              className="p-1.5 rounded-lg border border-zinc-800 text-zinc-300"
               title="Toggle Theme"
             >
-              {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+              {darkMode ? <Sun className="w-3.5 h-3.5 text-zinc-400" /> : <Moon className="w-3.5 h-3.5 text-zinc-700" />}
             </button>
             <button
               onClick={() => setActiveTab("report")}
-              className="px-3 py-1.5 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs shadow-sm"
+              className="px-2.5 py-1 rounded-lg bg-white text-black font-semibold text-xs shadow-sm"
             >
               + Report
             </button>
@@ -238,13 +234,13 @@ export default function App() {
         {/* Floating Toast Feedback */}
         {toastMessage && (
           <div className="fixed bottom-6 right-6 z-50 animate-toast">
-            <div className={`p-4 rounded-2xl border shadow-2xl flex items-start gap-3 max-w-sm ${
-              darkMode ? "bg-slate-900 border-emerald-500/50 text-white" : "bg-white border-emerald-500 text-slate-900"
+            <div className={`p-3.5 rounded-xl border shadow-2xl flex items-start gap-2.5 max-w-sm ${
+              darkMode ? "bg-zinc-950 border-zinc-750 text-white" : "bg-white border-zinc-300 text-black"
             }`}>
-              <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
               <div>
-                <h5 className="text-xs font-bold">{toastMessage.title}</h5>
-                <p className={`text-[11px] mt-0.5 leading-snug ${darkMode ? "text-slate-300" : "text-slate-600"}`}>
+                <h5 className="text-xs font-semibold">{toastMessage.title}</h5>
+                <p className="text-[11px] mt-0.5 text-zinc-400 leading-snug">
                   {toastMessage.subtitle}
                 </p>
               </div>
@@ -254,37 +250,35 @@ export default function App() {
 
         {/* Main Content Body */}
         <main className="flex-1">
-          {/* TAB 1: CAMPUS EXPLORER (FEED) */}
+          {/* TAB 1: OVERVIEW / CAMPUS EXPLORER */}
           {activeTab === "feed" && (
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10 animate-fade-in">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
               
-              {/* Hero Banner */}
-              <div className={`relative rounded-3xl overflow-hidden border p-6 sm:p-8 shadow-xl ${
-                darkMode ? "bg-slate-900 border-slate-800" : "bg-white border-slate-200"
+              {/* Vercel-Style Minimalist Hero Header */}
+              <div className={`relative rounded-2xl overflow-hidden border p-6 sm:p-8 ${
+                darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-200"
               }`}>
-                <div className="relative z-10 max-w-3xl space-y-4">
-                  <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs font-bold">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>Next-Gen Campus Lost & Found</span>
+                <div className="relative z-10 max-w-3xl space-y-3">
+                  <div className="inline-flex items-center space-x-2 px-2 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-[11px] font-mono text-zinc-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Radar Active • Automated Match Engine</span>
                   </div>
 
-                  <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
-                    Recover lost items faster with <span className="text-emerald-500">RECOVER-X</span>
+                  <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                    Next-Gen Lost & Found System
                   </h1>
 
-                  <p className={`text-sm sm:text-base leading-relaxed font-medium ${
-                    darkMode ? "text-slate-300" : "text-slate-600"
-                  }`}>
-                    Submit lost or found reports across campus. Our multimodal vision system automatically cross-references physical hallmarks, damage indicators, and campus locations to suggest instant matches.
+                  <p className="text-xs sm:text-sm leading-relaxed text-zinc-400 font-normal">
+                    Real-time item recovery with multimodal visual matching, anti-fraud verification challenges, and supervised safe handoff kiosks.
                   </p>
 
-                  <div className="flex flex-wrap gap-3 pt-2">
+                  <div className="flex flex-wrap gap-2.5 pt-2">
                     <button
                       onClick={() => setActiveTab("report")}
-                      className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-md flex items-center space-x-2 transition-all transform hover:-translate-y-0.5"
+                      className="px-4 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold text-xs shadow-sm flex items-center space-x-1.5 transition-colors"
                     >
-                      <Plus className="w-4 h-4 stroke-[3]" />
-                      <span>Report Lost or Found Item</span>
+                      <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                      <span>Report Item</span>
                     </button>
 
                     <button
@@ -295,28 +289,24 @@ export default function App() {
                         });
                         setActiveTab("matches");
                       }}
-                      className={`px-5 py-2.5 rounded-xl border text-xs font-bold flex items-center space-x-2 transition-colors ${
-                        darkMode 
-                          ? "bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200" 
-                          : "bg-slate-100 hover:bg-slate-200 border-slate-200 text-slate-800"
-                      }`}
+                      className="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-200 text-xs font-medium flex items-center space-x-1.5 transition-colors"
                     >
-                      <GitMerge className="w-4 h-4 text-emerald-500" />
-                      <span>View Active Matches</span>
+                      <GitMerge className="w-3.5 h-3.5 text-zinc-400" />
+                      <span>Match Hub</span>
                     </button>
 
                     <button
                       onClick={() => setSmartTagModalOpen(true)}
-                      className="px-5 py-2.5 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-700 text-purple-300 text-xs font-bold flex items-center space-x-2 transition-colors"
+                      className="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-300 text-xs font-medium flex items-center space-x-1.5 transition-colors"
                     >
-                      <QrCode className="w-4 h-4 text-purple-400" />
-                      <span>Generate QR Safe-Tag</span>
+                      <QrCode className="w-3.5 h-3.5 text-zinc-400" />
+                      <span>Print Safe-Tag</span>
                     </button>
                   </div>
                 </div>
               </div>
 
-              {/* NEW FEATURES SHOWCASE */}
+              {/* FEATURES SHOWCASE */}
               <FeaturesShowcase
                 onOpenSmartTag={() => setSmartTagModalOpen(true)}
                 onJumpToMatches={() => setActiveTab("matches")}
@@ -324,7 +314,7 @@ export default function App() {
                 darkMode={darkMode}
               />
 
-              {/* INTERACTIVE CAMPUS MAP & HOTSPOTS */}
+              {/* CAMPUS MAP & KIOSKS */}
               <CampusMapScanner
                 reports={reports}
                 selectedLocation={selectedLocation}
@@ -332,56 +322,50 @@ export default function App() {
                 darkMode={darkMode}
               />
 
-              {/* Filter & Search Bar */}
-              <div className="flex flex-col md:flex-row gap-4 items-center justify-between pb-2 pt-4">
+              {/* Search & Filter Controls */}
+              <div className="flex flex-col md:flex-row gap-3 items-center justify-between pb-1 pt-2">
                 
                 {/* Type Switcher */}
-                <div className={`flex items-center p-1 rounded-2xl border w-full md:w-auto ${
-                  darkMode ? "bg-slate-900 border-slate-800" : "bg-white border-slate-200"
+                <div className={`flex items-center p-1 rounded-xl border w-full md:w-auto ${
+                  darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-100 border-zinc-200"
                 }`}>
                   {["all", "lost", "found"].map((type) => (
                     <button
                       key={type}
                       onClick={() => setSelectedType(type)}
-                      className={`flex-1 md:flex-none px-4 py-2 rounded-xl text-xs font-bold capitalize transition-all ${
+                      className={`flex-1 md:flex-none px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-colors ${
                         selectedType === type
-                          ? type === "lost"
-                            ? "bg-rose-600 text-white shadow-sm"
-                            : type === "found"
-                            ? "bg-emerald-600 text-white shadow-sm"
-                            : darkMode ? "bg-slate-800 text-white" : "bg-slate-900 text-white"
-                          : darkMode ? "text-slate-400 hover:text-slate-200" : "text-slate-600 hover:text-slate-900"
+                          ? darkMode ? "bg-zinc-850 text-white font-semibold" : "bg-white text-black font-semibold shadow-sm"
+                          : darkMode ? "text-zinc-400 hover:text-white" : "text-zinc-600 hover:text-black"
                       }`}
                     >
-                      {type === "all" ? "All Items" : type === "lost" ? "• Lost Only" : "• Found Only"}
+                      {type === "all" ? "All Items" : type === "lost" ? "• Lost" : "• Found"}
                     </button>
                   ))}
                 </div>
 
-                {/* Search & Category Filter */}
-                <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto flex-1 md:max-w-xl justify-end">
+                {/* Search Bar & Category Dropdown */}
+                <div className="flex flex-col sm:flex-row gap-2.5 w-full md:w-auto flex-1 md:max-w-xl justify-end">
                   
-                  {/* Search Bar */}
                   <div className="relative flex-1">
-                    <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400 pointer-events-none" />
+                    <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-zinc-500 pointer-events-none" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search color, stickers, brand, location..."
-                      className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-xs font-medium border focus:outline-none focus:border-emerald-500 transition-colors ${
-                        darkMode ? "bg-slate-900 border-slate-800 text-white placeholder-slate-500" : "bg-white border-slate-200 text-slate-900 placeholder-slate-400"
+                      placeholder="Search items, stickers, colors, serials..."
+                      className={`w-full pl-9 pr-3 py-2 rounded-xl text-xs border focus:outline-none focus:border-zinc-500 transition-colors ${
+                        darkMode ? "bg-zinc-950 border-zinc-800 text-white placeholder-zinc-500" : "bg-white border-zinc-350 text-black placeholder-zinc-400"
                       }`}
                       aria-label="Search campus reports"
                     />
                   </div>
 
-                  {/* Category Dropdown */}
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className={`px-3.5 py-2.5 rounded-xl text-xs font-medium border focus:outline-none focus:border-emerald-500 ${
-                      darkMode ? "bg-slate-900 border-slate-800 text-slate-200" : "bg-white border-slate-200 text-slate-800"
+                    className={`px-3 py-2 rounded-xl text-xs border focus:outline-none focus:border-zinc-500 ${
+                      darkMode ? "bg-zinc-950 border-zinc-800 text-zinc-300" : "bg-white border-zinc-350 text-black"
                     }`}
                     aria-label="Filter by Category"
                   >
@@ -394,15 +378,15 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Item Cards Grid / Empty State */}
+              {/* Items Grid */}
               {filteredReports.length === 0 ? (
-                <div className={`py-16 text-center rounded-3xl border p-8 space-y-3 ${
-                  darkMode ? "bg-slate-900 border-slate-800" : "bg-white border-slate-200"
+                <div className={`py-14 text-center rounded-2xl border p-8 space-y-2.5 ${
+                  darkMode ? "bg-zinc-950 border-zinc-800" : "bg-zinc-50 border-zinc-200"
                 }`}>
-                  <Search className="w-10 h-10 text-slate-400 mx-auto" />
-                  <h4 className="text-base font-bold">No Matching Reports Found</h4>
-                  <p className={`text-xs max-w-sm mx-auto ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                    {selectedLocation ? `No items found in ${selectedLocation}.` : "No campus reports match your search query."}
+                  <Search className="w-8 h-8 text-zinc-600 mx-auto" />
+                  <h4 className="text-sm font-semibold">No Items Found</h4>
+                  <p className="text-xs text-zinc-400">
+                    {selectedLocation ? `No reports found for ${selectedLocation}.` : "No items match your active search filters."}
                   </p>
                   <button
                     onClick={() => {
@@ -411,15 +395,13 @@ export default function App() {
                       setSelectedLocation(null);
                       setSearchQuery("");
                     }}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold text-emerald-500 transition-colors ${
-                      darkMode ? "bg-slate-800 hover:bg-slate-700" : "bg-slate-100 hover:bg-slate-200"
-                    }`}
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900 border border-zinc-700 text-zinc-200 hover:text-white"
                   >
-                    Reset Filters & View All
+                    Reset Filters
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredReports.map((item) => (
                     <ItemCard
                       key={item.id}
@@ -435,7 +417,7 @@ export default function App() {
             </div>
           )}
 
-          {/* TAB 2: DEDICATED REPORT LOST / FOUND PAGE */}
+          {/* TAB 2: REPORT PAGE */}
           {activeTab === "report" && (
             <ReportPage
               onSubmitReport={handleCreateReport}
@@ -457,59 +439,52 @@ export default function App() {
 
           {/* TAB 4: SAFE HANDOFF VAULT */}
           {activeTab === "vault" && (
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
-              <div className="pb-6 border-b border-slate-800/80">
-                <div className="flex items-center space-x-2.5">
-                  <div className="p-2 rounded-xl bg-cyan-950 border border-cyan-800 text-cyan-400">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-                    Safe Handoff Vault & Claim Tickets
-                  </h1>
-                </div>
-                <p className={`mt-1 text-sm ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                  Encrypted exchange protocols, scannable QR verification tickets, and supervised campus pickup zones.
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
+              <div className="pb-4 border-b border-zinc-800">
+                <h1 className="text-xl font-bold tracking-tight text-white">
+                  Safe Handoff Vault & Claim Tickets
+                </h1>
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  Supervised pickup kiosks, 6-digit verification PINs, and scannable claim tickets
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {reports.filter(r => r.status === "resolved" || r.isPreSeeded).slice(0, 4).map((item) => (
                   <div 
                     key={item.id}
-                    className={`rounded-3xl border p-6 space-y-4 shadow-md flex flex-col justify-between ${
-                      darkMode ? "bg-slate-900 border-slate-800" : "bg-white border-slate-200"
+                    className={`rounded-2xl border p-5 space-y-3 flex flex-col justify-between ${
+                      darkMode ? "bg-zinc-950 border-zinc-800" : "bg-white border-zinc-200"
                     }`}
                   >
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <img src={item.imageUrl} alt={item.title} className="w-14 h-14 rounded-2xl object-cover border border-slate-700/60" />
+                        <img src={item.imageUrl} alt={item.title} className="w-12 h-12 rounded-xl object-cover border border-zinc-800" />
                         <div>
-                          <span className="text-[10px] font-bold uppercase text-emerald-500 block font-mono">{item.id}</span>
-                          <h3 className="text-base font-bold">{item.title}</h3>
-                          <span className={`text-xs ${darkMode ? "text-slate-400" : "text-slate-500"}`}>{item.location}</span>
+                          <span className="text-[10px] font-bold uppercase text-emerald-400 block font-mono">{item.id}</span>
+                          <h3 className="text-sm font-semibold text-white">{item.title}</h3>
+                          <span className="text-xs text-zinc-400">{item.location}</span>
                         </div>
                       </div>
 
-                      <span className="px-2.5 py-1 rounded-md bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-extrabold uppercase">
-                        Handoff Ready
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-900 border border-zinc-800 text-zinc-300">
+                        Ready
                       </span>
                     </div>
 
-                    <div className={`p-3 rounded-2xl border text-xs flex items-center justify-between ${
-                      darkMode ? "bg-slate-950 border-slate-800" : "bg-slate-50 border-slate-200"
+                    <div className={`p-2.5 rounded-xl border text-xs flex items-center justify-between font-mono ${
+                      darkMode ? "bg-black border-zinc-850" : "bg-zinc-50 border-zinc-200"
                     }`}>
-                      <span className="font-mono font-bold text-slate-400">PIN: 749-102</span>
-                      <span className="text-emerald-500 font-bold">Central Library Desk</span>
+                      <span className="text-zinc-400">PIN: 749-102</span>
+                      <span className="text-zinc-200 font-sans">Central Library Desk</span>
                     </div>
 
                     <button
                       onClick={() => setHandoffModalItem(item)}
-                      className={`w-full py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors ${
-                        darkMode ? "bg-slate-800 hover:bg-slate-700 text-white" : "bg-slate-100 hover:bg-slate-200 text-slate-900"
-                      }`}
+                      className="w-full py-2 rounded-lg font-semibold text-xs bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-200 flex items-center justify-center gap-1.5 transition-colors"
                     >
-                      <QrCode className="w-4 h-4 text-cyan-400" />
-                      <span>View Digital Claim Ticket & QR</span>
+                      <QrCode className="w-3.5 h-3.5 text-zinc-400" />
+                      <span>View Claim Ticket & QR</span>
                     </button>
                   </div>
                 ))}
@@ -523,24 +498,25 @@ export default function App() {
           )}
         </main>
 
-        {/* Footer */}
-        <footer className={`mt-16 border-t py-8 px-4 sm:px-6 lg:px-8 text-xs ${
-          darkMode ? "border-slate-800 bg-slate-950/80 text-slate-400" : "border-slate-200 bg-white text-slate-500"
+        {/* Vercel-Style Minimalist Footer */}
+        <footer className={`mt-16 border-t py-6 px-4 sm:px-6 lg:px-8 text-xs ${
+          darkMode ? "border-zinc-850 bg-black text-zinc-500" : "border-zinc-200 bg-white text-zinc-500"
         }`}>
-          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 font-mono">
             <div className="flex items-center space-x-2">
-              <span className="font-bold">RECOVER-X</span>
+              <Triangle className="w-3 h-3 fill-zinc-400 stroke-none" />
+              <span className="font-semibold text-zinc-400">RECOVER-X</span>
               <span>•</span>
-              <span>Smart Lost & Found System</span>
+              <span>Smart Lost & Found</span>
             </div>
             <div className="flex items-center space-x-4">
               <button 
                 onClick={() => setSmartTagModalOpen(true)}
-                className="text-purple-400 hover:underline font-bold"
+                className="text-zinc-400 hover:text-white transition-colors"
               >
-                + Print Device Safe-Tags
+                QR Safe-Tags
               </button>
-              <span className="text-slate-500">Encrypted Data Protection</span>
+              <span>Zero-Knowledge Verification</span>
             </div>
           </div>
         </footer>

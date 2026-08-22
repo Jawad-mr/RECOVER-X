@@ -85,101 +85,95 @@ export default function ReportPage({
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
       
       {/* Top Header */}
-      <div className="flex items-center justify-between pb-6 border-b border-slate-800/80">
+      <div className="flex items-center justify-between pb-4 border-b border-zinc-800">
         <div className="flex items-center space-x-3">
           <button
             onClick={onNavigateBack}
-            className={`p-2.5 rounded-xl border transition-colors ${
-              darkMode ? "bg-slate-900 border-slate-800 text-slate-300 hover:text-white" : "bg-white border-slate-200 text-slate-700 hover:bg-slate-100"
+            className={`p-2 rounded-lg border transition-colors ${
+              darkMode ? "bg-zinc-900 border-zinc-800 text-zinc-300 hover:text-white" : "bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-100"
             }`}
-            title="Back to Explorer"
+            title="Back to Overview"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-4 h-4" />
           </button>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+            <h1 className="text-xl font-bold tracking-tight text-white">
               Report an Item
             </h1>
-            <p className={`mt-0.5 text-xs ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-              Submit a lost or found report to automatically trigger visual matching across campus
+            <p className="text-xs text-zinc-400">
+              Submit a report to initiate multi-signal radar matching
             </p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 text-xs">
-          <span className={`px-3 py-1 rounded-full font-bold ${
-            reportType === "lost" ? "bg-rose-950 text-rose-300 border border-rose-800" : "bg-emerald-950 text-emerald-300 border border-emerald-800"
-          }`}>
-            {reportType === "lost" ? "• Lost Item Form" : "• Found Item Form"}
-          </span>
-        </div>
+        <span className={`px-2.5 py-0.5 rounded text-[11px] font-mono font-bold ${
+          reportType === "lost" ? "bg-rose-950 text-rose-300 border border-rose-800" : "bg-emerald-950 text-emerald-300 border border-emerald-800"
+        }`}>
+          {reportType === "lost" ? "LOST REPORT" : "FOUND REPORT"}
+        </span>
       </div>
 
-      {/* Main Form Container */}
-      <form onSubmit={handleSubmit} className={`p-6 sm:p-8 rounded-3xl border shadow-xl space-y-6 ${
-        darkMode ? "bg-slate-900 border-slate-800" : "bg-white border-slate-200"
+      {/* Form Container */}
+      <form onSubmit={handleSubmit} className={`p-6 rounded-2xl border space-y-5 ${
+        darkMode ? "bg-zinc-950 border-zinc-800" : "bg-white border-zinc-200"
       }`}>
         
-        {/* Report Type Selector */}
-        <div className={`grid grid-cols-2 gap-3 p-1.5 rounded-2xl border ${
-          darkMode ? "bg-slate-950 border-slate-800" : "bg-slate-100 border-slate-200"
+        {/* Type Selector */}
+        <div className={`grid grid-cols-2 gap-2 p-1 rounded-xl border ${
+          darkMode ? "bg-black border-zinc-850" : "bg-zinc-100 border-zinc-200"
         }`}>
           <button
             type="button"
             onClick={() => setReportType("lost")}
-            className={`py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center justify-center space-x-2 transition-all ${
+            className={`py-2 rounded-lg font-semibold text-xs flex items-center justify-center space-x-1.5 transition-colors ${
               reportType === "lost"
-                ? "bg-rose-600 text-white shadow-md"
-                : darkMode ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
+                ? "bg-rose-600 text-white shadow-sm"
+                : "text-zinc-400 hover:text-white"
             }`}
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-white"></span>
-            <span>I LOST Something</span>
+            <span>I Lost An Item</span>
           </button>
 
           <button
             type="button"
             onClick={() => setReportType("found")}
-            className={`py-3 rounded-xl font-extrabold text-xs sm:text-sm flex items-center justify-center space-x-2 transition-all ${
+            className={`py-2 rounded-lg font-semibold text-xs flex items-center justify-center space-x-1.5 transition-colors ${
               reportType === "found"
-                ? "bg-emerald-600 text-white shadow-md"
-                : darkMode ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
+                ? "bg-emerald-600 text-white shadow-sm"
+                : "text-zinc-400 hover:text-white"
             }`}
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-white"></span>
-            <span>I FOUND Something</span>
+            <span>I Found An Item</span>
           </button>
         </div>
 
-        {/* Sample Photo Gallery Selector */}
+        {/* Photo Gallery Selector */}
         <div className="space-y-2">
-          <label className={`block text-xs font-bold uppercase tracking-wider ${
-            darkMode ? "text-slate-400" : "text-slate-500"
-          }`}>
-            Select or Upload Item Photo:
+          <label className="block text-xs font-semibold text-zinc-300">
+            Select Sample Item Photo:
           </label>
 
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
             {DEMO_PRESET_PHOTOS.map((preset) => (
               <button
                 key={preset.id}
                 type="button"
                 onClick={() => handleSelectPreset(preset)}
-                className={`p-2.5 rounded-2xl border text-left flex flex-col items-center text-xs transition-all ${
+                className={`p-2 rounded-xl border text-left flex flex-col items-center text-xs transition-colors ${
                   imageUrl === preset.url
-                    ? "bg-slate-800 border-emerald-500 ring-2 ring-emerald-500 shadow-md"
-                    : darkMode ? "bg-slate-950 border-slate-800 hover:bg-slate-800/80" : "bg-slate-50 border-slate-200 hover:bg-slate-100"
+                    ? "bg-zinc-900 border-white ring-1 ring-white"
+                    : "bg-black border-zinc-850 hover:border-zinc-700"
                 }`}
               >
                 <img 
                   src={preset.url} 
                   alt={preset.title}
-                  className="w-full h-16 rounded-xl object-cover mb-2" 
+                  className="w-full h-14 rounded-lg object-cover mb-1.5" 
                 />
-                <span className="text-[11px] font-bold line-clamp-1 text-center">
+                <span className="text-[10px] font-mono text-zinc-300 line-clamp-1 text-center">
                   {preset.title.split(" ")[0]} {preset.title.split(" ")[1]}
                 </span>
               </button>
@@ -187,22 +181,18 @@ export default function ReportPage({
           </div>
         </div>
 
-        {/* Photo Preview & Visual Hallmark Extractor */}
-        <div className={`p-5 rounded-2xl border space-y-3 ${
-          darkMode ? "bg-slate-950 border-slate-800" : "bg-slate-50 border-slate-200"
-        }`}>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center space-x-3.5">
+        {/* Photo Preview & AI Extractor */}
+        <div className="p-3.5 rounded-xl bg-black border border-zinc-850 space-y-2.5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center space-x-3">
               <img 
                 src={imageUrl} 
                 alt="Item preview" 
-                className="w-16 h-16 rounded-2xl object-cover border border-slate-700/60" 
+                className="w-12 h-12 rounded-lg object-cover border border-zinc-800" 
               />
               <div>
-                <h4 className="text-xs font-bold">Image & Hallmark Analysis</h4>
-                <p className={`text-[11px] ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
-                  Scans surface damage, stickers, scratches, and geometry
-                </p>
+                <h4 className="text-xs font-semibold text-white">Visual Hallmark Scanner</h4>
+                <p className="text-[11px] text-zinc-400 font-mono">Scans scratches, stickers, decals, and geometry</p>
               </div>
             </div>
 
@@ -210,36 +200,26 @@ export default function ReportPage({
               type="button"
               onClick={handleAnalyzeWithAI}
               disabled={isAnalyzingImage}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700 text-xs font-bold flex items-center space-x-2 transition-colors"
+              className="px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-850 text-zinc-200 border border-zinc-700 text-xs font-medium flex items-center space-x-1.5 transition-colors"
             >
-              <Sparkles className={`w-4 h-4 ${isAnalyzingImage ? 'animate-spin' : ''}`} />
-              <span>{isAnalyzingImage ? "Analyzing..." : "Scan & Extract Details"}</span>
+              <Sparkles className={`w-3.5 h-3.5 ${isAnalyzingImage ? 'animate-spin' : ''}`} />
+              <span>{isAnalyzingImage ? "Scanning..." : "Scan Photo"}</span>
             </button>
           </div>
 
           {aiAnalysisCompleted && visualFeatures && (
-            <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-700/60 text-xs space-y-1.5 animate-fade-in">
-              <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-[11px] uppercase tracking-wider">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Detected Visual Hallmarks:</span>
-              </div>
-              <p className="font-medium leading-relaxed">
-                "{visualFeatures}"
-              </p>
-              <div className="flex flex-wrap gap-2 pt-1 text-[10px] font-semibold text-emerald-300">
-                <span className="px-2.5 py-0.5 rounded bg-emerald-950 border border-emerald-800">Color: {color || 'Detected'}</span>
-                <span className="px-2.5 py-0.5 rounded bg-emerald-950 border border-emerald-800">Brand: {brand || 'Detected'}</span>
-                <span className="px-2.5 py-0.5 rounded bg-emerald-950 border border-emerald-800">Category: {category}</span>
-              </div>
+            <div className="p-3 rounded-lg bg-zinc-950 border border-zinc-800 text-xs space-y-1 animate-fade-in font-mono">
+              <span className="text-zinc-400 font-bold text-[10px] uppercase">Detected Hallmarks:</span>
+              <p className="text-zinc-200 font-sans text-xs">{visualFeatures}</p>
             </div>
           )}
         </div>
 
         {/* Title & Category */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-bold uppercase mb-1.5">
-              Item Title *
+            <label className="block text-xs font-semibold text-zinc-300 mb-1">
+              Title *
             </label>
             <input
               type="text"
@@ -247,22 +227,18 @@ export default function ReportPage({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. 14-inch Space Gray MacBook Pro"
-              className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-medium border focus:outline-none focus:border-emerald-500 ${
-                darkMode ? "bg-slate-950 border-slate-700 text-white placeholder-slate-500" : "bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400"
-              }`}
+              className="w-full px-3 py-2 bg-black border border-zinc-800 rounded-lg text-xs text-white placeholder-zinc-500 focus:border-zinc-500 focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-300 mb-1">
               Category *
             </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-medium border focus:outline-none focus:border-emerald-500 ${
-                darkMode ? "bg-slate-950 border-slate-700 text-white" : "bg-slate-50 border-slate-300 text-slate-900"
-              }`}
+              className="w-full px-3 py-2 bg-black border border-zinc-800 rounded-lg text-xs text-white focus:border-zinc-500 focus:outline-none"
             >
               {CATEGORIES.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -271,35 +247,31 @@ export default function ReportPage({
           </div>
         </div>
 
-        {/* Public Description */}
+        {/* Description */}
         <div>
-          <label className="block text-xs font-bold uppercase mb-1.5">
-            Public Description *
+          <label className="block text-xs font-semibold text-zinc-300 mb-1">
+            Description *
           </label>
           <textarea
-            rows={3}
+            rows={2}
             required
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Describe visible color, stickers, dents, condition..."
-            className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-medium border resize-none focus:outline-none focus:border-emerald-500 ${
-              darkMode ? "bg-slate-950 border-slate-700 text-white placeholder-slate-500" : "bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400"
-            }`}
+            placeholder="Describe visible scratches, colors, case..."
+            className="w-full px-3 py-2 bg-black border border-zinc-800 rounded-lg text-xs text-white placeholder-zinc-500 resize-none focus:border-zinc-500 focus:outline-none"
           />
         </div>
 
         {/* Location & Time */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-bold uppercase mb-1.5">
-              Campus Location *
+            <label className="block text-xs font-semibold text-zinc-300 mb-1">
+              Location *
             </label>
             <select
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className={`w-full px-3 py-2.5 rounded-xl text-xs font-medium border focus:outline-none focus:border-emerald-500 ${
-                darkMode ? "bg-slate-950 border-slate-700 text-white" : "bg-slate-50 border-slate-300 text-slate-900"
-              }`}
+              className="w-full px-2.5 py-2 bg-black border border-zinc-800 rounded-lg text-xs text-white focus:border-zinc-500 focus:outline-none"
             >
               {CAMPUS_LOCATIONS.map((loc) => (
                 <option key={loc.id} value={loc.name}>{loc.name}</option>
@@ -308,79 +280,68 @@ export default function ReportPage({
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-300 mb-1">
               Date
             </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className={`w-full px-3 py-2.5 rounded-xl text-xs font-medium border focus:outline-none focus:border-emerald-500 ${
-                darkMode ? "bg-slate-950 border-slate-700 text-white" : "bg-slate-50 border-slate-300 text-slate-900"
-              }`}
+              className="w-full px-2.5 py-2 bg-black border border-zinc-800 rounded-lg text-xs text-white focus:border-zinc-500 focus:outline-none font-mono"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase mb-1.5">
+            <label className="block text-xs font-semibold text-zinc-300 mb-1">
               Time
             </label>
             <input
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className={`w-full px-3 py-2.5 rounded-xl text-xs font-medium border focus:outline-none focus:border-emerald-500 ${
-                darkMode ? "bg-slate-950 border-slate-700 text-white" : "bg-slate-50 border-slate-300 text-slate-900"
-              }`}
+              className="w-full px-2.5 py-2 bg-black border border-zinc-800 rounded-lg text-xs text-white focus:border-zinc-500 focus:outline-none font-mono"
             />
           </div>
         </div>
 
-        {/* Confidential Ground Truth - Anti-Fraud Layer */}
-        <div className={`p-4 sm:p-5 rounded-2xl border space-y-2 ${
-          darkMode ? "bg-slate-950 border-cyan-800/80" : "bg-cyan-50/50 border-cyan-300"
-        }`}>
+        {/* Confidential Ground Truth */}
+        <div className="p-3.5 rounded-xl bg-black border border-zinc-800 space-y-1.5">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-bold uppercase tracking-wider text-cyan-500 flex items-center gap-1.5">
-              <Lock className="w-4 h-4 text-cyan-500" />
-              <span>Confidential Security Secret (Hidden from Public)</span>
+            <label className="text-xs font-semibold text-zinc-200 flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-zinc-400" />
+              <span>Private Verification Secret (Hidden)</span>
             </label>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800 font-bold">
-              Private
+            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-zinc-900 text-zinc-400 border border-zinc-800">
+              ENCRYPTED
             </span>
           </div>
-          <p className={`text-[11px] leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
-            Enter private details known only to the genuine owner (e.g. lock screen wallpaper, hidden serial digit, charger brand in sleeve, inner pocket keys). Used to challenge claimants.
+          <p className="text-[11px] text-zinc-500 leading-snug">
+            Private detail known only to owner (e.g. lock screen text, serial digits, keychain count). Used to challenge claimants.
           </p>
           <textarea
             rows={2}
             value={hiddenGroundTruth}
             onChange={(e) => setHiddenGroundTruth(e.target.value)}
-            placeholder="e.g. Serial ends in 99X4. Lock screen is red nebula with 'Stay Hungry'. Case contains black Anker charger."
-            className={`w-full px-3.5 py-2.5 rounded-xl text-xs resize-none font-mono focus:outline-none border ${
-              darkMode ? "bg-slate-900 border-slate-700 text-cyan-100 placeholder-slate-500" : "bg-white border-slate-300 text-cyan-900 placeholder-slate-400"
-            }`}
+            placeholder="e.g. Lock screen wallpaper text, serial ending in 99X4..."
+            className="w-full px-3 py-2 bg-zinc-950 border border-zinc-800 rounded-lg text-xs text-zinc-300 resize-none font-mono focus:border-zinc-500 focus:outline-none"
           />
         </div>
 
         {/* Submit Actions */}
-        <div className="pt-3 flex items-center justify-end space-x-3 border-t border-slate-800/80">
+        <div className="pt-2 flex items-center justify-end space-x-2.5 border-t border-zinc-850">
           <button
             type="button"
             onClick={onNavigateBack}
-            className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-colors ${
-              darkMode ? "text-slate-400 hover:text-white" : "text-slate-600 hover:text-slate-900"
-            }`}
+            className="px-4 py-2 rounded-lg text-xs font-semibold text-zinc-400 hover:text-white transition-colors"
           >
             Cancel
           </button>
 
           <button
             type="submit"
-            className="px-7 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs sm:text-sm shadow-md flex items-center space-x-2 transition-all transform hover:-translate-y-0.5"
+            className="px-5 py-2 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold text-xs transition-colors"
           >
-            <Sparkles className="w-4 h-4 text-slate-950 stroke-[3]" />
-            <span>Submit Report</span>
+            Submit Report
           </button>
         </div>
 
