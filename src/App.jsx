@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { 
-  Search, Filter, Plus, Sparkles, MapPin, Clock, 
+  Search, Plus, Sparkles, MapPin, Clock, 
   ShieldCheck, GitMerge, Compass, Tag, Layers, RefreshCw,
-  QrCode, Lock, CheckCircle2, ChevronRight, Bell, HelpCircle
+  QrCode, Lock, CheckCircle2, ChevronRight, Bell, AlertCircle
 } from "lucide-react";
 
 import Navbar from "./components/Navbar";
@@ -44,11 +44,21 @@ export default function App() {
   // Match Hub focused pair
   const [selectedPair, setSelectedPair] = useState(null);
 
+  // Toast state
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const showToast = (title, subtitle) => {
+    setToastMessage({ title, subtitle });
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 4000);
+  };
+
   // Proactive Push Notifications
   const [notifications, setNotifications] = useState([
     {
       id: "notif-1",
-      title: "High-Confidence AI Match Detected!",
+      title: "High-Confidence AI Match Detected",
       message: "Lost MacBook Pro (REP-9001) matched with Found Laptop (REP-9002) at 96% confidence.",
       score: 96,
       timeAgo: "10m ago",
@@ -81,16 +91,14 @@ export default function App() {
   const handleSaveApiKey = (key) => {
     setApiKey(key);
     localStorage.setItem("campus_find_gemini_key", key);
+    showToast("Gemini Settings Saved", key ? "Live Gemini 1.5/2.0 API enabled." : "Smart fallback neural reasoning active.");
   };
 
   // Filtered reports for Campus Explorer
   const filteredReports = useMemo(() => {
     return reports.filter((item) => {
-      // Type filter
       if (selectedType !== "all" && item.type !== selectedType) return false;
-      // Category filter
       if (selectedCategory !== "All Categories" && item.category !== selectedCategory) return false;
-      // Search query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const text = `${item.title} ${item.description} ${item.location} ${item.category} ${item.brand || ""} ${item.color || ""}`.toLowerCase();
@@ -104,6 +112,7 @@ export default function App() {
   const handleCreateReport = async (newReport) => {
     const updated = [newReport, ...reports];
     setReports(updated);
+    showToast("Report Submitted Successfully", `Proactive AI Radar scanning campus database for ${newReport.title}...`);
 
     // Proactive background matching simulation against opposite reports
     const opposites = updated.filter(r => r.type !== newReport.type);
@@ -117,13 +126,14 @@ export default function App() {
           const newNotif = {
             id: `notif-${Date.now()}`,
             title: `Proactive Match: ${matchResult.overallScore}% Confidence`,
-            message: `New report "${newReport.title}" automatically matched with "${opp.title}".`,
+            message: `"${newReport.title}" automatically matched with "${opp.title}".`,
             score: matchResult.overallScore,
             timeAgo: "Just now",
             read: false,
             pair: { lost, found }
           };
           setNotifications(prev => [newNotif, ...prev]);
+          showToast(`Proactive Match (${matchResult.overallScore}%)`, `High-confidence match found for ${newReport.title}`);
           break;
         }
       } catch (err) {
@@ -156,6 +166,7 @@ export default function App() {
   // Complete Handoff
   const handleHandoffComplete = (itemId) => {
     setReports(prev => prev.map(r => r.id === itemId ? { ...r, status: "resolved" } : r));
+    showToast("Handoff Completed", "Item marked as resolved in campus records.");
   };
 
   return (
@@ -173,33 +184,46 @@ export default function App() {
         onSelectNotification={handleSelectNotification}
       />
 
+      {/* Floating Toast Feedback */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 animate-toast">
+          <div className="p-4 rounded-2xl bg-slate-900 border border-emerald-600/50 shadow-2xl flex items-start gap-3 max-w-sm">
+            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+            <div>
+              <h5 className="text-xs font-bold text-white">{toastMessage.title}</h5>
+              <p className="text-[11px] text-slate-300 mt-0.5 leading-snug">{toastMessage.subtitle}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Content Area */}
       <main className="flex-1">
         {activeTab === "feed" && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
             
-            {/* Hero / Pitch Banner */}
-            <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-emerald-950/80 via-slate-900 to-cyan-950/80 border border-slate-800 p-6 sm:p-8 shadow-2xl">
+            {/* Hero Banner */}
+            <div className="relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 p-6 sm:p-8 shadow-xl">
               <div className="relative z-10 max-w-3xl space-y-4">
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs font-bold">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Next-Gen Smart Campus Ecosystem</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-                  Multimodal AI Lost & Found with <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Anti-Fraud Verification</span>
+                  Multimodal AI Lost & Found with <span className="text-emerald-400">Anti-Fraud Verification</span>
                 </h1>
 
-                <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+                <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-medium">
                   Powered by Google Gemini Vision & Text reasoning. Analyzes physical damage, stickers, and campus geography simultaneously, protecting items with dynamic AI ownership challenges.
                 </p>
 
                 <div className="flex flex-wrap gap-3 pt-2">
                   <button
                     onClick={() => setReportModalOpen(true)}
-                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/25 flex items-center space-x-2 transition-all transform hover:-translate-y-0.5"
+                    className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs shadow-md flex items-center space-x-2 transition-all transform hover:-translate-y-0.5"
                   >
-                    <Plus className="w-4 h-4 stroke-[2.5]" />
+                    <Plus className="w-4 h-4 stroke-[3]" />
                     <span>Report Lost or Found Item</span>
                   </button>
 
@@ -211,17 +235,13 @@ export default function App() {
                       });
                       setActiveTab("matches");
                     }}
-                    className="px-5 py-2.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs font-bold text-slate-200 flex items-center space-x-2 transition-colors"
+                    className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-bold text-slate-200 flex items-center space-x-2 transition-colors"
                   >
                     <GitMerge className="w-4 h-4 text-emerald-400" />
                     <span>Test Multimodal Match Engine</span>
                   </button>
                 </div>
               </div>
-
-              {/* Background ambient lighting */}
-              <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none"></div>
-              <div className="absolute bottom-0 right-1/4 -mb-20 w-80 h-80 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none"></div>
             </div>
 
             {/* Filter & Search Bar */}
@@ -236,10 +256,10 @@ export default function App() {
                     className={`flex-1 md:flex-none px-4 py-2 rounded-xl text-xs font-bold capitalize transition-all ${
                       selectedType === type
                         ? type === "lost"
-                          ? "bg-rose-600 text-white shadow-md shadow-rose-950"
+                          ? "bg-rose-600 text-white shadow-sm"
                           : type === "found"
-                          ? "bg-emerald-600 text-white shadow-md shadow-emerald-950"
-                          : "bg-slate-800 text-white shadow-md"
+                          ? "bg-emerald-600 text-white shadow-sm"
+                          : "bg-slate-800 text-white shadow-sm"
                         : "text-slate-400 hover:text-slate-200"
                     }`}
                   >
@@ -253,13 +273,14 @@ export default function App() {
                 
                 {/* Search Bar */}
                 <div className="relative flex-1">
-                  <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-500 pointer-events-none" />
+                  <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400 pointer-events-none" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search color, stickers, brand, location..."
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 font-medium"
+                    aria-label="Search campus reports"
                   />
                 </div>
 
@@ -267,7 +288,8 @@ export default function App() {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-emerald-500"
+                  className="px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-200 font-medium"
+                  aria-label="Filter by Category"
                 >
                   <option value="All Categories">All Categories</option>
                   {CATEGORIES.map((cat) => (
@@ -278,21 +300,23 @@ export default function App() {
               </div>
             </div>
 
-            {/* Item Cards Grid */}
+            {/* Item Cards Grid / Empty State */}
             {filteredReports.length === 0 ? (
-              <div className="py-16 text-center rounded-3xl bg-slate-900/40 border border-slate-800 p-8 space-y-3">
-                <Search className="w-10 h-10 text-slate-600 mx-auto" />
+              <div className="py-16 text-center rounded-3xl bg-slate-900 border border-slate-800 p-8 space-y-3">
+                <Search className="w-10 h-10 text-slate-500 mx-auto" />
                 <h4 className="text-base font-bold text-white">No Matching Reports Found</h4>
-                <p className="text-xs text-slate-400">Try adjusting your filters or search keywords.</p>
+                <p className="text-xs text-slate-400 max-w-sm mx-auto">
+                  No campus reports match your search query or filter selection.
+                </p>
                 <button
                   onClick={() => {
                     setSelectedType("all");
                     setSelectedCategory("All Categories");
                     setSearchQuery("");
                   }}
-                  className="px-4 py-2 rounded-xl bg-slate-800 text-xs font-semibold text-emerald-400 hover:bg-slate-700"
+                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-emerald-400 transition-colors"
                 >
-                  Reset Filters
+                  Reset Filters & View All
                 </button>
               </div>
             ) : (
@@ -328,8 +352,8 @@ export default function App() {
         {activeTab === "vault" && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
             <div className="pb-6 border-b border-slate-800">
-              <div className="flex items-center space-x-2">
-                <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+              <div className="flex items-center space-x-2.5">
+                <div className="p-2 rounded-xl bg-cyan-950 border border-cyan-800 text-cyan-400">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
@@ -345,7 +369,7 @@ export default function App() {
               {reports.filter(r => r.status === "resolved" || r.isPreSeeded).slice(0, 4).map((item) => (
                 <div 
                   key={item.id}
-                  className="rounded-3xl bg-slate-900 border border-slate-800 p-6 space-y-4 shadow-xl flex flex-col justify-between"
+                  className="rounded-3xl bg-slate-900 border border-slate-800 p-6 space-y-4 shadow-md flex flex-col justify-between"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
@@ -357,14 +381,14 @@ export default function App() {
                       </div>
                     </div>
 
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-bold uppercase">
+                    <span className="px-2.5 py-1 rounded-md bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] font-extrabold uppercase">
                       Handoff Ready
                     </span>
                   </div>
 
                   <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs flex items-center justify-between">
-                    <span className="text-slate-400 font-mono">PIN: 749-102</span>
-                    <span className="text-emerald-400 font-semibold">Central Library Desk</span>
+                    <span className="text-slate-400 font-mono font-bold">PIN: 749-102</span>
+                    <span className="text-emerald-400 font-bold">Central Library Desk</span>
                   </div>
 
                   <button
@@ -387,18 +411,18 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-16 border-t border-slate-800/80 bg-slate-950/60 py-8 px-4 sm:px-6 lg:px-8 text-xs text-slate-500">
+      <footer className="mt-16 border-t border-slate-800 bg-slate-950/80 py-8 px-4 sm:px-6 lg:px-8 text-xs text-slate-400">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-2">
-            <span className="font-bold text-slate-300">Campus Find (RECOVER-X)</span>
+            <span className="font-bold text-slate-200">Campus Find (RECOVER-X)</span>
             <span>•</span>
             <span>Google for Developers "Build with AI" Hackathon</span>
           </div>
           <div className="flex items-center space-x-4">
-            <button onClick={() => setJudgeTourModalOpen(true)} className="hover:text-emerald-400 transition-colors">
+            <button onClick={() => setJudgeTourModalOpen(true)} className="hover:text-emerald-400 transition-colors font-medium">
               Judge Pitch Summary
             </button>
-            <button onClick={() => setApiKeyModalOpen(true)} className="hover:text-emerald-400 transition-colors">
+            <button onClick={() => setApiKeyModalOpen(true)} className="hover:text-emerald-400 transition-colors font-medium">
               Gemini Settings
             </button>
           </div>

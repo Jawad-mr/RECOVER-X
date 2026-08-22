@@ -3,8 +3,30 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --campus-forest: #059669;
+    --campus-emerald: #10b981;
+    --campus-ink: #0b1120;
+    --campus-card: #131d31;
+    --campus-border: #1e2d4a;
+    --campus-amber: #f59e0b;
+    --campus-rose: #f43f5e;
+  }
+
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #0b1120;
+    color: #f1f5f9;
+  }
+
+  /* Accessible focus ring across all interactive elements */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #10b981, 0 0 0 4px rgba(16, 185, 129, 0.25);
   }
 }
 
@@ -14,49 +36,55 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: #0f172a;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(51, 65, 85, 0.8);
+  background: #334155;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.6);
+  background: #475569;
 }
 
-/* Glassmorphic utilities */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.glass-panel-interactive {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Subtle tactile card styling */
+.campus-card {
+  background-color: #111a2e;
+  border: 1px solid #1e2c47;
+  border-radius: 1rem;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.glass-panel-interactive:hover {
-  background: rgba(30, 41, 59, 0.85);
-  border-color: rgba(52, 211, 153, 0.3);
+.campus-card-interactive {
+  background-color: #111a2e;
+  border: 1px solid #1e2c47;
+  border-radius: 1rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.campus-card-interactive:hover {
+  background-color: #16223b;
+  border-color: #2b3e63;
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.4), 0 4px 10px -2px rgba(0, 0, 0, 0.2);
 }
 
-.glass-card-lost {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.06) 0%, rgba(15, 23, 42, 0.8) 100%);
-  border: 1px solid rgba(239, 68, 68, 0.2);
+/* Score ring pulse */
+@keyframes scorePulse {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.02); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-.glass-card-found {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.06) 0%, rgba(15, 23, 42, 0.8) 100%);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+.animate-score {
+  animation: scorePulse 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.radar-glow {
-  box-shadow: 0 0 50px -10px rgba(16, 185, 129, 0.25);
+/* Clean Toast Notification */
+@keyframes toastSlideIn {
+  0% { transform: translateY(-12px) scale(0.96); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.animate-toast {
+  animation: toastSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

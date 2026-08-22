@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { 
   ShieldCheck, AlertTriangle, Sparkles, CheckCircle2, 
-  X, Lock, ShieldAlert, ChevronRight, HelpCircle, ArrowRight, RefreshCw
+  X, Lock, ShieldAlert, ChevronRight, RefreshCw
 } from "lucide-react";
 import { generateAntiFraudQuestions, evaluateClaimantAnswers } from "../services/geminiService";
 
@@ -32,7 +32,6 @@ export default function ClaimVerificationModal({
     try {
       const qData = await generateAntiFraudQuestions(item, apiKey);
       setQuestionsData(qData);
-      // Initialize answers object
       const initialAnswers = {};
       qData.questions.forEach(q => { initialAnswers[q.id] = ""; });
       setAnswers(initialAnswers);
@@ -94,21 +93,21 @@ export default function ClaimVerificationModal({
   if (!isOpen || !item) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md overflow-y-auto animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-sm overflow-y-auto animate-fade-in">
       <div className="relative w-full max-w-2xl my-8 overflow-hidden rounded-3xl bg-slate-900 border border-slate-700 shadow-2xl p-6 sm:p-8 space-y-6">
         
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div className="flex items-center space-x-3">
-            <div className="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
-              <ShieldCheck className="w-6 h-6" />
+            <div className="p-3 rounded-2xl bg-cyan-950 text-cyan-400 border border-cyan-800">
+              <ShieldCheck className="w-6 h-6 stroke-[2.5]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg sm:text-xl font-black text-white">
+                <h3 className="text-lg sm:text-xl font-extrabold text-white">
                   AI Anti-Fraud Verification
                 </h3>
-                <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-cyan-950 text-cyan-300 border border-cyan-800">
+                <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">
                   Novel Differentiator
                 </span>
               </div>
@@ -120,21 +119,22 @@ export default function ClaimVerificationModal({
           <button 
             onClick={onClose}
             className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Item Summary Card */}
-        <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-center gap-4">
+        <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex items-center gap-4">
           <img 
             src={item.imageUrl} 
             alt={item.title} 
             className="w-16 h-16 rounded-xl object-cover border border-slate-800"
           />
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 text-[11px] text-slate-400">
-              <span className="font-mono text-emerald-400 font-semibold">{item.id}</span>
+            <div className="flex items-center gap-2 text-xs text-slate-400">
+              <span className="font-mono text-emerald-400 font-bold">{item.id}</span>
               <span>•</span>
               <span className="font-semibold text-slate-300">{item.category}</span>
             </div>
@@ -142,16 +142,16 @@ export default function ClaimVerificationModal({
             <p className="text-xs text-slate-400 truncate">{item.location}</p>
           </div>
           <div className="text-right text-xs">
-            <span className="px-2 py-1 rounded-lg bg-slate-800 text-slate-300 font-mono text-[11px] block">
+            <span className="px-2 py-1 rounded bg-slate-800 text-slate-300 font-mono text-[11px] block font-semibold">
               {item.reporterAlias}
             </span>
-            <span className="text-[10px] text-slate-500 mt-1 block">Privacy Mask Active</span>
+            <span className="text-[10px] text-slate-500 mt-1 block font-medium">Privacy Mask Active</span>
           </div>
         </div>
 
         {/* Judge Fast-Fill Banner */}
-        <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
-          <span className="text-amber-300 font-medium flex items-center gap-1.5">
+        <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+          <span className="text-amber-300 font-bold flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>Judge Test Shortcuts:</span>
           </span>
@@ -159,14 +159,14 @@ export default function ClaimVerificationModal({
             <button
               type="button"
               onClick={fastFillLegitimate}
-              className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30 font-semibold text-[11px] transition-colors"
+              className="px-2.5 py-1 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-700 hover:bg-emerald-900 font-bold text-[11px] transition-colors"
             >
               ✓ Test Real Owner Answers (Pass)
             </button>
             <button
               type="button"
               onClick={fastFillImposter}
-              className="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/30 font-semibold text-[11px] transition-colors"
+              className="px-2.5 py-1 rounded-lg bg-rose-950 text-rose-300 border border-rose-700 hover:bg-rose-900 font-bold text-[11px] transition-colors"
             >
               ✕ Test Imposter Guess (Fail)
             </button>
@@ -185,7 +185,7 @@ export default function ClaimVerificationModal({
               {questionsData?.questions?.map((q, idx) => (
                 <div key={q.id} className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
                   <label className="block text-xs font-bold text-white flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 flex items-center justify-center text-[10px]">
+                    <span className="w-5 h-5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 flex items-center justify-center text-[10px] font-mono font-bold">
                       {idx + 1}
                     </span>
                     <span>{q.question}</span>
@@ -196,7 +196,7 @@ export default function ClaimVerificationModal({
                     value={answers[q.id] || ""}
                     onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
                     placeholder="Type specific details to prove ownership..."
-                    className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                    className="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-medium"
                   />
                 </div>
               ))}
@@ -207,16 +207,16 @@ export default function ClaimVerificationModal({
               <button
                 type="submit"
                 disabled={evaluating}
-                className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-slate-950 font-black text-sm shadow-xl shadow-cyan-500/20 flex items-center justify-center space-x-2 transition-all"
+                className="w-full py-3 px-4 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black text-sm shadow-md flex items-center justify-center space-x-2 transition-all"
               >
                 {evaluating ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin text-slate-950" />
-                    <span>Evaluating with Gemini Vision/Text Security Core...</span>
+                    <span>Cross-referencing confidential ground truth with Gemini AI...</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4 text-slate-950 stroke-[2.5]" />
+                    <Sparkles className="w-4 h-4 text-slate-950 stroke-[3]" />
                     <span>Cross-Reference & Verify Ownership</span>
                   </>
                 )}
@@ -227,15 +227,15 @@ export default function ClaimVerificationModal({
 
         {/* EVALUATION RESULTS CARD */}
         {evalResult && (
-          <div className="rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 p-5 space-y-4 animate-scale-in">
+          <div className="rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 p-5 space-y-4 animate-score">
             
             {/* Verdict Top Header */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center space-x-2">
-                <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${
+                <span className={`px-3 py-1 rounded-md text-xs font-black uppercase tracking-wider ${
                   evalResult.verdict === "VERIFIED"
-                    ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                    : "bg-rose-500/20 text-rose-300 border border-rose-500/40"
+                    ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
+                    : "bg-rose-950 text-rose-300 border border-rose-700"
                 }`}>
                   {evalResult.verdict}
                 </span>
@@ -245,28 +245,28 @@ export default function ClaimVerificationModal({
               </div>
 
               <div className="text-right">
-                <span className="text-2xl font-black text-white">
+                <span className="text-2xl font-black text-white font-mono">
                   {evalResult.verificationScore}%
                 </span>
-                <span className="text-[10px] text-slate-400 block">AI Match Score</span>
+                <span className="text-[10px] text-slate-400 block font-medium">AI Match Score</span>
               </div>
             </div>
 
             {/* Rationale */}
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-slate-200 leading-relaxed font-medium">
               "{evalResult.confidenceReason}"
             </p>
 
             {/* Per-question breakdown */}
-            <div className="space-y-2 pt-2">
+            <div className="space-y-2 pt-1">
               {evalResult.questionBreakdown?.map((qb, i) => (
-                <div key={i} className="flex items-start gap-2 text-xs p-2.5 rounded-xl bg-slate-900/80 border border-slate-800/80">
+                <div key={i} className="flex items-start gap-2 text-xs p-2.5 rounded-xl bg-slate-900 border border-slate-800">
                   {qb.isMatch ? (
                     <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   ) : (
                     <ShieldAlert className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                   )}
-                  <span className="text-slate-300">{qb.feedback}</span>
+                  <span className="text-slate-300 font-medium">{qb.feedback}</span>
                 </div>
               ))}
             </div>
@@ -279,7 +279,7 @@ export default function ClaimVerificationModal({
                     onClose();
                     onVerificationSuccess(item);
                   }}
-                  className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/25 flex items-center justify-center space-x-2 transition-all transform hover:-translate-y-0.5"
+                  className="w-full py-3.5 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm shadow-md flex items-center justify-center space-x-2 transition-all transform hover:-translate-y-0.5"
                 >
                   <ShieldCheck className="w-5 h-5 stroke-[2.5]" />
                   <span>Security Cleared → Generate Safe Handoff Ticket</span>
@@ -287,7 +287,7 @@ export default function ClaimVerificationModal({
                 </button>
               </div>
             ) : (
-              <div className="p-3 rounded-xl bg-rose-950/40 border border-rose-800/60 text-xs text-rose-300 text-center">
+              <div className="p-3 rounded-xl bg-rose-950 text-xs text-rose-300 text-center font-semibold border border-rose-800">
                 Verification failed. Contact details remain masked to protect student privacy.
               </div>
             )}
