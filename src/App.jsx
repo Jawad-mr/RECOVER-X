@@ -16,6 +16,7 @@ import AnalyticsView from "./components/AnalyticsView";
 import CampusMapScanner from "./components/CampusMapScanner";
 import FeaturesShowcase from "./components/FeaturesShowcase";
 import SmartTagModal from "./components/SmartTagModal";
+import RecoverXLogo from "./components/RecoverXLogo";
 
 import { INITIAL_REPORTS, CATEGORIES, CAMPUS_LOCATIONS } from "./data/seedData";
 import { runMultimodalMatch } from "./services/geminiService";
@@ -181,7 +182,7 @@ export default function App() {
       darkMode ? "bg-[#121212] text-[#e8eaed] selection:bg-[#4285F4]/30 selection:text-white" : "bg-[#f8fafd] text-[#202124] selection:bg-[#4285F4]/30 selection:text-[#1a73e8]"
     }`}>
       
-      {/* Google-Themed Sidebar */}
+      {/* Persistent Left Sidebar (w-72) */}
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -194,8 +195,8 @@ export default function App() {
         onCloseMobile={() => setMobileMenuOpen(false)}
       />
 
-      {/* Main Layout Container (Offset by Sidebar on Desktop) */}
-      <div className="md:pl-68 flex flex-col min-h-screen">
+      {/* Main Layout Container (Properly offset by md:pl-72 so sidebar never overlaps content) */}
+      <div className="md:pl-72 flex flex-col min-h-screen">
         
         {/* Mobile Top Header */}
         <header className={`md:hidden sticky top-0 z-30 flex items-center justify-between px-4 py-3 border-b ${
@@ -209,15 +210,18 @@ export default function App() {
             >
               <Menu className="w-4 h-4" />
             </button>
-            <div className="flex items-center text-sm font-black tracking-tight">
-              <span className="text-[#4285F4]">R</span>
-              <span className="text-[#EA4335]">E</span>
-              <span className="text-[#FBBC05]">C</span>
-              <span className="text-[#4285F4]">O</span>
-              <span className="text-[#34A853]">V</span>
-              <span className="text-[#EA4335]">E</span>
-              <span className="text-[#4285F4]">R</span>
-              <span className={darkMode ? "text-white" : "text-[#202124]"}>-X</span>
+            <div className="flex items-center space-x-2">
+              <RecoverXLogo className="w-7 h-7" />
+              <div className="flex items-center text-sm font-black tracking-tight">
+                <span className="text-[#4285F4]">R</span>
+                <span className="text-[#EA4335]">E</span>
+                <span className="text-[#FBBC05]">C</span>
+                <span className="text-[#4285F4]">O</span>
+                <span className="text-[#34A853]">V</span>
+                <span className="text-[#EA4335]">E</span>
+                <span className="text-[#4285F4]">R</span>
+                <span className={darkMode ? "text-white" : "text-[#202124]"}>-X</span>
+              </div>
             </div>
           </div>
 
@@ -261,7 +265,7 @@ export default function App() {
           {activeTab === "feed" && (
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-fade-in">
               
-              {/* Google-Style Hero Banner */}
+              {/* Hero Banner */}
               <div className={`relative rounded-3xl overflow-hidden border p-6 sm:p-8 shadow-md ${
                 darkMode ? "bg-[#202124] border-[#3c4043]" : "bg-white border-[#dadce0]"
               }`}>
@@ -510,12 +514,13 @@ export default function App() {
           )}
         </main>
 
-        {/* Google-Style Footer */}
+        {/* Footer */}
         <footer className={`mt-16 border-t py-8 px-4 sm:px-6 lg:px-8 text-xs ${
           darkMode ? "border-[#3c4043] bg-[#1e1f20] text-[#9aa0a6]" : "border-[#dadce0] bg-white text-[#5f6368]"
         }`}>
           <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 font-medium">
             <div className="flex items-center space-x-2">
+              <RecoverXLogo className="w-6 h-6" />
               <div className="flex items-center text-sm font-black">
                 <span className="text-[#4285F4]">R</span>
                 <span className="text-[#EA4335]">E</span>

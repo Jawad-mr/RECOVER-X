@@ -3,6 +3,7 @@ import {
   Bell, Plus, Compass, GitMerge, ShieldCheck, 
   BarChart3, Sun, Moon, Check, X, Shield, FilePlus2, QrCode, Sparkles
 } from "lucide-react";
+import RecoverXLogo from "./RecoverXLogo";
 
 export default function Sidebar({ 
   activeTab, 
@@ -49,7 +50,7 @@ export default function Sidebar({
       )}
 
       {/* Main Persistent Sidebar */}
-      <aside className={`fixed top-0 bottom-0 left-0 z-50 w-68 flex flex-col justify-between border-r transition-transform duration-200 ease-out md:translate-x-0 ${
+      <aside className={`fixed top-0 bottom-0 left-0 z-50 w-72 flex flex-col justify-between border-r transition-transform duration-200 ease-out md:translate-x-0 ${
         mobileOpen ? "translate-x-0" : "-translate-x-full"
       } ${
         darkMode 
@@ -57,10 +58,10 @@ export default function Sidebar({
           : "bg-[#ffffff] border-[#dadce0] text-[#202124]"
       }`}>
         
-        {/* Top Section: Google-Style Brand & Navigation */}
+        {/* Top Section: Brand & Navigation */}
         <div className="p-4 space-y-4">
           
-          {/* Google 4-Color Brand Header */}
+          {/* Custom RECOVER-X Brand Header */}
           <div className="flex items-center justify-between px-1">
             <button 
               onClick={() => {
@@ -69,18 +70,10 @@ export default function Sidebar({
               }}
               className="flex items-center space-x-3 text-left group focus:outline-none"
             >
-              {/* Google 4-color icon */}
-              <div className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center p-1.5 border border-slate-200">
-                <svg viewBox="0 0 24 24" className="w-full h-full">
-                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-                  <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
-                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
-                </svg>
-              </div>
+              <RecoverXLogo className="w-9 h-9" />
 
               <div>
-                <div className="flex items-center text-base font-black tracking-tight">
+                <div className="flex items-center text-lg font-black tracking-tight">
                   <span className="text-[#4285F4]">R</span>
                   <span className="text-[#EA4335]">E</span>
                   <span className="text-[#FBBC05]">C</span>
@@ -111,7 +104,7 @@ export default function Sidebar({
               setActiveTab("report");
               if (onCloseMobile) onCloseMobile();
             }}
-            className="w-full py-2.5 px-4 rounded-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium text-xs shadow-md flex items-center justify-center space-x-2 transition-all transform hover:shadow-lg active:scale-95"
+            className="w-full py-2.5 px-4 rounded-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-bold text-xs shadow-md flex items-center justify-center space-x-2 transition-all transform hover:shadow-lg active:scale-95"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>Report Lost / Found</span>
