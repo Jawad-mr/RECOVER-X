@@ -84,40 +84,58 @@ export default function ReportPage({
     onSubmitReport(newReport);
   };
 
+  const inputClass = `w-full px-4 py-2.5 rounded-xl text-xs font-medium border focus:border-[#4285F4] focus:outline-none transition-colors ${
+    darkMode 
+      ? "bg-[#121212] border-[#3c4043] text-white placeholder-[#5f6368]" 
+      : "bg-[#f8fafd] border-[#dadce0] text-[#202124] placeholder-[#9aa0a6]"
+  }`;
+
+  const labelClass = `block text-xs font-bold uppercase mb-1.5 ${
+    darkMode ? "text-[#bdc1c6]" : "text-[#5f6368]"
+  }`;
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
       
       {/* Top Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-[#3c4043]">
+      <div className={`flex items-center justify-between pb-4 border-b ${
+        darkMode ? "border-[#3c4043]" : "border-[#dadce0]"
+      }`}>
         <div className="flex items-center space-x-3">
           <button
             onClick={onNavigateBack}
             className={`p-2 rounded-full border transition-colors ${
-              darkMode ? "bg-[#2d2f31] border-[#3c4043] text-white hover:bg-[#3c4043]" : "bg-white border-[#dadce0] text-[#202124] hover:bg-[#f1f3f4]"
+              darkMode 
+                ? "bg-[#2d2f31] border-[#3c4043] text-white hover:bg-[#3c4043]" 
+                : "bg-white border-[#dadce0] text-[#202124] hover:bg-[#f1f3f4]"
             }`}
             title="Back to Explorer"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white">
+            <h1 className={`text-2xl font-bold tracking-tight ${
+              darkMode ? "text-white" : "text-[#202124]"
+            }`}>
               Report an Item
             </h1>
-            <p className="text-xs text-[#9aa0a6]">
+            <p className={`text-xs ${darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"}`}>
               Submit a lost or found report to automatically trigger visual matching
             </p>
           </div>
         </div>
 
-        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-          reportType === "lost" ? "bg-[#ea4335]/20 text-[#f28b82] border border-[#ea4335]/40" : "bg-[#34a853]/20 text-[#81c995] border border-[#34a853]/40"
+        <span className={`px-3.5 py-1 rounded-full text-xs font-bold ${
+          reportType === "lost" 
+            ? darkMode ? "bg-[#ea4335]/20 text-[#f28b82] border border-[#ea4335]/40" : "bg-[#fce8e6] text-[#c5221f] border border-[#f5c6cb]"
+            : darkMode ? "bg-[#34a853]/20 text-[#81c995] border border-[#34a853]/40" : "bg-[#e6f4ea] text-[#137333] border border-[#ceead6]"
         }`}>
           {reportType === "lost" ? "• Lost Item Form" : "• Found Item Form"}
         </span>
       </div>
 
       {/* Form Container */}
-      <form onSubmit={handleSubmit} className={`p-6 sm:p-8 rounded-3xl border shadow-xl space-y-6 ${
+      <form onSubmit={handleSubmit} className={`p-6 sm:p-8 rounded-3xl border shadow-md space-y-6 ${
         darkMode ? "bg-[#202124] border-[#3c4043]" : "bg-white border-[#dadce0]"
       }`}>
         
@@ -131,7 +149,7 @@ export default function ReportPage({
             className={`py-3 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center space-x-2 transition-all ${
               reportType === "lost"
                 ? "bg-[#ea4335] text-white shadow-md"
-                : "text-[#9aa0a6] hover:text-white"
+                : darkMode ? "text-[#9aa0a6] hover:text-white" : "text-[#5f6368] hover:text-[#202124]"
             }`}
           >
             <span className="w-2.5 h-2.5 rounded-full bg-white"></span>
@@ -144,7 +162,7 @@ export default function ReportPage({
             className={`py-3 rounded-full font-bold text-xs sm:text-sm flex items-center justify-center space-x-2 transition-all ${
               reportType === "found"
                 ? "bg-[#34a853] text-white shadow-md"
-                : "text-[#9aa0a6] hover:text-white"
+                : darkMode ? "text-[#9aa0a6] hover:text-white" : "text-[#5f6368] hover:text-[#202124]"
             }`}
           >
             <span className="w-2.5 h-2.5 rounded-full bg-white"></span>
@@ -154,7 +172,7 @@ export default function ReportPage({
 
         {/* Photo Gallery Selector */}
         <div className="space-y-2">
-          <label className="block text-xs font-bold uppercase text-[#bdc1c6]">
+          <label className={labelClass}>
             Select or Upload Item Photo:
           </label>
 
@@ -166,8 +184,12 @@ export default function ReportPage({
                 onClick={() => handleSelectPreset(preset)}
                 className={`p-2.5 rounded-2xl border text-left flex flex-col items-center text-xs transition-all ${
                   imageUrl === preset.url
-                    ? "bg-[#1a73e8]/20 border-[#8ab4f8] ring-2 ring-[#8ab4f8]"
-                    : "bg-[#121212] border-[#3c4043] hover:border-[#5f6368]"
+                    ? darkMode
+                      ? "bg-[#1a73e8]/20 border-[#8ab4f8] ring-2 ring-[#8ab4f8]"
+                      : "bg-[#e8f0fe] border-[#1a73e8] ring-2 ring-[#1a73e8]"
+                    : darkMode
+                      ? "bg-[#121212] border-[#3c4043] hover:border-[#5f6368]"
+                      : "bg-[#f8fafd] border-[#dadce0] hover:border-[#bdc1c6]"
                 }`}
               >
                 <img 
@@ -175,7 +197,9 @@ export default function ReportPage({
                   alt={preset.title}
                   className="w-full h-16 rounded-xl object-cover mb-2" 
                 />
-                <span className="text-[11px] font-bold text-white line-clamp-1 text-center">
+                <span className={`text-[11px] font-bold line-clamp-1 text-center ${
+                  darkMode ? "text-white" : "text-[#202124]"
+                }`}>
                   {preset.title.split(" ")[0]} {preset.title.split(" ")[1]}
                 </span>
               </button>
@@ -184,17 +208,21 @@ export default function ReportPage({
         </div>
 
         {/* Photo Preview & AI Extractor */}
-        <div className="p-4 rounded-2xl bg-[#121212] border border-[#3c4043] space-y-3">
+        <div className={`p-4 rounded-2xl border space-y-3 ${
+          darkMode ? "bg-[#121212] border-[#3c4043]" : "bg-[#f8fafd] border-[#dadce0]"
+        }`}>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center space-x-3">
               <img 
                 src={imageUrl} 
                 alt="Item preview" 
-                className="w-16 h-16 rounded-2xl object-cover border border-[#3c4043]" 
+                className={`w-16 h-16 rounded-2xl object-cover border ${
+                  darkMode ? "border-[#3c4043]" : "border-[#dadce0]"
+                }`} 
               />
               <div>
-                <h4 className="text-xs font-bold text-white">Visual Hallmark Scanner</h4>
-                <p className="text-[11px] text-[#9aa0a6]">Scans surface scratches, decals, stickers, and colorimetry</p>
+                <h4 className={`text-xs font-bold ${darkMode ? "text-white" : "text-[#202124]"}`}>Visual Hallmark Scanner</h4>
+                <p className={`text-[11px] ${darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"}`}>Scans surface scratches, decals, stickers, and colorimetry</p>
               </div>
             </div>
 
@@ -210,8 +238,12 @@ export default function ReportPage({
           </div>
 
           {aiAnalysisCompleted && visualFeatures && (
-            <div className="p-3.5 rounded-xl bg-[#34a853]/15 border border-[#34a853]/40 text-xs text-[#e8eaed] space-y-1.5 animate-fade-in">
-              <div className="flex items-center gap-1.5 text-[#81c995] font-bold text-[11px] uppercase tracking-wider">
+            <div className={`p-3.5 rounded-xl border text-xs space-y-1.5 animate-fade-in ${
+              darkMode ? "bg-[#34a853]/15 border-[#34a853]/40 text-[#e8eaed]" : "bg-[#e6f4ea] border-[#ceead6] text-[#137333]"
+            }`}>
+              <div className={`flex items-center gap-1.5 font-bold text-[11px] uppercase tracking-wider ${
+                darkMode ? "text-[#81c995]" : "text-[#137333]"
+              }`}>
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>Detected Visual Hallmarks:</span>
               </div>
@@ -225,7 +257,7 @@ export default function ReportPage({
         {/* Title & Category */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold uppercase text-[#bdc1c6] mb-1.5">
+            <label className={labelClass}>
               Item Title *
             </label>
             <input
@@ -234,18 +266,18 @@ export default function ReportPage({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. 14-inch Space Gray MacBook Pro"
-              className="w-full px-4 py-2.5 bg-[#121212] border border-[#3c4043] rounded-xl text-xs text-white placeholder-[#9aa0a6] focus:border-[#4285F4] focus:outline-none"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-[#bdc1c6] mb-1.5">
+            <label className={labelClass}>
               Category *
             </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-4 py-2.5 bg-[#121212] border border-[#3c4043] rounded-xl text-xs text-white focus:border-[#4285F4] focus:outline-none"
+              className={inputClass}
             >
               {CATEGORIES.map((c) => (
                 <option key={c} value={c}>{c}</option>
@@ -256,7 +288,7 @@ export default function ReportPage({
 
         {/* Description */}
         <div>
-          <label className="block text-xs font-bold uppercase text-[#bdc1c6] mb-1.5">
+          <label className={labelClass}>
             Public Description *
           </label>
           <textarea
@@ -265,20 +297,20 @@ export default function ReportPage({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe visible color, stickers, dents, condition..."
-            className="w-full px-4 py-2.5 bg-[#121212] border border-[#3c4043] rounded-xl text-xs text-white placeholder-[#9aa0a6] resize-none focus:border-[#4285F4] focus:outline-none"
+            className={`${inputClass} resize-none`}
           />
         </div>
 
         {/* Location & Time */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label className="block text-xs font-bold uppercase text-[#bdc1c6] mb-1.5">
+            <label className={labelClass}>
               Campus Location *
             </label>
             <select
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="w-full px-3 py-2.5 bg-[#121212] border border-[#3c4043] rounded-xl text-xs text-white focus:border-[#4285F4] focus:outline-none"
+              className={inputClass}
             >
               {CAMPUS_LOCATIONS.map((loc) => (
                 <option key={loc.id} value={loc.name}>{loc.name}</option>
@@ -287,42 +319,48 @@ export default function ReportPage({
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-[#bdc1c6] mb-1.5">
+            <label className={labelClass}>
               Date
             </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-3 py-2.5 bg-[#121212] border border-[#3c4043] rounded-xl text-xs text-white focus:border-[#4285F4] focus:outline-none"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase text-[#bdc1c6] mb-1.5">
+            <label className={labelClass}>
               Time
             </label>
             <input
               type="time"
               value={time}
               onChange={(e) => setTime(e.target.value)}
-              className="w-full px-3 py-2.5 bg-[#121212] border border-[#3c4043] rounded-xl text-xs text-white focus:border-[#4285F4] focus:outline-none"
+              className={inputClass}
             />
           </div>
         </div>
 
         {/* Confidential Ground Truth */}
-        <div className="p-4 rounded-2xl bg-[#121212] border border-[#4285F4]/40 space-y-2">
+        <div className={`p-4 rounded-2xl border space-y-2 ${
+          darkMode ? "bg-[#121212] border-[#4285F4]/40" : "bg-[#e8f0fe]/50 border-[#aecbfa]"
+        }`}>
           <div className="flex items-center justify-between">
-            <label className="text-xs font-bold uppercase text-[#8ab4f8] flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-[#4285F4]" />
+            <label className={`text-xs font-bold uppercase flex items-center gap-1.5 ${
+              darkMode ? "text-[#8ab4f8]" : "text-[#1a73e8]"
+            }`}>
+              <Lock className="w-3.5 h-3.5" />
               <span>Private Verification Secret (Hidden from Public)</span>
             </label>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#1a73e8]/20 text-[#8ab4f8] border border-[#1a73e8]/40 font-bold">
+            <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold ${
+              darkMode ? "bg-[#1a73e8]/20 text-[#8ab4f8] border border-[#1a73e8]/40" : "bg-[#e8f0fe] text-[#1a73e8] border border-[#aecbfa]"
+            }`}>
               Protected
             </span>
           </div>
-          <p className="text-[11px] text-[#9aa0a6] leading-relaxed">
+          <p className={`text-[11px] leading-relaxed ${darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"}`}>
             Private details known only to genuine owner (e.g. lock screen text, serial digits, keychain count). Used to challenge claimants.
           </p>
           <textarea
@@ -330,16 +368,24 @@ export default function ReportPage({
             value={hiddenGroundTruth}
             onChange={(e) => setHiddenGroundTruth(e.target.value)}
             placeholder="e.g. Lock screen wallpaper is red nebula with 'Stay Hungry'. Case contains black charger."
-            className="w-full px-4 py-2 bg-[#1e1f20] border border-[#3c4043] rounded-xl text-xs text-white placeholder-[#5f6368] resize-none font-mono focus:border-[#4285F4] focus:outline-none"
+            className={`w-full px-4 py-2 rounded-xl text-xs font-mono resize-none focus:border-[#4285F4] focus:outline-none ${
+              darkMode 
+                ? "bg-[#1e1f20] border border-[#3c4043] text-white placeholder-[#5f6368]" 
+                : "bg-white border border-[#dadce0] text-[#202124] placeholder-[#9aa0a6]"
+            }`}
           />
         </div>
 
         {/* Submit Actions */}
-        <div className="pt-3 flex items-center justify-end space-x-3 border-t border-[#3c4043]">
+        <div className={`pt-3 flex items-center justify-end space-x-3 border-t ${
+          darkMode ? "border-[#3c4043]" : "border-[#dadce0]"
+        }`}>
           <button
             type="button"
             onClick={onNavigateBack}
-            className="px-5 py-2.5 rounded-full text-xs font-bold text-[#bdc1c6] hover:text-white transition-colors"
+            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-colors ${
+              darkMode ? "text-[#bdc1c6] hover:text-white" : "text-[#5f6368] hover:text-[#202124]"
+            }`}
           >
             Cancel
           </button>

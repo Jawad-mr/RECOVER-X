@@ -195,7 +195,7 @@ export default function App() {
         onCloseMobile={() => setMobileMenuOpen(false)}
       />
 
-      {/* Main Layout Container (Properly offset by md:pl-72 so sidebar never overlaps content) */}
+      {/* Main Layout Container */}
       <div className="md:pl-72 flex flex-col min-h-screen">
         
         {/* Mobile Top Header */}
@@ -205,7 +205,9 @@ export default function App() {
           <div className="flex items-center space-x-2.5">
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="p-1.5 rounded-full border border-[#3c4043] text-[#e8eaed]"
+              className={`p-1.5 rounded-full border ${
+                darkMode ? "border-[#3c4043] text-[#e8eaed]" : "border-[#dadce0] text-[#202124]"
+              }`}
               aria-label="Open Navigation Menu"
             >
               <Menu className="w-4 h-4" />
@@ -228,7 +230,9 @@ export default function App() {
           <div className="flex items-center space-x-2">
             <button
               onClick={handleToggleTheme}
-              className="p-1.5 rounded-full border border-[#3c4043] text-[#e8eaed]"
+              className={`p-1.5 rounded-full border ${
+                darkMode ? "border-[#3c4043] text-[#e8eaed]" : "border-[#dadce0] text-[#202124]"
+              }`}
               title="Toggle Theme"
             >
               {darkMode ? <Sun className="w-4 h-4 text-[#fbbc04]" /> : <Moon className="w-4 h-4 text-[#5f6368]" />}
@@ -251,7 +255,9 @@ export default function App() {
               <CheckCircle2 className="w-5 h-5 text-[#34a853] shrink-0 mt-0.5" />
               <div>
                 <h5 className="text-xs font-bold">{toastMessage.title}</h5>
-                <p className="text-[11px] mt-0.5 text-[#9aa0a6] leading-snug">
+                <p className={`text-[11px] mt-0.5 leading-snug ${
+                  darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"
+                }`}>
                   {toastMessage.subtitle}
                 </p>
               </div>
@@ -270,16 +276,22 @@ export default function App() {
                 darkMode ? "bg-[#202124] border-[#3c4043]" : "bg-white border-[#dadce0]"
               }`}>
                 <div className="relative z-10 max-w-3xl space-y-4">
-                  <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#1a73e8]/15 border border-[#1a73e8]/30 text-[#8ab4f8] text-xs font-bold">
+                  <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full border text-xs font-bold ${
+                    darkMode ? "bg-[#1a73e8]/15 border-[#1a73e8]/30 text-[#8ab4f8]" : "bg-[#e8f0fe] border-[#aecbfa] text-[#1a73e8]"
+                  }`}>
                     <Sparkles className="w-3.5 h-3.5 text-[#4285F4]" />
                     <span>Smart Campus Lost & Found System</span>
                   </div>
 
-                  <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                  <h1 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${
+                    darkMode ? "text-white" : "text-[#202124]"
+                  }`}>
                     Recover lost items with <span className="text-[#4285F4]">Intelligent</span> <span className="text-[#34A853]">Visual Matching</span>
                   </h1>
 
-                  <p className="text-sm leading-relaxed text-[#bdc1c6] font-medium">
+                  <p className={`text-sm leading-relaxed font-medium ${
+                    darkMode ? "text-[#bdc1c6]" : "text-[#5f6368]"
+                  }`}>
                     Submit lost or found reports across campus. Our multimodal vision system cross-references physical hallmarks, damage patterns, and campus locations to suggest instant matches.
                   </p>
 
@@ -300,7 +312,11 @@ export default function App() {
                         });
                         setActiveTab("matches");
                       }}
-                      className="px-5 py-2.5 rounded-full bg-[#2d2f31] hover:bg-[#3c4043] border border-[#5f6368] text-white text-xs font-bold flex items-center space-x-2 transition-colors"
+                      className={`px-5 py-2.5 rounded-full border text-xs font-bold flex items-center space-x-2 transition-colors ${
+                        darkMode 
+                          ? "bg-[#2d2f31] hover:bg-[#3c4043] border-[#5f6368] text-white" 
+                          : "bg-white hover:bg-[#f1f3f4] border-[#dadce0] text-[#202124] shadow-sm"
+                      }`}
                     >
                       <GitMerge className="w-4 h-4 text-[#34a853]" />
                       <span>View Match Hub</span>
@@ -308,7 +324,11 @@ export default function App() {
 
                     <button
                       onClick={() => setSmartTagModalOpen(true)}
-                      className="px-5 py-2.5 rounded-full bg-[#fbbc04]/15 hover:bg-[#fbbc04]/25 border border-[#fbbc04]/40 text-[#fdd663] text-xs font-bold flex items-center space-x-2 transition-colors"
+                      className={`px-5 py-2.5 rounded-full border text-xs font-bold flex items-center space-x-2 transition-colors ${
+                        darkMode 
+                          ? "bg-[#fbbc04]/15 hover:bg-[#fbbc04]/25 border-[#fbbc04]/40 text-[#fdd663]" 
+                          : "bg-[#fef7e0] hover:bg-[#feefc3] border-[#fce8b2] text-[#b06000]"
+                      }`}
                     >
                       <QrCode className="w-4 h-4 text-[#fbbc04]" />
                       <span>Print Safe-Tag</span>
@@ -336,7 +356,7 @@ export default function App() {
               {/* Search & Filter Controls */}
               <div className="flex flex-col md:flex-row gap-4 items-center justify-between pb-1 pt-2">
                 
-                {/* Google-Style Type Switcher */}
+                {/* Type Switcher */}
                 <div className={`flex items-center p-1 rounded-full border w-full md:w-auto ${
                   darkMode ? "bg-[#202124] border-[#3c4043]" : "bg-[#f1f3f4] border-[#dadce0]"
                 }`}>
@@ -359,7 +379,7 @@ export default function App() {
                   ))}
                 </div>
 
-                {/* Google Pill Search Bar & Dropdown */}
+                {/* Pill Search Bar & Dropdown */}
                 <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto flex-1 md:max-w-xl justify-end">
                   
                   <div className="relative flex-1">
@@ -399,8 +419,8 @@ export default function App() {
                   darkMode ? "bg-[#202124] border-[#3c4043]" : "bg-white border-[#dadce0]"
                 }`}>
                   <Search className="w-10 h-10 text-[#5f6368] mx-auto" />
-                  <h4 className="text-base font-bold">No Items Found</h4>
-                  <p className="text-xs text-[#9aa0a6]">
+                  <h4 className={`text-base font-bold ${darkMode ? "text-white" : "text-[#202124]"}`}>No Items Found</h4>
+                  <p className={`text-xs ${darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"}`}>
                     {selectedLocation ? `No reports found for ${selectedLocation}.` : "No items match your active search filters."}
                   </p>
                   <button
@@ -424,6 +444,7 @@ export default function App() {
                       onInspect={(itm) => setDetailsModalItem(itm)}
                       onTriggerMatch={handleTriggerMatch}
                       onStartClaim={(itm) => setClaimModalItem(itm)}
+                      darkMode={darkMode}
                     />
                   ))}
                 </div>
@@ -449,18 +470,21 @@ export default function App() {
               onSelectPair={(pair) => setSelectedPair(pair)}
               onStartClaimVerification={(item) => setClaimModalItem(item)}
               onOpenHandoff={(item) => setHandoffModalItem(item)}
+              darkMode={darkMode}
             />
           )}
 
           {/* TAB 4: SAFE HANDOFF VAULT */}
           {activeTab === "vault" && (
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
-              <div className="pb-4 border-b border-[#3c4043]">
-                <h1 className="text-2xl font-black tracking-tight text-white flex items-center gap-2">
+              <div className={`pb-4 border-b ${darkMode ? "border-[#3c4043]" : "border-[#dadce0]"}`}>
+                <h1 className={`text-2xl font-black tracking-tight flex items-center gap-2 ${
+                  darkMode ? "text-white" : "text-[#202124]"
+                }`}>
                   <ShieldCheck className="w-6 h-6 text-[#34a853]" />
                   <span>Safe Handoff Vault & Claim Tickets</span>
                 </h1>
-                <p className="text-xs text-[#9aa0a6] mt-0.5">
+                <p className={`text-xs mt-0.5 ${darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"}`}>
                   Supervised pickup kiosks, 6-digit verification PINs, and scannable claim tickets
                 </p>
               </div>
@@ -475,15 +499,21 @@ export default function App() {
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <img src={item.imageUrl} alt={item.title} className="w-14 h-14 rounded-2xl object-cover border border-[#3c4043]" />
+                        <img src={item.imageUrl} alt={item.title} className={`w-14 h-14 rounded-2xl object-cover border ${
+                          darkMode ? "border-[#3c4043]" : "border-[#dadce0]"
+                        }`} />
                         <div>
-                          <span className="text-[10px] font-bold uppercase text-[#8ab4f8] block font-mono">{item.id}</span>
-                          <h3 className="text-base font-bold text-white">{item.title}</h3>
-                          <span className="text-xs text-[#9aa0a6]">{item.location}</span>
+                          <span className={`text-[10px] font-bold uppercase block font-mono ${
+                            darkMode ? "text-[#8ab4f8]" : "text-[#1a73e8]"
+                          }`}>{item.id}</span>
+                          <h3 className={`text-base font-bold ${darkMode ? "text-white" : "text-[#202124]"}`}>{item.title}</h3>
+                          <span className={`text-xs ${darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"}`}>{item.location}</span>
                         </div>
                       </div>
 
-                      <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-[#34a853]/20 text-[#81c995] border border-[#34a853]/40">
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold border ${
+                        darkMode ? "bg-[#34a853]/20 text-[#81c995] border-[#34a853]/40" : "bg-[#e6f4ea] text-[#137333] border-[#ceead6]"
+                      }`}>
                         Ready
                       </span>
                     </div>
@@ -491,8 +521,8 @@ export default function App() {
                     <div className={`p-3 rounded-2xl border text-xs flex items-center justify-between font-mono ${
                       darkMode ? "bg-[#1e1f20] border-[#3c4043]" : "bg-[#f8fafd] border-[#dadce0]"
                     }`}>
-                      <span className="text-[#9aa0a6]">PIN: 749-102</span>
-                      <span className="text-white font-sans font-bold">Central Library Desk</span>
+                      <span className={darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"}>PIN: 749-102</span>
+                      <span className={`font-sans font-bold ${darkMode ? "text-white" : "text-[#202124]"}`}>Central Library Desk</span>
                     </div>
 
                     <button
@@ -510,7 +540,7 @@ export default function App() {
 
           {/* TAB 5: CAMPUS METRICS */}
           {activeTab === "analytics" && (
-            <AnalyticsView reports={reports} />
+            <AnalyticsView reports={reports} darkMode={darkMode} />
           )}
         </main>
 
@@ -529,7 +559,7 @@ export default function App() {
                 <span className="text-[#34A853]">V</span>
                 <span className="text-[#EA4335]">E</span>
                 <span className="text-[#4285F4]">R</span>
-                <span className="text-white">-X</span>
+                <span className={darkMode ? "text-white" : "text-[#202124]"}>-X</span>
               </div>
               <span>•</span>
               <span>Smart Lost & Found</span>
@@ -537,7 +567,9 @@ export default function App() {
             <div className="flex items-center space-x-4">
               <button 
                 onClick={() => setSmartTagModalOpen(true)}
-                className="text-[#8ab4f8] hover:underline font-bold"
+                className={`font-bold hover:underline ${
+                  darkMode ? "text-[#8ab4f8]" : "text-[#1a73e8]"
+                }`}
               >
                 + Print Device Safe-Tags
               </button>

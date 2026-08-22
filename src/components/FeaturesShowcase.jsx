@@ -17,8 +17,8 @@ export default function FeaturesShowcase({
       description: "Cross-references image scratches, custom stickers, dents, and text specifications with an explainable 4-signal confidence breakdown.",
       icon: Eye,
       color: "bg-[#4285F4]",
-      border: "hover:border-[#4285F4]",
-      textColor: "text-[#8ab4f8]",
+      border: darkMode ? "hover:border-[#4285F4]" : "hover:border-[#1a73e8]",
+      textColor: darkMode ? "text-[#8ab4f8]" : "text-[#1a73e8]",
       cta: "Explore Match Engine",
       action: onJumpToMatches
     },
@@ -28,8 +28,8 @@ export default function FeaturesShowcase({
       description: "Dynamically challenges claimants on private details stored in report ground truth before releasing student contact data.",
       icon: ShieldCheck,
       color: "bg-[#EA4335]",
-      border: "hover:border-[#EA4335]",
-      textColor: "text-[#f28b82]",
+      border: darkMode ? "hover:border-[#EA4335]" : "hover:border-[#d93025]",
+      textColor: darkMode ? "text-[#f28b82]" : "text-[#c5221f]",
       cta: "View Security Engine",
       action: onJumpToMatches
     },
@@ -39,8 +39,8 @@ export default function FeaturesShowcase({
       description: "Encrypted 6-digit PIN and scannable QR claim tickets paired with verified campus drop kiosks (Library, Union, Gym).",
       icon: MapPin,
       color: "bg-[#34A853]",
-      border: "hover:border-[#34A853]",
-      textColor: "text-[#81c995]",
+      border: darkMode ? "hover:border-[#34A853]" : "hover:border-[#1e8e3e]",
+      textColor: darkMode ? "text-[#81c995]" : "text-[#137333]",
       cta: "Check Safe Zones",
       action: onJumpToVault
     },
@@ -50,8 +50,8 @@ export default function FeaturesShowcase({
       description: "Generate privacy-preserving, printable QR recovery tags for laptops, water bottles, and backpacks without exposing phone numbers.",
       icon: QrCode,
       color: "bg-[#FBBC05]",
-      border: "hover:border-[#FBBC05]",
-      textColor: "text-[#fdd663]",
+      border: darkMode ? "hover:border-[#FBBC05]" : "hover:border-[#f9ab00]",
+      textColor: darkMode ? "text-[#fdd663]" : "text-[#b06000]",
       cta: "Generate Free Safe Tag",
       action: onOpenSmartTag
     }
@@ -67,7 +67,9 @@ export default function FeaturesShowcase({
             <span className="w-2 h-2 rounded-full bg-[#4285F4]"></span>
             <span className="text-[#4285F4]">Next-Gen Campus Ecosystem</span>
           </div>
-          <h2 className="text-xl font-bold tracking-tight text-white">
+          <h2 className={`text-xl font-bold tracking-tight ${
+            darkMode ? "text-white" : "text-[#202124]"
+          }`}>
             Core Architecture & Capabilities
           </h2>
         </div>
@@ -80,14 +82,22 @@ export default function FeaturesShowcase({
           return (
             <div
               key={feat.id}
-              className={`p-5 rounded-2xl border bg-[#202124] border-[#3c4043] ${feat.border} flex flex-col justify-between space-y-4 transition-all duration-200 hover:shadow-lg`}
+              className={`p-5 rounded-3xl border ${feat.border} flex flex-col justify-between space-y-4 transition-all duration-200 shadow-md ${
+                darkMode ? "bg-[#202124] border-[#3c4043] hover:shadow-xl" : "bg-white border-[#dadce0] hover:shadow-lg"
+              }`}
             >
               <div className="space-y-3">
                 <div className={`w-10 h-10 rounded-2xl ${feat.color} text-white flex items-center justify-center shadow-md`}>
                   <Icon className="w-5 h-5 stroke-[2.2]" />
                 </div>
-                <h3 className="text-base font-bold tracking-tight text-white">{feat.title}</h3>
-                <p className="text-xs leading-relaxed text-[#bdc1c6] font-normal">
+                <h3 className={`text-base font-bold tracking-tight ${
+                  darkMode ? "text-white" : "text-[#202124]"
+                }`}>
+                  {feat.title}
+                </h3>
+                <p className={`text-xs leading-relaxed font-normal ${
+                  darkMode ? "text-[#bdc1c6]" : "text-[#5f6368]"
+                }`}>
                   {feat.description}
                 </p>
               </div>

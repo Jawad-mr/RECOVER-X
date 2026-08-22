@@ -61,16 +61,22 @@ export default function CampusMapScanner({
     }`}>
       
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#3c4043]">
+      <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b ${
+        darkMode ? "border-[#3c4043]" : "border-[#dadce0]"
+      }`}>
         <div className="flex items-center space-x-2.5">
-          <div className="p-2 rounded-xl bg-[#4285F4]/20 text-[#8ab4f8]">
+          <div className={`p-2 rounded-xl ${
+            darkMode ? "bg-[#4285F4]/20 text-[#8ab4f8]" : "bg-[#e8f0fe] text-[#1a73e8]"
+          }`}>
             <MapPin className="w-5 h-5 text-[#4285F4]" />
           </div>
           <div>
-            <h2 className="text-base font-bold tracking-tight text-white">
+            <h2 className={`text-base font-bold tracking-tight ${
+              darkMode ? "text-white" : "text-[#202124]"
+            }`}>
               Campus Hotspots & Safe Kiosks
             </h2>
-            <p className="text-xs text-[#9aa0a6]">
+            <p className={`text-xs ${darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"}`}>
               Filter lost and found reports by campus facility
             </p>
           </div>
@@ -98,33 +104,49 @@ export default function CampusMapScanner({
               onClick={() => onSelectLocationFilter(isSelected ? null : zone.name)}
               className={`p-4 rounded-2xl border text-left flex flex-col justify-between space-y-3 transition-all ${
                 isSelected
-                  ? "bg-[#1a73e8]/20 border-[#8ab4f8] ring-2 ring-[#8ab4f8] shadow-md"
-                  : "bg-[#2d2f31] border-[#3c4043] hover:border-[#5f6368]"
+                  ? darkMode 
+                    ? "bg-[#1a73e8]/20 border-[#8ab4f8] ring-2 ring-[#8ab4f8] shadow-md"
+                    : "bg-[#e8f0fe] border-[#1a73e8] ring-2 ring-[#1a73e8] shadow-md"
+                  : darkMode
+                    ? "bg-[#2d2f31] border-[#3c4043] hover:border-[#5f6368]"
+                    : "bg-[#f8fafd] border-[#dadce0] hover:border-[#bdc1c6]"
               }`}
             >
               <div className="flex items-start justify-between">
-                <div className={`p-2.5 rounded-xl bg-[#1e1f20] border border-[#3c4043] ${zone.iconColor}`}>
+                <div className={`p-2.5 rounded-xl border ${
+                  darkMode ? "bg-[#1e1f20] border-[#3c4043]" : "bg-white border-[#dadce0] shadow-sm"
+                } ${zone.iconColor}`}>
                   <Icon className="w-5 h-5" />
                 </div>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#1e1f20] text-[#bdc1c6] border border-[#3c4043]">
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                  darkMode ? "bg-[#1e1f20] text-[#bdc1c6] border-[#3c4043]" : "bg-white text-[#5f6368] border-[#dadce0]"
+                }`}>
                   {zone.area}
                 </span>
               </div>
 
               <div>
-                <h4 className="text-sm font-bold text-white">{zone.name}</h4>
-                <p className="text-[11px] text-[#9aa0a6] mt-0.5">
+                <h4 className={`text-sm font-bold ${
+                  darkMode ? "text-white" : "text-[#202124]"
+                }`}>{zone.name}</h4>
+                <p className={`text-[11px] mt-0.5 ${darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"}`}>
                   {zone.kiosk}
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-[#3c4043] flex items-center justify-between text-xs font-bold">
+              <div className={`pt-2 border-t flex items-center justify-between text-xs font-bold ${
+                darkMode ? "border-[#3c4043]" : "border-[#dadce0]"
+              }`}>
                 <div className="flex items-center space-x-2">
-                  <span className="text-[#f28b82]">{zone.lost} lost</span>
-                  <span className="text-[#5f6368]">•</span>
-                  <span className="text-[#81c995]">{zone.found} found</span>
+                  <span className={darkMode ? "text-[#f28b82]" : "text-[#c5221f]"}>{zone.lost} lost</span>
+                  <span className={darkMode ? "text-[#5f6368]" : "text-[#bdc1c6]"}>•</span>
+                  <span className={darkMode ? "text-[#81c995]" : "text-[#137333]"}>{zone.found} found</span>
                 </div>
-                <span className="text-[#8ab4f8] text-[11px]">
+                <span className={`text-[11px] ${
+                  isSelected 
+                    ? darkMode ? "text-[#8ab4f8]" : "text-[#1a73e8]" 
+                    : darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"
+                }`}>
                   {isSelected ? "Active" : "Filter"}
                 </span>
               </div>
