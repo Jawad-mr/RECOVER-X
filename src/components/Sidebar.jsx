@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { 
   Bell, Plus, Compass, GitMerge, ShieldCheck, 
-  BarChart3, Sun, Moon, Check, X, Shield, FilePlus2, QrCode, Triangle
+  BarChart3, Sun, Moon, Check, X, Shield, FilePlus2, QrCode, Sparkles
 } from "lucide-react";
 
 export default function Sidebar({ 
@@ -30,11 +30,11 @@ export default function Sidebar({
   }, []);
 
   const navItems = [
-    { id: "feed", label: "Overview", icon: Compass },
-    { id: "report", label: "Report Item", icon: FilePlus2 },
-    { id: "matches", label: "AI Match Hub", icon: GitMerge, badge: "4 matches" },
-    { id: "vault", label: "Safe Handoff", icon: ShieldCheck },
-    { id: "analytics", label: "Metrics & Logs", icon: BarChart3 },
+    { id: "feed", label: "Campus Explorer", icon: Compass, color: "text-[#4285f4]" },
+    { id: "report", label: "Report Lost / Found", icon: FilePlus2, color: "text-[#ea4335]" },
+    { id: "matches", label: "AI Match Hub", icon: GitMerge, badge: "4 matches", color: "text-[#34a853]" },
+    { id: "vault", label: "Safe Handoff", icon: ShieldCheck, color: "text-[#fbbc04]" },
+    { id: "analytics", label: "Campus Metrics", icon: BarChart3, color: "text-[#4285f4]" },
   ];
 
   return (
@@ -43,68 +43,82 @@ export default function Sidebar({
       {mobileOpen && (
         <div 
           onClick={onCloseMobile}
-          className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
           aria-hidden="true"
         />
       )}
 
       {/* Main Persistent Sidebar */}
-      <aside className={`fixed top-0 bottom-0 left-0 z-50 w-64 flex flex-col justify-between border-r transition-transform duration-200 ease-out md:translate-x-0 ${
+      <aside className={`fixed top-0 bottom-0 left-0 z-50 w-68 flex flex-col justify-between border-r transition-transform duration-200 ease-out md:translate-x-0 ${
         mobileOpen ? "translate-x-0" : "-translate-x-full"
       } ${
         darkMode 
-          ? "bg-black border-zinc-800 text-zinc-100" 
-          : "bg-white border-zinc-200 text-zinc-900"
+          ? "bg-[#1e1f20] border-[#3c4043] text-[#e8eaed]" 
+          : "bg-[#ffffff] border-[#dadce0] text-[#202124]"
       }`}>
         
-        {/* Top Section: Brand & Navigation */}
+        {/* Top Section: Google-Style Brand & Navigation */}
         <div className="p-4 space-y-4">
           
-          {/* Vercel-Style Brand Header */}
+          {/* Google 4-Color Brand Header */}
           <div className="flex items-center justify-between px-1">
             <button 
               onClick={() => {
                 setActiveTab("feed");
                 if (onCloseMobile) onCloseMobile();
               }}
-              className="flex items-center space-x-2.5 text-left group focus:outline-none"
+              className="flex items-center space-x-3 text-left group focus:outline-none"
             >
-              <div className="w-7 h-7 rounded-lg bg-white text-black flex items-center justify-center font-bold shadow-sm">
-                <Triangle className="w-3.5 h-3.5 fill-black stroke-none" />
+              {/* Google 4-color icon */}
+              <div className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center p-1.5 border border-slate-200">
+                <svg viewBox="0 0 24 24" className="w-full h-full">
+                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
+                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                  <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                </svg>
               </div>
-              <div className="flex items-center space-x-1.5">
-                <span className="text-sm font-bold tracking-tight text-white font-mono">
-                  RECOVER<span className="text-zinc-400">-X</span>
-                </span>
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-medium bg-zinc-900 border border-zinc-800 text-zinc-400">
-                  v2.0
-                </span>
+
+              <div>
+                <div className="flex items-center text-base font-black tracking-tight">
+                  <span className="text-[#4285F4]">R</span>
+                  <span className="text-[#EA4335]">E</span>
+                  <span className="text-[#FBBC05]">C</span>
+                  <span className="text-[#4285F4]">O</span>
+                  <span className="text-[#34A853]">V</span>
+                  <span className="text-[#EA4335]">E</span>
+                  <span className="text-[#4285F4]">R</span>
+                  <span className={darkMode ? "text-white" : "text-[#202124]"}>-X</span>
+                </div>
+                <p className={`text-[11px] font-medium ${darkMode ? "text-[#9aa0a6]" : "text-[#5f6368]"}`}>
+                  Smart Lost & Found
+                </p>
               </div>
             </button>
 
-            {/* Mobile close X button */}
+            {/* Mobile close button */}
             <button
               onClick={onCloseMobile}
-              className="p-1 rounded-md text-zinc-400 hover:text-white md:hidden"
+              className="p-1 rounded-lg text-slate-400 hover:text-white md:hidden"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Vercel-Style Primary CTA Button */}
+          {/* Google-Style Pill CTA Button (+ Report Item) */}
           <button
             onClick={() => {
               setActiveTab("report");
               if (onCloseMobile) onCloseMobile();
             }}
-            className="w-full py-2 px-3 rounded-lg bg-white hover:bg-zinc-200 text-black font-semibold text-xs shadow-sm flex items-center justify-center space-x-1.5 transition-colors"
+            className="w-full py-2.5 px-4 rounded-full bg-[#1a73e8] hover:bg-[#1557b0] text-white font-medium text-xs shadow-md flex items-center justify-center space-x-2 transition-all transform hover:shadow-lg active:scale-95"
           >
-            <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+            <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>Report Lost / Found</span>
           </button>
 
           {/* Navigation Links */}
-          <nav className="space-y-0.5 pt-1" aria-label="Sidebar Navigation">
+          <nav className="space-y-1 pt-1" aria-label="Sidebar Navigation">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -115,26 +129,26 @@ export default function Sidebar({
                     setActiveTab(item.id);
                     if (onCloseMobile) onCloseMobile();
                   }}
-                  className={`w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${
+                  className={`w-full px-3.5 py-2.5 rounded-full text-xs font-medium flex items-center justify-between transition-colors ${
                     isActive
                       ? darkMode
-                        ? "bg-zinc-900 text-white font-semibold shadow-inner"
-                        : "bg-zinc-100 text-black font-semibold"
+                        ? "bg-[#1a73e8]/20 text-[#8ab4f8] font-bold"
+                        : "bg-[#e8f0fe] text-[#1a73e8] font-bold shadow-sm"
                       : darkMode
-                        ? "text-zinc-400 hover:text-white hover:bg-zinc-900/60"
-                        : "text-zinc-600 hover:text-black hover:bg-zinc-100/60"
+                        ? "text-[#bdc1c6] hover:bg-[#2d2f31] hover:text-[#ffffff]"
+                        : "text-[#3c4043] hover:bg-[#f1f3f4] hover:text-[#202124]"
                   }`}
                 >
-                  <div className="flex items-center space-x-2.5">
-                    <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-zinc-400"}`} />
+                  <div className="flex items-center space-x-3">
+                    <Icon className={`w-4 h-4 ${isActive ? (darkMode ? "text-[#8ab4f8]" : "text-[#1a73e8]") : item.color}`} />
                     <span>{item.label}</span>
                   </div>
 
                   {item.badge && (
-                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono ${
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                       isActive 
-                        ? darkMode ? "bg-zinc-800 text-zinc-200 border border-zinc-700" : "bg-zinc-200 text-zinc-800"
-                        : darkMode ? "bg-zinc-900 text-zinc-500" : "bg-zinc-100 text-zinc-500"
+                        ? darkMode ? "bg-[#34a853]/30 text-[#81c995]" : "bg-[#ceead6] text-[#137333]"
+                        : darkMode ? "bg-[#2d2f31] text-[#9aa0a6]" : "bg-[#f1f3f4] text-[#5f6368]"
                     }`}>
                       {item.badge}
                     </span>
@@ -149,11 +163,11 @@ export default function Sidebar({
                 onOpenSmartTag();
                 if (onCloseMobile) onCloseMobile();
               }}
-              className={`w-full px-3 py-2 rounded-lg text-xs font-medium flex items-center space-x-2.5 transition-colors ${
-                darkMode ? "text-zinc-400 hover:text-white hover:bg-zinc-900/60" : "text-zinc-600 hover:text-black hover:bg-zinc-100/60"
+              className={`w-full px-3.5 py-2.5 rounded-full text-xs font-medium flex items-center space-x-3 transition-colors ${
+                darkMode ? "text-[#fdd663] hover:bg-[#fbbc04]/15" : "text-[#b06000] hover:bg-[#fef7e0]"
               }`}
             >
-              <QrCode className="w-4 h-4 text-zinc-400" />
+              <QrCode className="w-4 h-4 text-[#fbbc04]" />
               <span>QR Safe-Tags</span>
             </button>
           </nav>
@@ -161,25 +175,25 @@ export default function Sidebar({
 
         {/* Bottom Utility Controls */}
         <div className={`p-3 border-t space-y-2 ${
-          darkMode ? "border-zinc-850 bg-black" : "border-zinc-200 bg-white"
+          darkMode ? "border-[#3c4043] bg-[#1e1f20]" : "border-[#dadce0] bg-[#ffffff]"
         }`}>
           
-          {/* Notifications Drawer Row */}
+          {/* Notifications Drawer */}
           <div className="relative" ref={notifRef}>
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className={`w-full px-3 py-1.5 rounded-lg text-xs font-medium flex items-center justify-between transition-colors border ${
+              className={`w-full px-3.5 py-2 rounded-full text-xs font-medium flex items-center justify-between transition-colors border ${
                 darkMode 
-                  ? "bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-zinc-700" 
-                  : "bg-white border-zinc-200 text-zinc-700 hover:border-zinc-300"
+                  ? "bg-[#2d2f31] border-[#3c4043] text-[#e8eaed] hover:border-[#5f6368]" 
+                  : "bg-[#ffffff] border-[#dadce0] text-[#3c4043] hover:border-[#bdc1c6]"
               }`}
             >
               <div className="flex items-center space-x-2">
-                <Bell className="w-3.5 h-3.5 text-zinc-400" />
-                <span>Alerts</span>
+                <Bell className="w-3.5 h-3.5 text-[#4285f4]" />
+                <span>Match Alerts</span>
               </div>
               {unreadCount > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-white text-black">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ea4335] text-white">
                   {unreadCount}
                 </span>
               )}
@@ -187,12 +201,15 @@ export default function Sidebar({
 
             {/* Notifications Dropdown */}
             {showNotifications && (
-              <div className={`absolute bottom-full left-0 right-0 mb-2 rounded-xl border shadow-2xl p-3 z-50 animate-toast ${
-                darkMode ? "bg-zinc-950 border-zinc-800" : "bg-white border-zinc-200"
+              <div className={`absolute bottom-full left-0 right-0 mb-2 rounded-2xl border shadow-2xl p-3 z-50 animate-toast ${
+                darkMode ? "bg-[#2d2f31] border-[#3c4043] text-white" : "bg-white border-[#dadce0] text-[#202124]"
               }`}>
-                <div className="flex items-center justify-between pb-2 border-b border-zinc-800 text-xs font-semibold text-zinc-200">
-                  <span>Match Alerts</span>
-                  <span className="text-[10px] text-emerald-400 font-mono">Live</span>
+                <div className="flex items-center justify-between pb-2 border-b border-[#3c4043] text-xs font-bold">
+                  <span className="flex items-center gap-1 text-[#4285f4]">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    Radar Alerts
+                  </span>
+                  <span className="text-[10px] text-[#34a853] font-bold">Live AI</span>
                 </div>
 
                 <div className="mt-2 space-y-1.5 max-h-56 overflow-y-auto">
@@ -203,17 +220,17 @@ export default function Sidebar({
                         onSelectNotification(notif);
                         setShowNotifications(false);
                       }}
-                      className={`p-2.5 rounded-lg border text-xs cursor-pointer transition-colors ${
+                      className={`p-2.5 rounded-xl border text-xs cursor-pointer transition-colors ${
                         notif.read
-                          ? darkMode ? "bg-black border-zinc-850 text-zinc-500" : "bg-zinc-50 border-zinc-200 text-zinc-500"
-                          : darkMode ? "bg-zinc-900 border-zinc-750 text-zinc-200" : "bg-zinc-100 border-zinc-300 text-zinc-900"
+                          ? darkMode ? "bg-[#1e1f20] border-[#3c4043] text-[#9aa0a6]" : "bg-[#f8fafd] border-[#dadce0] text-[#5f6368]"
+                          : darkMode ? "bg-[#1a73e8]/20 border-[#1a73e8]/40 text-[#e8eaed]" : "bg-[#e8f0fe] border-[#aecbfa] text-[#1a73e8]"
                       }`}
                     >
-                      <div className="font-semibold text-white mb-0.5 flex justify-between">
+                      <div className="font-bold mb-0.5 flex justify-between">
                         <span>{notif.title}</span>
-                        <span className="text-[10px] text-zinc-500">{notif.timeAgo}</span>
+                        <span className="text-[10px] text-[#9aa0a6] font-normal">{notif.timeAgo}</span>
                       </div>
-                      <p className="text-[11px] text-zinc-400 line-clamp-2">{notif.message}</p>
+                      <p className="text-[11px] line-clamp-2 leading-snug">{notif.message}</p>
                     </div>
                   ))}
                 </div>
@@ -224,24 +241,30 @@ export default function Sidebar({
           {/* Theme Switcher Toggle */}
           <button
             onClick={onToggleTheme}
-            className={`w-full py-1.5 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-1.5 transition-colors ${
+            className={`w-full py-2 px-3 rounded-full border text-xs font-medium flex items-center justify-center space-x-1.5 transition-colors ${
               darkMode 
-                ? "bg-zinc-950 border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-900" 
-                : "bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-100"
+                ? "bg-[#2d2f31] border-[#3c4043] text-[#e8eaed] hover:bg-[#3c4043]" 
+                : "bg-white border-[#dadce0] text-[#3c4043] hover:bg-[#f1f3f4]"
             }`}
           >
             {darkMode ? (
               <>
-                <Sun className="w-3.5 h-3.5 text-zinc-400" />
-                <span>Light Mode</span>
+                <Sun className="w-3.5 h-3.5 text-[#fbbc04]" />
+                <span>Light Theme</span>
               </>
             ) : (
               <>
-                <Moon className="w-3.5 h-3.5 text-zinc-700" />
-                <span>Dark Mode</span>
+                <Moon className="w-3.5 h-3.5 text-[#5f6368]" />
+                <span>Dark Theme</span>
               </>
             )}
           </button>
+
+          {/* Google Privacy Badge */}
+          <div className="flex items-center justify-center space-x-1 text-[11px] text-[#9aa0a6] py-0.5 font-medium">
+            <Shield className="w-3.5 h-3.5 text-[#4285f4]" />
+            <span>Encrypted Campus Privacy</span>
+          </div>
 
         </div>
 
